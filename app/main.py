@@ -41,11 +41,9 @@ console = Console()
               help="Rondas máximas de negociación.")
 @click.option("--pausa", "-p", default=30, show_default=True,
               help="Segundos de espera entre rondas.")
-@click.option("--source-ip", default=None,
-              help="IP local de origen para el butler (sin bind por defecto).")
 @click.option("--api-url", default=None,
               help="URL base de la API del juego.")
-def main(alias, modelo, debug, max_rondas, pausa, source_ip, api_url):
+def main(alias, modelo, debug, max_rondas, pausa, api_url):
     """🤖 Agente Negociador Autónomo para fdi-pln-butler."""
 
     # ── Modo automático (CLI) ────────────────────────────────────────────
@@ -54,7 +52,7 @@ def main(alias, modelo, debug, max_rondas, pausa, source_ip, api_url):
         _ejecutar_agente(
             alias=alias, modelo=modelo, debug=debug,
             max_rondas=max_rondas, pausa=pausa,
-            interactivo=False, source_ip=source_ip, api_url=api_url,
+            interactivo=False, api_url=api_url,
         )
         return
 
@@ -142,9 +140,9 @@ def _menu_agente(alias: str):
 
 def _ejecutar_agente(alias: str, modelo: str, debug: bool,
                      max_rondas: int, pausa: int, interactivo: bool = False,
-                     source_ip: str = None, api_url: str = None):
+                     api_url: str = None):
     """Crea y ejecuta el agente negociador."""
-    agente = AgenteNegociador(alias, modelo, debug, api_url=api_url, source_ip=source_ip)
+    agente = AgenteNegociador(alias, modelo, debug, api_url=api_url)
     agente.pausa_entre_rondas = pausa
 
     try:

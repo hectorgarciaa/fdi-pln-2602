@@ -7,37 +7,19 @@ Usa loguru para logging en vez de print().
 
 import time
 import requests
-from requests.adapters import HTTPAdapter
 from typing import Dict, List, Optional
 
 from loguru import logger
 from config import API_BASE_URL
 
 
-class SourceIPAdapter(HTTPAdapter):
-    """HTTPAdapter que bindea a una IP local específica."""
-
-    def __init__(self, source_ip: str, **kwargs):
-        self.source_ip = source_ip
-        super().__init__(**kwargs)
-
-    def init_poolmanager(self, *args, **kwargs):
-        kwargs["source_address"] = (self.source_ip, 0)
-        super().init_poolmanager(*args, **kwargs)
-
-
 class APIClient:
     """Cliente para interactuar con la API del juego."""
 
-    def __init__(self, base_url: str = None, source_ip: str = None, agente: str = None):
+    def __init__(self, base_url: str = None, agente: str = None):
         self.base_url = base_url or API_BASE_URL
         self.agente = agente
         self.session = requests.Session()
-        if source_ip:
-            adapter = SourceIPAdapter(source_ip)
-            self.session.mount("http://", adapter)
-            self.session.mount("https://", adapter)
-            logger.debug("Bindeado a IP local {}", source_ip)
         if agente:
             logger.debug("Usando identificador de agente {}", agente)
 

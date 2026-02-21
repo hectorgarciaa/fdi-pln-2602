@@ -108,7 +108,6 @@ Lanza el bot directamente sin menú interactivo.
 | `--debug` | `-d` | `False` | Activa modo debug: muestra cada decisión del agente (📤📥🔍🧠🔄). |
 | `--max-rondas` | `-r` | `10` | Número máximo de rondas de negociación. |
 | `--pausa` | `-p` | `30` | Segundos de espera entre rondas (para dar tiempo a respuestas). |
-| `--source-ip` | — | *(ninguno)* | IP local de origen para diferenciar jugadores en el butler. |
 | `--api-url` | — | *(ninguno)* | Override explícito de la URL base de la API (si no se indica, se usa `FDI_PLN__BUTLER_ADDRESS`). |
 | `--help` | `-h` | — | Muestra la ayuda. |
 
@@ -136,8 +135,7 @@ uv run app/main.py -a Bot_1 --api-url http://192.168.1.100:7719
 ### `test_runner.py` — Orquestador multi-bot
 
 Lanza N bots en paralelo, cada uno como un subproceso independiente de `main.py`.
-Para pruebas locales con Butler en `--monopuesto`, no usa bindeo de IP:
-cada bot se identifica por su alias mediante el parámetro `agente`.
+Cada bot se identifica por su alias mediante el parámetro `agente`.
 
 ```bash
 uv run app/test_runner.py -n 5 --consola

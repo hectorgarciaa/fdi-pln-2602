@@ -124,9 +124,9 @@ class AgenteNegociador:
     """
 
     def __init__(self, alias: str, modelo: str = MODELO_DEFAULT, debug: bool = False,
-                 api_url: str = None, source_ip: str = None):
+                 api_url: str = None):
         self.alias = alias
-        self.api = APIClient(base_url=api_url, source_ip=source_ip, agente=alias)
+        self.api = APIClient(base_url=api_url, agente=alias)
         self.ia = OllamaClient(modelo)
         self.debug = debug
 
