@@ -10,7 +10,7 @@ import requests
 from typing import Dict, List, Optional, Tuple
 
 from loguru import logger
-from config import API_BASE_URL
+from ..core.config import API_BASE_URL
 
 
 class APIClient:
@@ -104,7 +104,9 @@ class APIClient:
                         or item.get("alias")
                         or str(item)
                     )
-                    logger.debug("get_gente: item dict normalizado {} -> {}", item, nombre)
+                    logger.debug(
+                        "get_gente: item dict normalizado {} -> {}", item, nombre
+                    )
                     resultado.append(nombre)
                 else:
                     resultado.append(str(item))
