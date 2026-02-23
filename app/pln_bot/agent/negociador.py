@@ -23,12 +23,12 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from ..nucleo.configuracion import MODELO_DEFAULT
-from .ejecutor_ronda import ejecutar_ronda
-from ..servicios.servicio_analisis import AnalisisMensajesService, RespuestaUnificada
-from ..servicios.cliente_api import APIClient
-from ..servicios.cliente_ollama import OllamaClient
-from ..negociacion.constructor_propuestas import generar_propuesta
+from ..core.config import MODELO_DEFAULT
+from .round_executor import ejecutar_ronda
+from ..services.analysis_service import AnalisisMensajesService, RespuestaUnificada
+from ..services.api_client import APIClient
+from ..services.ollama_client import OllamaClient
+from ..negotiation.proposal_builder import generar_propuesta
 
 # ── Rich console compartida ─────────────────────────────────────────────
 console = Console()

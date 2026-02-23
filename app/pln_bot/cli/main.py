@@ -4,10 +4,10 @@ Interfaz de usuario — punto de entrada principal.
 Usa **click** para la CLI y **rich** para la interfaz de terminal.
 
 Uso interactivo (menú):
-    python principal.py
+    python main.py
 
 Uso automático (lanzar bot directo):
-    python principal.py --alias Bot_1 --modelo llama3.2:3b --debug --max-rondas 10
+    python main.py --alias Bot_1 --modelo llama3.2:3b --debug --max-rondas 10
 """
 
 import json
@@ -18,9 +18,9 @@ from rich.panel import Panel
 from rich.prompt import Prompt, IntPrompt, Confirm
 from rich.table import Table
 
-from ..agente.negociador import AgenteNegociador
-from ..servicios.cliente_api import APIClient
-from ..nucleo.configuracion import MODELOS_DISPONIBLES, MODELO_DEFAULT
+from ..agent.negociador import AgenteNegociador
+from ..services.api_client import APIClient
+from ..core.config import MODELOS_DISPONIBLES, MODELO_DEFAULT
 
 console = Console()
 

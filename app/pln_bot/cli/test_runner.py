@@ -2,15 +2,15 @@
 """
 Orquestador de bots — lanza N bots negociadores en paralelo.
 
-Cada bot es un subproceso independiente de principal.py con alias único.
+Cada bot es un subproceso independiente de main.py con alias único.
 Usa **click** para la CLI y **rich** para la salida coloreada.
 
 Uso:
-    python orquestador_bots.py                           # 3 bots por defecto
-    python orquestador_bots.py -n 5                      # 5 bots
-    python orquestador_bots.py -n 2 -m llama3.2:3b -d    # 2 bots, debug
-    python orquestador_bots.py -n 4 --prefijo Agent      # Agent_1 … Agent_4
-    python orquestador_bots.py -n 3 --consola            # salida coloreada en terminal
+    python test_runner.py                           # 3 bots por defecto
+    python test_runner.py -n 5                      # 5 bots
+    python test_runner.py -n 2 -m llama3.2:3b -d    # 2 bots, debug
+    python test_runner.py -n 4 --prefijo Agent      # Agent_1 … Agent_4
+    python test_runner.py -n 3 --consola            # salida coloreada en terminal
 
 Cierre limpio con Ctrl+C.
 """
@@ -37,7 +37,7 @@ DEFAULT_PAUSA = 30
 DEFAULT_PREFIJO = "Bot"
 APP_DIR = Path(__file__).resolve().parents[2]
 LOGS_DIR = APP_DIR / "logs"
-SCRIPT_PRINCIPAL = APP_DIR / "principal.py"
+MAIN_SCRIPT = APP_DIR / "main.py"
 
 # Estilos rich para cada bot (se repiten si hay más de 8)
 ESTILOS = [
@@ -63,7 +63,7 @@ def construir_comando(
     """Construye la lista de argumentos para lanzar un bot."""
     cmd = [
         sys.executable,
-        str(SCRIPT_PRINCIPAL),
+        str(MAIN_SCRIPT),
         "--alias",
         alias,
         "--modelo",
@@ -99,7 +99,7 @@ def lanzar_modo_logs(
             cmd,
             stdout=log_file,
             stderr=subprocess.STDOUT,
-            cwd=str(SCRIPT_PRINCIPAL.parent),
+            cwd=str(MAIN_SCRIPT.parent),
             env=env,
             preexec_fn=os.setsid if sys.platform != "win32" else None,
         )
@@ -139,7 +139,7 @@ def lanzar_modo_consola(
             stderr=subprocess.STDOUT,
             text=True,
             bufsize=1,
-            cwd=str(SCRIPT_PRINCIPAL.parent),
+            cwd=str(MAIN_SCRIPT.parent),
             env=env,
             preexec_fn=os.setsid if sys.platform != "win32" else None,
         )
