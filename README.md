@@ -9,7 +9,7 @@ El proyecto está organizado por paquetes en español y tiene dos modos de ejecu
 ## Requisitos
 - Python 3.12+
 - Ollama en ejecución (`http://127.0.0.1:11434` por defecto)
-- Servidor Butler en ejecución (`http://127.0.0.1:7719` por defecto)
+- Servidor Butler en ejecución
 
 ## Instalación
 ```bash
