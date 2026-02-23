@@ -11,7 +11,7 @@ from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
 from pydantic_ai.settings import ModelSettings
 
-from ..core.config import OLLAMA_URL
+from ..nucleo.config import OLLAMA_URL
 
 
 class RespuestaUnificada(BaseModel):

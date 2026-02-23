@@ -5,7 +5,7 @@ Gestión de acuerdos pendientes, expirados y aceptaciones.
 import time
 from typing import Any, Dict, Optional
 
-from .message_utils import (
+from .utilidades_mensajes import (
     RE_ASUNTO_RECURSOS,
     RE_RECURSO_INDIVIDUAL,
     extraer_recursos_mencionados,

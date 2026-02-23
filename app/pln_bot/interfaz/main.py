@@ -18,9 +18,9 @@ from rich.panel import Panel
 from rich.prompt import Prompt, IntPrompt, Confirm
 from rich.table import Table
 
-from ..agent.negociador import AgenteNegociador
-from ..services.api_client import APIClient
-from ..core.config import MODELOS_DISPONIBLES, MODELO_DEFAULT
+from ..agente.negociador import AgenteNegociador
+from ..servicios.api_client import APIClient
+from ..nucleo.config import MODELOS_DISPONIBLES, MODELO_DEFAULT
 
 console = Console()
 

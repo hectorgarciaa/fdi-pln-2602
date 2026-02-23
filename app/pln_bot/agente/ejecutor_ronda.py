@@ -4,9 +4,9 @@ Ejecución de una ronda completa del agente negociador.
 
 import time
 
-from ..negotiation.agreement_tracker import limpiar_cache_tx, mover_a_expirados_por_tx
-from ..negotiation.mailbox_processor import procesar_buzon
-from ..negotiation.proposal_sender import enviar_propuestas
+from ..negociacion.gestor_acuerdos import limpiar_cache_tx, mover_a_expirados_por_tx
+from ..negociacion.procesador_buzon import procesar_buzon
+from ..negociacion.enviador_propuestas import enviar_propuestas
 
 
 def ejecutar_ronda(agente, console) -> bool:

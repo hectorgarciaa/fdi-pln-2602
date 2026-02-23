@@ -10,7 +10,7 @@ import requests
 from typing import Dict, List, Optional, Tuple
 
 from loguru import logger
-from ..core.config import API_BASE_URL
+from ..nucleo.config import API_BASE_URL
 
 
 class APIClient:

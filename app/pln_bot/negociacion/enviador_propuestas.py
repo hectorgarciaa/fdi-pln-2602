@@ -5,8 +5,8 @@ Envío de propuestas iniciales de intercambio.
 import time
 from typing import Dict
 
-from .agreement_tracker import registrar_acuerdo_pendiente
-from .proposal_builder import generar_propuesta
+from .gestor_acuerdos import registrar_acuerdo_pendiente
+from .constructor_propuestas import generar_propuesta
 
 
 def enviar_propuestas(agente, necesidades: Dict, excedentes: Dict, oro: int):

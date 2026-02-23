@@ -5,7 +5,7 @@ Utilidades de parsing y clasificación de mensajes de negociación.
 import re as _re
 from typing import Dict, List, Optional
 
-from ..core.config import RECURSOS_CONOCIDOS
+from ..nucleo.config import RECURSOS_CONOCIDOS
 
 # Detectores de intención en texto libre
 RE_RECHAZO = _re.compile(

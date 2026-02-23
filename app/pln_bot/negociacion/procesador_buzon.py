@@ -4,8 +4,8 @@ Procesamiento del buzón de cartas para el agente negociador.
 
 from typing import Dict
 
-from .agreement_tracker import registrar_acuerdo_pendiente, responder_aceptacion
-from .message_utils import (
+from .gestor_acuerdos import registrar_acuerdo_pendiente, responder_aceptacion
+from .utilidades_mensajes import (
     es_aceptacion_simple,
     es_carta_sistema,
     es_mensaje_corto_sin_propuesta,
@@ -15,8 +15,8 @@ from .message_utils import (
     registrar_rechazo,
     registrar_rechazo_propio,
 )
-from .negotiation_policy import decidir_aceptar_programatico
-from .proposal_builder import generar_contraoferta, generar_propuesta_adaptada
+from .politica_negociacion import decidir_aceptar_programatico
+from .constructor_propuestas import generar_contraoferta, generar_propuesta_adaptada
 
 
 def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
