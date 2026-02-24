@@ -147,6 +147,11 @@ class APIClient:
         if response.status_code == 200:
             logger.success("Alias '{}' creado", nombre)
             return True
+        if response.status_code in (403, 409):
+            aliases = set(self.get_gente())
+            if nombre in aliases:
+                logger.info("Alias '{}' ya existía; se reutiliza", nombre)
+                return True
         logger.warning("Error creando alias: status {}", response.status_code)
         return False
 

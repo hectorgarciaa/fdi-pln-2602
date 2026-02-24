@@ -12,6 +12,7 @@ Usa loguru para logging, rich para la interfaz de terminal y
 pydantic para validar las respuestas JSON de la IA.
 """
 
+import json
 import os
 import sys
 import time
@@ -134,6 +135,8 @@ class AgenteNegociador:
 
         # Fichero: SIEMPRE (app/logs/{alias}.log)
         app_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        self._estado_runtime_path = os.path.join(app_dir, "state", f"{alias}.json")
+        os.makedirs(os.path.dirname(self._estado_runtime_path), exist_ok=True)
         log_dir = os.path.join(app_dir, "logs")
         os.makedirs(log_dir, exist_ok=True)
         log_path = os.path.join(log_dir, f"{alias}.log")
@@ -148,6 +151,7 @@ class AgenteNegociador:
             "{name}:{function}:{line} - {message}",
         )
         logger.info(f"Logs guardados en {log_path}")
+        self._cargar_estado_negociacion()
 
     # =====================================================================
     # LOGGING
@@ -246,6 +250,114 @@ class AgenteNegociador:
             )
 
         return disponibles
+
+    # =====================================================================
+    # PERSISTENCIA DE ESTADO DE NEGOCIACIÓN
+    # =====================================================================
+
+    def _cargar_estado_negociacion(self):
+        """Carga acuerdos/tx para retomar negociación tras reinicio."""
+        if not os.path.exists(self._estado_runtime_path):
+            return
+        try:
+            with open(self._estado_runtime_path, "r", encoding="utf-8") as fh:
+                data = json.load(fh)
+            if not isinstance(data, dict):
+                return
+
+            acuerdos_pendientes = data.get("acuerdos_pendientes", {})
+            acuerdos_expirados_tx = data.get("acuerdos_expirados_tx", {})
+            acuerdos_expirados_por_remitente = data.get(
+                "acuerdos_expirados_por_remitente", {}
+            )
+            tx_cerrados = data.get("tx_cerrados", {})
+            propuestas_enviadas = data.get("propuestas_enviadas", {})
+            rechazos_recibidos = data.get("rechazos_recibidos", {})
+
+            if isinstance(acuerdos_pendientes, dict):
+                self.acuerdos_pendientes = acuerdos_pendientes
+            if isinstance(acuerdos_expirados_tx, dict):
+                self.acuerdos_expirados_tx = acuerdos_expirados_tx
+            if isinstance(acuerdos_expirados_por_remitente, dict):
+                self.acuerdos_expirados_por_remitente = acuerdos_expirados_por_remitente
+
+            if isinstance(tx_cerrados, dict):
+                self.tx_cerrados = {
+                    str(tx): float(ts)
+                    for tx, ts in tx_cerrados.items()
+                    if isinstance(tx, str)
+                }
+
+            if isinstance(propuestas_enviadas, dict):
+                propuestas: Dict[tuple, int] = {}
+                for key, ronda in propuestas_enviadas.items():
+                    if not isinstance(key, str):
+                        continue
+                    partes = key.split("|")
+                    if len(partes) != 3:
+                        continue
+                    try:
+                        propuestas[(partes[0], partes[1], partes[2])] = int(ronda)
+                    except (TypeError, ValueError):
+                        continue
+                self.propuestas_enviadas = propuestas
+
+            if isinstance(rechazos_recibidos, dict):
+                rechazos: Dict[tuple, int] = {}
+                for key, ronda in rechazos_recibidos.items():
+                    if not isinstance(key, str):
+                        continue
+                    partes = key.split("|")
+                    if len(partes) != 3:
+                        continue
+                    try:
+                        rechazos[(partes[0], partes[1], partes[2])] = int(ronda)
+                    except (TypeError, ValueError):
+                        continue
+                self.rechazos_recibidos = rechazos
+
+            self._log(
+                "INFO",
+                "Estado de negociación cargado",
+                {
+                    "acuerdos_pendientes": sum(
+                        len(v) for v in self.acuerdos_pendientes.values()
+                    ),
+                    "tx_cerrados": len(self.tx_cerrados),
+                },
+            )
+        except Exception as e:
+            self._log("ERROR", f"No se pudo cargar estado de negociación: {e}")
+
+    def _guardar_estado_negociacion(self):
+        """Guarda acuerdos/tx para continuidad entre ejecuciones."""
+        try:
+            propuestas_serializadas = {
+                "|".join(clave): ronda
+                for clave, ronda in self.propuestas_enviadas.items()
+                if isinstance(clave, tuple) and len(clave) == 3
+            }
+            rechazos_serializados = {
+                "|".join(clave): ronda
+                for clave, ronda in self.rechazos_recibidos.items()
+                if isinstance(clave, tuple) and len(clave) == 3
+            }
+
+            data = {
+                "acuerdos_pendientes": self.acuerdos_pendientes,
+                "acuerdos_expirados_tx": self.acuerdos_expirados_tx,
+                "acuerdos_expirados_por_remitente": self.acuerdos_expirados_por_remitente,
+                "tx_cerrados": self.tx_cerrados,
+                "propuestas_enviadas": propuestas_serializadas,
+                "rechazos_recibidos": rechazos_serializados,
+                "updated_at": time.time(),
+            }
+            temp_path = f"{self._estado_runtime_path}.tmp"
+            with open(temp_path, "w", encoding="utf-8") as fh:
+                json.dump(data, fh, ensure_ascii=True, indent=2)
+            os.replace(temp_path, self._estado_runtime_path)
+        except Exception as e:
+            self._log("ERROR", f"No se pudo guardar estado de negociación: {e}")
 
     # =====================================================================
     # ANÁLISIS DE MENSAJES (IA + pydantic)
@@ -464,6 +576,7 @@ class AgenteNegociador:
             console.print(f"\n[bold cyan]🔄 RONDA {ronda}/{max_rondas}[/]")
 
             completado = self._ejecutar_ronda()
+            self._guardar_estado_negociacion()
             if completado:
                 break
 
@@ -473,6 +586,7 @@ class AgenteNegociador:
                 )
                 time.sleep(self.pausa_entre_rondas)
 
+        self._guardar_estado_negociacion()
         self._mostrar_resumen()
 
     # =====================================================================

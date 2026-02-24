@@ -16,12 +16,18 @@ def ejecutar_ronda(agente, console) -> bool:
     agente.ronda_actual += 1
     inicio_ronda = time.time()
 
+    # Evita bloquear recursos durante demasiadas rondas por acuerdos sin respuesta.
+    ttl_base = max(1, int(getattr(agente, "ACUERDO_TTL_SEGUNDOS", 300)))
+    pausa_rondas = max(1, int(getattr(agente, "pausa_entre_rondas", 30)))
+    ttl_dinamico = max(20, pausa_rondas * 2)
+    ttl_activo = min(ttl_base, ttl_dinamico)
+
     ahora = time.time()
     for persona in list(agente.acuerdos_pendientes.keys()):
         acuerdos_activos = []
         acuerdos_expirados = []
         for acuerdo in agente.acuerdos_pendientes[persona]:
-            if ahora - acuerdo.get("timestamp", 0) < agente.ACUERDO_TTL_SEGUNDOS:
+            if ahora - acuerdo.get("timestamp", 0) < ttl_activo:
                 acuerdos_activos.append(acuerdo)
             else:
                 acuerdos_expirados.append(acuerdo)
@@ -31,7 +37,7 @@ def ejecutar_ronda(agente, console) -> bool:
             agente._log(
                 "INFO",
                 f"Moviendo {len(acuerdos_expirados)} acuerdo(s) de {persona} "
-                f"a caché de expirados (TTL activo={agente.ACUERDO_TTL_SEGUNDOS}s, "
+                f"a caché de expirados (TTL activo={ttl_activo}s, "
                 f"gracia={agente.ACUERDO_GRACIA_TTL_SEGUNDOS}s)",
             )
         if acuerdos_activos:
