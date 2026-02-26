@@ -64,7 +64,6 @@ def construir_comando(
     max_rondas: int,
     pausa: int,
     debug: bool,
-    sin_cooldown: bool,
 ) -> list[str]:
     """Construye la lista de argumentos para lanzar un bot."""
     cmd = [
@@ -81,8 +80,6 @@ def construir_comando(
     ]
     if debug:
         cmd.append("--debug")
-    if sin_cooldown:
-        cmd.append("--sin-cooldown")
     return cmd
 
 
@@ -92,7 +89,6 @@ def lanzar_modo_logs(
     max_rondas: int,
     pausa: int,
     debug: bool,
-    sin_cooldown: bool,
 ):
     """Lanza bots redirigiendo salida a archivos de log."""
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
@@ -107,9 +103,7 @@ def lanzar_modo_logs(
         log_path = LOGS_DIR / f"{alias}_{timestamp}.log"
         log_file = open(log_path, "w", encoding="utf-8")
 
-        cmd = construir_comando(
-            alias, modelo, max_rondas, pausa, debug, sin_cooldown
-        )
+        cmd = construir_comando(alias, modelo, max_rondas, pausa, debug)
         proc = subprocess.Popen(
             cmd,
             stdout=log_file,
@@ -130,7 +124,6 @@ def lanzar_modo_consola(
     max_rondas: int,
     pausa: int,
     debug: bool,
-    sin_cooldown: bool,
 ):
     """Lanza bots con salida coloreada en terminal (usa rich)."""
     procesos: list[tuple[str, subprocess.Popen, None]] = []
@@ -152,9 +145,7 @@ def lanzar_modo_consola(
 
     for i, alias in enumerate(aliases):
         estilo = ESTILOS[i % len(ESTILOS)]
-        cmd = construir_comando(
-            alias, modelo, max_rondas, pausa, debug, sin_cooldown
-        )
+        cmd = construir_comando(alias, modelo, max_rondas, pausa, debug)
         proc = subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
@@ -281,13 +272,7 @@ def _tabla_resumen(procesos: list) -> Table:
     default=False,
     help="Mostrar salida coloreada en terminal en vez de logs a archivos.",
 )
-@click.option(
-    "--sin-cooldown",
-    is_flag=True,
-    default=False,
-    help="Pasa --sin-cooldown a cada bot lanzado.",
-)
-def main(num_bots, prefijo, modelo, debug, max_rondas, pausa, consola, sin_cooldown):
+def main(num_bots, prefijo, modelo, debug, max_rondas, pausa, consola):
     """🚀 Orquestador de bots negociadores — lanza N bots en paralelo."""
     if not modelo_soporta_tools(modelo):
         console.print(
@@ -304,8 +289,6 @@ def main(num_bots, prefijo, modelo, debug, max_rondas, pausa, consola, sin_coold
             f"  Bots:       [cyan]{num_bots}[/]  ({', '.join(aliases)})\n"
             f"  Modelo:     [cyan]{modelo}[/]\n"
             f"  Debug:      [{'green' if debug else 'dim'}]{'SÍ' if debug else 'NO'}[/]\n"
-            f"  Cooldown:   [{'yellow' if sin_cooldown else 'green'}]"
-            f"{'DESACTIVADO' if sin_cooldown else 'ACTIVO'}[/]\n"
             f"  Max rondas: [cyan]{max_rondas}[/]\n"
             f"  Pausa:      [cyan]{pausa}s[/]\n"
             f"  Salida:     [cyan]{'consola' if consola else f'archivos en {LOGS_DIR}/'}[/]",
@@ -316,13 +299,9 @@ def main(num_bots, prefijo, modelo, debug, max_rondas, pausa, consola, sin_coold
     console.print("\n[bold]🔧 Lanzando bots…[/]\n")
 
     if consola:
-        procesos = lanzar_modo_consola(
-            aliases, modelo, max_rondas, pausa, debug, sin_cooldown
-        )
+        procesos = lanzar_modo_consola(aliases, modelo, max_rondas, pausa, debug)
     else:
-        procesos = lanzar_modo_logs(
-            aliases, modelo, max_rondas, pausa, debug, sin_cooldown
-        )
+        procesos = lanzar_modo_logs(aliases, modelo, max_rondas, pausa, debug)
 
     console.rule()
     console.print("[green]✅ Todos los bots lanzados. Pulsa Ctrl+C para detenerlos.[/]")

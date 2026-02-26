@@ -68,7 +68,6 @@ class AgenteNegociador:
         modelo: str = MODELO_DEFAULT,
         debug: bool = False,
         api_url: str = None,
-        sin_cooldown: bool = False,
     ):
         if not modelo_soporta_tools(modelo):
             raise ValueError(
@@ -80,7 +79,6 @@ class AgenteNegociador:
         self.ia = OllamaClient(modelo)
         self.analisis_mensajes = AnalisisMensajesService(modelo)
         self.debug = debug
-        self.sin_cooldown = bool(sin_cooldown)
 
         # Estado
         self.modo = ModoAgente.CONSEGUIR_OBJETIVO
@@ -124,25 +122,6 @@ class AgenteNegociador:
         self.pausa_entre_rondas = 30
         self.max_rondas = 10
         self.max_propuestas_por_ronda = 3
-
-        # Anti-spam y cooldowns
-        self.COOLDOWN_CONTACTO_SEGUNDOS: int = 30
-        self.COOLDOWN_RECHAZO_ADAPTADO_SEGUNDOS: int = 45
-        self.SPAM_VENTANA_SEGUNDOS: int = 90
-        self.SPAM_MAX_CARTAS_VENTANA: int = 5
-        self.SPAM_SILENCIO_SEGUNDOS: int = 180
-        self.OFERTA_DUPLICADA_TTL_SEGUNDOS: int = 180
-        self.ultimo_contacto_por_destinatario: Dict[str, float] = {}
-        self.ultimo_rechazo_adaptado_por_remitente: Dict[str, float] = {}
-        self.historial_cartas_por_remitente: Dict[str, List[float]] = {}
-        self.remitente_silenciado_hasta: Dict[str, float] = {}
-        self.ofertas_recientes: Dict[str, float] = {}
-        self.remitentes_gestionados_esta_ronda: set[str] = set()
-
-        if self.sin_cooldown:
-            self.COOLDOWN_CONTACTO_SEGUNDOS = 0
-            self.COOLDOWN_RECHAZO_ADAPTADO_SEGUNDOS = 0
-            self.OFERTA_DUPLICADA_TTL_SEGUNDOS = 0
 
         # ── Configurar loguru ────────────────────────────────────────────
         # Limpiar handlers previos (evitar duplicados en multi-bot)
@@ -450,137 +429,8 @@ class AgenteNegociador:
         return disponibles
 
     # =====================================================================
-    # COOLDOWNS Y ANTI-SPAM
+    # MEMORIA DE RECHAZOS
     # =====================================================================
-
-    @staticmethod
-    def _firma_oferta(
-        remitente: str, ofrecen: Dict[str, int], piden: Dict[str, int]
-    ) -> str:
-        """Genera firma estable para detectar ofertas repetidas."""
-
-        def _partes(recursos: Dict[str, int]) -> str:
-            items = []
-            for rec, cant in recursos.items():
-                try:
-                    cantidad = int(cant)
-                except (TypeError, ValueError):
-                    continue
-                if cantidad <= 0:
-                    continue
-                items.append((str(rec).strip().lower(), cantidad))
-            items.sort(key=lambda x: x[0])
-            return ",".join(f"{rec}:{cant}" for rec, cant in items)
-
-        return f"{str(remitente).strip().lower()}|{_partes(ofrecen)}|{_partes(piden)}"
-
-    def _limpiar_caches_cooldown(self, ahora: Optional[float] = None):
-        """Limpia estructuras temporales de anti-spam y ofertas."""
-        ahora = ahora or time.time()
-        umbral_spam = ahora - self.SPAM_VENTANA_SEGUNDOS
-        umbral_duplicadas = ahora - self.OFERTA_DUPLICADA_TTL_SEGUNDOS
-
-        for remitente in list(self.historial_cartas_por_remitente.keys()):
-            recientes = [
-                ts
-                for ts in self.historial_cartas_por_remitente[remitente]
-                if ts >= umbral_spam
-            ]
-            if recientes:
-                self.historial_cartas_por_remitente[remitente] = recientes
-            else:
-                del self.historial_cartas_por_remitente[remitente]
-
-        for remitente in list(self.remitente_silenciado_hasta.keys()):
-            if self.remitente_silenciado_hasta[remitente] <= ahora:
-                del self.remitente_silenciado_hasta[remitente]
-
-        for firma, ts in list(self.ofertas_recientes.items()):
-            if ts < umbral_duplicadas:
-                del self.ofertas_recientes[firma]
-
-    def _en_cooldown_contacto(
-        self, destinatario: str, ahora: Optional[float] = None
-    ) -> tuple[bool, int]:
-        """Indica si aún no toca volver a enviar carta a un destinatario."""
-        ahora = ahora or time.time()
-        ultimo = self.ultimo_contacto_por_destinatario.get(destinatario)
-        if not ultimo:
-            return False, 0
-        restante = int(self.COOLDOWN_CONTACTO_SEGUNDOS - (ahora - ultimo))
-        return restante > 0, max(0, restante)
-
-    def _registrar_contacto(self, destinatario: str, ahora: Optional[float] = None):
-        """Marca instante del último contacto por carta con un destinatario."""
-        self.ultimo_contacto_por_destinatario[destinatario] = ahora or time.time()
-
-    def _en_cooldown_rechazo_adaptado(
-        self, remitente: str, ahora: Optional[float] = None
-    ) -> tuple[bool, int]:
-        """Evita reintentar propuestas adaptadas demasiado rápido."""
-        ahora = ahora or time.time()
-        ultimo = self.ultimo_rechazo_adaptado_por_remitente.get(remitente)
-        if not ultimo:
-            return False, 0
-        restante = int(self.COOLDOWN_RECHAZO_ADAPTADO_SEGUNDOS - (ahora - ultimo))
-        return restante > 0, max(0, restante)
-
-    def _registrar_rechazo_adaptado(
-        self, remitente: str, ahora: Optional[float] = None
-    ):
-        """Marca instante de última respuesta adaptada a un rechazo."""
-        self.ultimo_rechazo_adaptado_por_remitente[remitente] = ahora or time.time()
-
-    def _registrar_carta_recibida(
-        self, remitente: str, ahora: Optional[float] = None
-    ) -> bool:
-        """Actualiza métrica de cartas recibidas y activa silencio por spam.
-
-        Devuelve True si el remitente está temporalmente silenciado.
-        """
-        ahora = ahora or time.time()
-        self._limpiar_caches_cooldown(ahora)
-
-        silenciado_hasta = self.remitente_silenciado_hasta.get(remitente, 0)
-        if silenciado_hasta > ahora:
-            return True
-
-        hist = self.historial_cartas_por_remitente.setdefault(remitente, [])
-        hist.append(ahora)
-        umbral = ahora - self.SPAM_VENTANA_SEGUNDOS
-        hist = [ts for ts in hist if ts >= umbral]
-        self.historial_cartas_por_remitente[remitente] = hist
-
-        if len(hist) > self.SPAM_MAX_CARTAS_VENTANA:
-            self.remitente_silenciado_hasta[remitente] = (
-                ahora + self.SPAM_SILENCIO_SEGUNDOS
-            )
-            self._log(
-                "ALERTA",
-                f"Remitente {remitente} silenciado por spam durante "
-                f"{self.SPAM_SILENCIO_SEGUNDOS}s",
-                {
-                    "cartas_ventana": len(hist),
-                    "ventana_seg": self.SPAM_VENTANA_SEGUNDOS,
-                },
-            )
-            return True
-
-        return False
-
-    def _oferta_duplicada_reciente(
-        self,
-        remitente: str,
-        ofrecen: Dict[str, int],
-        piden: Dict[str, int],
-        ahora: Optional[float] = None,
-    ) -> bool:
-        """Detecta ofertas repetidas de un remitente en una ventana corta."""
-        ahora = ahora or time.time()
-        firma = self._firma_oferta(remitente, ofrecen, piden)
-        ultimo = self.ofertas_recientes.get(firma, 0)
-        self.ofertas_recientes[firma] = ahora
-        return (ahora - ultimo) < self.OFERTA_DUPLICADA_TTL_SEGUNDOS
 
     def _rechazo_vigente(self, clave: tuple) -> bool:
         """Comprueba si un rechazo sigue vigente (no ha expirado)."""
@@ -640,8 +490,6 @@ class AgenteNegociador:
                 "exito": exito,
             },
         )
-        if exito:
-            self._registrar_contacto(destinatario)
         return exito
 
     def _enviar_paquete(self, destinatario: str, recursos: Dict[str, int]) -> bool:

@@ -14,7 +14,6 @@ def ejecutar_ronda(agente, console) -> bool:
     console.rule(f"[bold]📍 RONDA — Modo: {agente.modo.value}[/bold]")
 
     agente.ronda_actual += 1
-    agente.remitentes_gestionados_esta_ronda = set()
     inicio_ronda = time.time()
 
     # Evita bloquear recursos durante demasiadas rondas por acuerdos sin respuesta.
@@ -47,7 +46,6 @@ def ejecutar_ronda(agente, console) -> bool:
             del agente.acuerdos_pendientes[persona]
 
     limpiar_cache_tx(agente, ahora)
-    agente._limpiar_caches_cooldown(ahora)
 
     claves_viejas = [
         k
