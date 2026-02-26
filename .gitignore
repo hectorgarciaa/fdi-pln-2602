@@ -20,7 +20,7 @@ env/
 # He visto que tienes una carpeta 'app/logs', mejor que no suba tus trazas
 app/logs/
 *.log
-
+estado_butler.json
 # --- Archivos de configuración de IDE ---
 .vscode/
 .idea/
