@@ -119,8 +119,8 @@ class AnalisisMensajesService:
                 "   - No inventes recursos/cantidades fuera del contexto.\n\n"
                 "5) razon: explicación breve de tu análisis.\n\n"
                 'Ejemplo: "yo te doy 2 madera y tú me das 3 piedra"\n'
-                "→ es_aceptacion=false, ofrecen={\"madera\": 2}, "
-                "piden={\"piedra\": 3}, decision=..."
+                '→ es_aceptacion=false, ofrecen={"madera": 2}, '
+                'piden={"piedra": 3}, decision=...'
             ),
             model_settings=ai_settings,
             retries=2,

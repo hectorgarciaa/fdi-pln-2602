@@ -58,9 +58,7 @@ def extraer_recursos_mencionados(
     encontrados: List[str] = []
 
     if candidatos is not None:
-        candidatos_norm = [
-            str(c).strip().lower() for c in candidatos if str(c).strip()
-        ]
+        candidatos_norm = [str(c).strip().lower() for c in candidatos if str(c).strip()]
         for recurso in candidatos_norm:
             if _re.search(r"\b" + _re.escape(recurso) + r"\b", msg_lower):
                 encontrados.append(recurso)

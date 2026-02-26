@@ -253,7 +253,9 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
         hay_oferta = bool(r.ofrecen or r.piden)
         decision = r.decision if hay_oferta else "ignorar"
 
-        if hay_oferta and agente._oferta_duplicada_reciente(remitente, r.ofrecen, r.piden):
+        if hay_oferta and agente._oferta_duplicada_reciente(
+            remitente, r.ofrecen, r.piden
+        ):
             agente._log(
                 "INFO",
                 f"Oferta duplicada reciente de {remitente} — ignorada",
@@ -376,7 +378,9 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
                         f"dar={contra['_ofrezco']}, pedir={contra['_pido']} "
                         f"[tx:{contra.get('_tx_id')}]",
                     )
-                    if agente._enviar_carta(remitente, contra["asunto"], contra["cuerpo"]):
+                    if agente._enviar_carta(
+                        remitente, contra["asunto"], contra["cuerpo"]
+                    ):
                         registrar_acuerdo_pendiente(
                             agente,
                             remitente,

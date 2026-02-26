@@ -20,7 +20,11 @@ from rich.table import Table
 
 from pln_bot.agente.negociador import AgenteNegociador
 from pln_bot.services.api_client import APIClient
-from pln_bot.core.config import MODELOS_DISPONIBLES, MODELO_DEFAULT, modelo_soporta_tools
+from pln_bot.core.config import (
+    MODELOS_DISPONIBLES,
+    MODELO_DEFAULT,
+    modelo_soporta_tools,
+)
 
 console = Console()
 

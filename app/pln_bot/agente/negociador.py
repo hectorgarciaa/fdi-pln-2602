@@ -552,7 +552,10 @@ class AgenteNegociador:
                 "ALERTA",
                 f"Remitente {remitente} silenciado por spam durante "
                 f"{self.SPAM_SILENCIO_SEGUNDOS}s",
-                {"cartas_ventana": len(hist), "ventana_seg": self.SPAM_VENTANA_SEGUNDOS},
+                {
+                    "cartas_ventana": len(hist),
+                    "ventana_seg": self.SPAM_VENTANA_SEGUNDOS,
+                },
             )
             return True
 
