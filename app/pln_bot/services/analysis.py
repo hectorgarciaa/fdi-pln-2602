@@ -285,7 +285,7 @@ class AnalisisMensajesService:
             limits_estructurado = UsageLimits(
                 request_limit=2,
                 tool_calls_limit=3,
-                response_tokens_limit=300,
+                output_tokens_limit=300,
             )
             result = self._agente.run_sync(
                 prompt_estructurado,
@@ -312,7 +312,7 @@ class AnalisisMensajesService:
         limits_principal = UsageLimits(
             request_limit=4,
             tool_calls_limit=3,
-            response_tokens_limit=600,
+            output_tokens_limit=600,
         )
         try:
             result = self._agente.run_sync(
@@ -337,7 +337,7 @@ class AnalisisMensajesService:
             limits_rescate = UsageLimits(
                 request_limit=2,
                 tool_calls_limit=3,
-                response_tokens_limit=300,
+                output_tokens_limit=300,
             )
             try:
                 result = self._agente.run_sync(
