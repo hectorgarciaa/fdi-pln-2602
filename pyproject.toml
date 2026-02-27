@@ -1,7 +1,7 @@
 [project]
 name = "fdi_pln_2602_p1"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0"
+description = "Agente negociador autónomo basado en PLN para la práctica 1"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -10,6 +10,17 @@ dependencies = [
     "ollama>=0.6.1",
     "pydantic>=2.12.5",
     "pydantic-ai>=1.57.0",
+    "python-dotenv>=1.1.0",
     "requests>=2.32.5",
     "rich>=14.3.2",
 ]
+
+[project.scripts]
+fdi-pln-2602-p1 = "app.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]

@@ -663,14 +663,15 @@ wheels = [
 
 [[package]]
 name = "fdi-pln-2602-p1"
-version = "0.1.0"
-source = { virtual = "." }
+version = "1.0"
+source = { editable = "." }
 dependencies = [
     { name = "click" },
     { name = "loguru" },
     { name = "ollama" },
     { name = "pydantic" },
     { name = "pydantic-ai" },
+    { name = "python-dotenv" },
     { name = "requests" },
     { name = "rich" },
 ]
@@ -682,6 +683,7 @@ requires-dist = [
     { name = "ollama", specifier = ">=0.6.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "pydantic-ai", specifier = ">=1.57.0" },
+    { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "requests", specifier = ">=2.32.5" },
     { name = "rich", specifier = ">=14.3.2" },
 ]
