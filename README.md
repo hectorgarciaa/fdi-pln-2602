@@ -297,7 +297,7 @@ Toda la configuración está centralizada en `app/pln_bot/core/config.py` usando
 | `top_p` | 0.7 |
 | `top_k` | 20 |
 | `repeat_penalty` | 1.2 |
-| `num_predict` | 2048 |
+| `num_predict` | 512 |
 | `num_ctx` | 2048 |
 
 ---

@@ -43,7 +43,7 @@ class OllamaParams(BaseModel):
     top_p: float = 0.7
     top_k: int = 20
     repeat_penalty: float = 1.2
-    num_predict: int = 2048
+    num_predict: int = 512
     num_ctx: int = 2048
     num_gpu: int = 1
     num_thread: int = 8
