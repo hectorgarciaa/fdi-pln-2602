@@ -62,7 +62,9 @@ class Settings(BaseModel):
 
     # ── URLs (resolución: env → .env → default) ─────────────────────────
     api_base_url: str = Field(
-        default_factory=lambda: _ensure_http(_env("FDI_PLN__BUTLER_ADDRESS", "127.0.0.1:7719"))
+        default_factory=lambda: _ensure_http(
+            _env("FDI_PLN__BUTLER_ADDRESS", "127.0.0.1:7719")
+        )
     )
     ollama_url: str = Field(
         default_factory=lambda: _env("FDI_PLN__OLLAMA_URL", "http://127.0.0.1:11434")
