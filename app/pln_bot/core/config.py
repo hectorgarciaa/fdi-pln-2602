@@ -31,6 +31,13 @@ def _env(var: str, default: str) -> str:
     return os.getenv(var, default).strip().rstrip("/") or default
 
 
+def _ensure_http(url: str) -> str:
+    """Añade 'http://' si la URL no tiene esquema."""
+    if url.startswith(("http://", "https://")):
+        return url
+    return f"http://{url}"
+
+
 def modelo_soporta_tools(modelo: str) -> bool:
     """Valida si el modelo soporta el flujo de tools de negociación."""
     return modelo.strip().lower().startswith("qwen")
@@ -55,7 +62,7 @@ class Settings(BaseModel):
 
     # ── URLs (resolución: env → .env → default) ─────────────────────────
     api_base_url: str = Field(
-        default_factory=lambda: _env("FDI_PLN__BUTLER_ADDRESS", "http://127.0.0.1:7719")
+        default_factory=lambda: _ensure_http(_env("FDI_PLN__BUTLER_ADDRESS", "127.0.0.1:7719"))
     )
     ollama_url: str = Field(
         default_factory=lambda: _env("FDI_PLN__OLLAMA_URL", "http://127.0.0.1:11434")
