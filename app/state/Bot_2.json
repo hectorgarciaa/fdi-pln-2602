@@ -2,35 +2,494 @@
   "acuerdos_pendientes": {
     "profesor": [
       {
-        "tx_id": "e63d27b71f",
+        "tx_id": "e4ae97537b",
         "recursos_dar": {
-          "trigo": 1
-        },
-        "recursos_pedir": {
-          "ladrillos": 1
-        },
-        "timestamp": 1772147004.9547982
-      }
-    ],
-    "Bot_1": [
-      {
-        "tx_id": "3fc1a6861a",
-        "recursos_dar": {
-          "aceite": 1
+          "oro": 1
         },
         "recursos_pedir": {
           "vino": 1
         },
-        "timestamp": 1772147005.9570081
+        "timestamp": 1772150180.75486
+      }
+    ],
+    "Bot_1": [
+      {
+        "tx_id": "c837b34d08",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "ladrillos": 1
+        },
+        "timestamp": 1772150181.757515
       }
     ]
   },
-  "acuerdos_expirados_tx": {},
-  "acuerdos_expirados_por_remitente": {},
-  "tx_cerrados": {},
+  "acuerdos_expirados_tx": {
+    "e2e5773780": {
+      "remitente": "profesor",
+      "acuerdo": {
+        "tx_id": "e2e5773780",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772149932.7481208
+      },
+      "expira_en": 1772150202.7478886
+    },
+    "69b62e8b87": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "69b62e8b87",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772149933.7506382
+      },
+      "expira_en": 1772150202.7478886
+    },
+    "dba5582673": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "dba5582673",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "ladrillos": 1
+        },
+        "timestamp": 1772149947.7539973
+      },
+      "expira_en": 1772150217.750428
+    },
+    "09daf8b277": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "09daf8b277",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "ladrillos": 1
+        },
+        "timestamp": 1772149962.7560585
+      },
+      "expira_en": 1772150232.7524793
+    },
+    "e431e77c27": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "e431e77c27",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772149977.757984
+      },
+      "expira_en": 1772150247.7553535
+    },
+    "8a47af1211": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "8a47af1211",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772149992.7601125
+      },
+      "expira_en": 1772150262.7588642
+    },
+    "ddf1866dfa": {
+      "remitente": "profesor",
+      "acuerdo": {
+        "tx_id": "ddf1866dfa",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "ladrillos": 1
+        },
+        "timestamp": 1772149992.7739887
+      },
+      "expira_en": 1772150262.7588642
+    },
+    "55a7fd27a7": {
+      "remitente": "profesor",
+      "acuerdo": {
+        "tx_id": "55a7fd27a7",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "ladrillos": 1
+        },
+        "timestamp": 1772150037.7761378
+      },
+      "expira_en": 1772150307.7663007
+    },
+    "9f053c95dd": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "9f053c95dd",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "ladrillos": 1
+        },
+        "timestamp": 1772150052.7689342
+      },
+      "expira_en": 1772150322.7685401
+    },
+    "a2b9b8e5e1": {
+      "remitente": "profesor",
+      "acuerdo": {
+        "tx_id": "a2b9b8e5e1",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772150067.775017
+      },
+      "expira_en": 1772150337.7712786
+    },
+    "43d50e5943": {
+      "remitente": "profesor",
+      "acuerdo": {
+        "tx_id": "43d50e5943",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772150112.780028
+      },
+      "expira_en": 1772150390.74319
+    },
+    "fa85f85ae8": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "fa85f85ae8",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772150113.7825227
+      },
+      "expira_en": 1772150390.74319
+    },
+    "bae2ed8675": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "bae2ed8675",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772150127.7860868
+      },
+      "expira_en": 1772150390.74319
+    },
+    "0db8061d5d": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "0db8061d5d",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772150140.7345982
+      },
+      "expira_en": 1772150405.7459462
+    },
+    "dc060c94b2": {
+      "remitente": "Bot_1",
+      "acuerdo": {
+        "tx_id": "dc060c94b2",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "vino": 1
+        },
+        "timestamp": 1772150140.739574
+      },
+      "expira_en": 1772150405.7459462
+    },
+    "86ccc9112b": {
+      "remitente": "profesor",
+      "acuerdo": {
+        "tx_id": "86ccc9112b",
+        "recursos_dar": {
+          "oro": 1
+        },
+        "recursos_pedir": {
+          "ladrillos": 1
+        },
+        "timestamp": 1772150150.7613792
+      },
+      "expira_en": 1772150420.7488947
+    }
+  },
+  "acuerdos_expirados_por_remitente": {
+    "profesor": [
+      {
+        "remitente": "profesor",
+        "acuerdo": {
+          "tx_id": "e2e5773780",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772149932.7481208
+        },
+        "expira_en": 1772150202.7478886
+      },
+      {
+        "remitente": "profesor",
+        "acuerdo": {
+          "tx_id": "ddf1866dfa",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "ladrillos": 1
+          },
+          "timestamp": 1772149992.7739887
+        },
+        "expira_en": 1772150262.7588642
+      },
+      {
+        "remitente": "profesor",
+        "acuerdo": {
+          "tx_id": "55a7fd27a7",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "ladrillos": 1
+          },
+          "timestamp": 1772150037.7761378
+        },
+        "expira_en": 1772150307.7663007
+      },
+      {
+        "remitente": "profesor",
+        "acuerdo": {
+          "tx_id": "a2b9b8e5e1",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772150067.775017
+        },
+        "expira_en": 1772150337.7712786
+      },
+      {
+        "remitente": "profesor",
+        "acuerdo": {
+          "tx_id": "43d50e5943",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772150112.780028
+        },
+        "expira_en": 1772150390.74319
+      },
+      {
+        "remitente": "profesor",
+        "acuerdo": {
+          "tx_id": "86ccc9112b",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "ladrillos": 1
+          },
+          "timestamp": 1772150150.7613792
+        },
+        "expira_en": 1772150420.7488947
+      }
+    ],
+    "Bot_1": [
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "69b62e8b87",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772149933.7506382
+        },
+        "expira_en": 1772150202.7478886
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "dba5582673",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "ladrillos": 1
+          },
+          "timestamp": 1772149947.7539973
+        },
+        "expira_en": 1772150217.750428
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "09daf8b277",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "ladrillos": 1
+          },
+          "timestamp": 1772149962.7560585
+        },
+        "expira_en": 1772150232.7524793
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "e431e77c27",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772149977.757984
+        },
+        "expira_en": 1772150247.7553535
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "8a47af1211",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772149992.7601125
+        },
+        "expira_en": 1772150262.7588642
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "9f053c95dd",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "ladrillos": 1
+          },
+          "timestamp": 1772150052.7689342
+        },
+        "expira_en": 1772150322.7685401
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "fa85f85ae8",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772150113.7825227
+        },
+        "expira_en": 1772150390.74319
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "bae2ed8675",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772150127.7860868
+        },
+        "expira_en": 1772150390.74319
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "0db8061d5d",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772150140.7345982
+        },
+        "expira_en": 1772150405.7459462
+      },
+      {
+        "remitente": "Bot_1",
+        "acuerdo": {
+          "tx_id": "dc060c94b2",
+          "recursos_dar": {
+            "oro": 1
+          },
+          "recursos_pedir": {
+            "vino": 1
+          },
+          "timestamp": 1772150140.739574
+        },
+        "expira_en": 1772150405.7459462
+      }
+    ]
+  },
+  "tx_cerrados": {
+    "696c16a5bf": 1772149977.7659843,
+    "cdd9a1c043": 1772149992.7688806,
+    "aa34dbb33f": 1772150037.7688432,
+    "48c30d1641": 1772150150.756433
+  },
   "propuestas_enviadas": {
-    "profesor|trigo|ladrillos": 1,
-    "Bot_1|aceite|vino": 1
+    "profesor|oro|vino": 17,
+    "Bot_1|oro|ladrillos": 17
   },
   "rechazos_recibidos": {
     "Bot_1|queso|aceite": 2,
@@ -40,7 +499,70 @@
     "profesor|queso|vino": 2,
     "profesor|madera|ladrillos": 2,
     "profesor|queso|ladrillos": 2,
-    "profesor|trigo|ladrillos": 2
+    "profesor|trigo|ladrillos": 2,
+    "Bot_1|trigo|oro": 7,
+    "profesor|oro|vino": 18,
+    "Bot_1|ladrillos|oro": 14,
+    "Bot_1|oro|vino": 16,
+    "profesor|oro|ladrillos": 16,
+    "profesor|vino|oro": 14,
+    "Bot_1|oro|ladrillos": 18
   },
-  "updated_at": 1772147429.8271687
+  "backoff_combos": {
+    "profesor|trigo|ladrillos": {
+      "nivel": 0,
+      "next_round": 2,
+      "updated_round": 1,
+      "motivo": "expirado_sin_respuesta"
+    },
+    "Bot_1|aceite|vino": {
+      "nivel": 0,
+      "next_round": 2,
+      "updated_round": 1,
+      "motivo": "expirado_sin_respuesta"
+    },
+    "Bot_1|oro|ladrillos": {
+      "nivel": 3,
+      "next_round": 24,
+      "updated_round": 18,
+      "motivo": "rechazo_recibido"
+    },
+    "Bot_1|trigo|oro": {
+      "nivel": 2,
+      "next_round": 11,
+      "updated_round": 7,
+      "motivo": "rechazo_propio"
+    },
+    "Bot_1|oro|vino": {
+      "nivel": 3,
+      "next_round": 22,
+      "updated_round": 16,
+      "motivo": "rechazo_recibido"
+    },
+    "Bot_1|ladrillos|oro": {
+      "nivel": 3,
+      "next_round": 20,
+      "updated_round": 14,
+      "motivo": "rechazo_propio"
+    },
+    "profesor|oro|vino": {
+      "nivel": 2,
+      "next_round": 22,
+      "updated_round": 18,
+      "motivo": "rechazo_recibido"
+    },
+    "profesor|vino|oro": {
+      "nivel": 0,
+      "next_round": 15,
+      "updated_round": 14,
+      "motivo": "rechazo_propio"
+    },
+    "profesor|oro|ladrillos": {
+      "nivel": 1,
+      "next_round": 19,
+      "updated_round": 17,
+      "motivo": "expirado_sin_respuesta"
+    }
+  },
+  "updated_at": 1772150200.752109
 }

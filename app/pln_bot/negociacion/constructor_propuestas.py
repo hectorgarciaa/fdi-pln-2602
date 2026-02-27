@@ -25,6 +25,9 @@ def generar_propuesta(
         lista_necesidades = list(necesidades.keys())
         lista_excedentes = list(exc_disp.keys())
         total_combos = len(lista_necesidades) * len(lista_excedentes)
+        bloqueadas_rechazo = 0
+        bloqueadas_reciente = 0
+        bloqueadas_backoff = 0
 
         for offset in range(total_combos):
             idx = (agente.propuesta_index + offset) % total_combos
@@ -36,11 +39,17 @@ def generar_propuesta(
             clave = (destinatario, recurso_ofrezco, recurso_pido)
 
             if agente._rechazo_vigente(clave):
+                bloqueadas_rechazo += 1
+                continue
+            en_backoff, _ = agente._combo_en_backoff(clave)
+            if en_backoff:
+                bloqueadas_backoff += 1
                 continue
             if (
                 clave in agente.propuestas_enviadas
                 and agente.ronda_actual - agente.propuestas_enviadas[clave] < 2
             ):
+                bloqueadas_reciente += 1
                 continue
 
             cantidad_ofrezco = 1
@@ -84,6 +93,9 @@ def generar_propuesta(
                     clave = (destinatario, "oro", recurso_pido)
                     if agente._rechazo_vigente(clave):
                         continue
+                    en_backoff, _ = agente._combo_en_backoff(clave)
+                    if en_backoff:
+                        continue
                     if oro_libre >= 1:
                         ofrezco = {"oro": 1}
                         pido = {recurso_pido: 1}
@@ -98,6 +110,9 @@ def generar_propuesta(
                         "rechazos_vigentes": len(agente.rechazos_recibidos),
                         "comprometidos": comprometidos,
                         "oro_libre": oro - comprometidos.get("oro", 0),
+                        "bloq_rechazo": bloqueadas_rechazo,
+                        "bloq_reciente": bloqueadas_reciente,
+                        "bloq_backoff": bloqueadas_backoff,
                     },
                 )
                 return None
@@ -110,6 +125,9 @@ def generar_propuesta(
             clave = (destinatario, "oro", recurso_pido)
             if agente._rechazo_vigente(clave):
                 continue
+            en_backoff, _ = agente._combo_en_backoff(clave)
+            if en_backoff:
+                continue
             if oro_libre >= 1:
                 ofrezco = {"oro": 1}
                 pido = {recurso_pido: 1}
@@ -121,6 +139,9 @@ def generar_propuesta(
         recurso_ofrezco = list(exc_disp.keys())[0]
         clave = (destinatario, recurso_ofrezco, "oro")
         if agente._rechazo_vigente(clave):
+            return None
+        en_backoff, _ = agente._combo_en_backoff(clave)
+        if en_backoff:
             return None
         ofrezco = {recurso_ofrezco: 1}
         pido = {"oro": 1}

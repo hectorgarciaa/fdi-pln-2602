@@ -4,18 +4,22 @@ Procesamiento del buzón de cartas para el agente negociador.
 
 from typing import Dict
 
+from ..services.analysis import RespuestaUnificada
 from .gestor_acuerdos import registrar_acuerdo_pendiente, responder_aceptacion
 from .utilidades_mensajes import (
     es_aceptacion_simple,
     es_carta_sistema,
     es_mensaje_corto_sin_propuesta,
     es_rechazo_simple,
+    extraer_oferta_estructurada,
     extraer_recursos_mencionados,
     extraer_tx_id,
     registrar_rechazo,
     registrar_rechazo_propio,
 )
 from .constructor_propuestas import (
+    generar_contraoferta,
+    generar_propuesta,
     generar_propuesta_adaptada,
     nuevo_tx_id,
 )
@@ -79,18 +83,118 @@ def _enviar_rechazo_no_silencioso(
     agente._enviar_carta(remitente, asunto, cuerpo)
 
 
+def _registrar_propuesta_en_memoria(agente, remitente: str, propuesta: Dict) -> None:
+    """Guarda tracking de propuesta enviada desde cualquier flujo."""
+    registrar_acuerdo_pendiente(
+        agente,
+        remitente,
+        propuesta["_ofrezco"],
+        propuesta["_pido"],
+        propuesta["_tx_id"],
+    )
+    for r_o in propuesta["_ofrezco"]:
+        for r_p in propuesta["_pido"]:
+            agente.propuestas_enviadas[(remitente, r_o, r_p)] = agente.ronda_actual
+
+
+def _responder_contraoferta_o_rechazo(
+    agente,
+    remitente: str,
+    asunto: str,
+    razon: str,
+    ofrecen: Dict[str, int],
+    piden: Dict[str, int],
+    necesidades: Dict[str, int],
+    excedentes: Dict[str, int],
+) -> None:
+    """Intenta contraofertar antes de enviar rechazo definitivo."""
+    contra = generar_contraoferta(agente, remitente, ofrecen, necesidades, excedentes)
+    if not contra:
+        oro_actual = (
+            agente.info_actual.get("Recursos", {}).get("oro", 0)
+            if agente.info_actual
+            else 0
+        )
+        contra = generar_propuesta(agente, remitente, necesidades, excedentes, oro_actual)
+
+    if contra:
+        agente._log(
+            "DECISION",
+            f"RECHAZO + CONTRAOFERTA a {remitente}: "
+            f"dar={contra['_ofrezco']}, pedir={contra['_pido']} "
+            f"[tx:{contra.get('_tx_id')}]",
+            {"motivo_rechazo_original": razon},
+        )
+        if agente._enviar_carta(remitente, contra["asunto"], contra["cuerpo"]):
+            _registrar_propuesta_en_memoria(agente, remitente, contra)
+            return
+        agente._log("ERROR", f"No se pudo enviar contraoferta a {remitente}")
+
+    _enviar_rechazo_no_silencioso(agente, remitente, asunto, razon)
+
+
+def _decision_rapida_oferta(
+    agente,
+    ofrecen: Dict[str, int],
+    piden: Dict[str, int],
+    necesidades: Dict[str, int],
+    excedentes: Dict[str, int],
+) -> RespuestaUnificada:
+    """Decisión rápida sin LLM para ofertas en formato plantilla."""
+    if not ofrecen or not piden:
+        return RespuestaUnificada(
+            decision="ignorar",
+            razon="oferta estructurada incompleta",
+            ofrecen=ofrecen,
+            piden=piden,
+        )
+
+    exc_disp = agente._excedentes_disponibles(excedentes)
+    puede_entregar = all(exc_disp.get(rec, 0) >= cant for rec, cant in piden.items())
+
+    valor_recibo = sum(min(int(cant), int(necesidades.get(rec, 0))) for rec, cant in ofrecen.items())
+    coste_entrego = sum(min(int(cant), int(necesidades.get(rec, 0))) for rec, cant in piden.items())
+
+    if puede_entregar and valor_recibo > 0 and valor_recibo >= coste_entrego:
+        return RespuestaUnificada(
+            ofrecen=ofrecen,
+            piden=piden,
+            decision="aceptar",
+            razon="analisis_rapido: cubre necesidades y no empeora objetivo",
+        )
+
+    return RespuestaUnificada(
+        ofrecen=ofrecen,
+        piden=piden,
+        decision="rechazar",
+        razon="analisis_rapido: oferta no favorable o no entregable con excedentes",
+    )
+
+
 def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
     """Procesa todas las cartas del buzón usando IA para lenguaje natural."""
     buzon = agente.info_actual.get("Buzon", {}) if agente.info_actual else {}
     intercambios = 0
-    cartas_procesadas = []
+    analisis_llm_realizados = 0
+    max_analisis_llm = max(1, int(getattr(agente, "max_analisis_llm_por_ronda", 3)))
+
+    def _cerrar_carta(uid_local: str, carta_id_local: str, motivo: str) -> None:
+        agente.cartas_vistas.add(carta_id_local)
+        if not agente.api.eliminar_carta(uid_local):
+            agente._log(
+                "ALERTA",
+                f"No se pudo eliminar carta {uid_local} tras {motivo}",
+            )
 
     for uid, carta in buzon.items():
         carta_id = carta.get("id", uid)
         if carta_id in agente.cartas_vistas:
-            cartas_procesadas.append(uid)
+            if not agente.api.eliminar_carta(uid):
+                agente._log(
+                    "ALERTA",
+                    f"No se pudo limpiar carta ya vista {uid} del buzón",
+                )
             continue
-        agente.cartas_vistas.add(carta_id)
 
         remitente = carta.get("remi", "Desconocido")
         mensaje = carta.get("cuerpo", "")
@@ -105,7 +209,7 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
         # ── Filtro 0: cartas del Sistema → ignorar ──
         if es_carta_sistema(remitente, mensaje):
             agente._log("INFO", f"Carta del sistema de '{remitente}' — ignorada")
-            cartas_procesadas.append(uid)
+            _cerrar_carta(uid, carta_id, "ignorar carta de sistema")
             continue
 
         aceptacion_textual = es_aceptacion_simple(mensaje, asunto)
@@ -118,7 +222,7 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
             )
             if responder_aceptacion(agente, remitente, mensaje, asunto):
                 intercambios += 1
-            cartas_procesadas.append(uid)
+            _cerrar_carta(uid, carta_id, "procesar aceptación textual")
             continue
 
         # ── Filtro 1: rechazos simples → extraer contexto si lo hay ──
@@ -188,7 +292,7 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
                     f"Rechazo de {remitente} — ignorado (sin contexto aprovechable)",
                 )
 
-            cartas_procesadas.append(uid)
+            _cerrar_carta(uid, carta_id, "procesar rechazo simple")
             continue
 
         # ── Filtro 2: mensajes muy cortos sin propuesta ──
@@ -196,32 +300,62 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
             agente._log(
                 "INFO", f"Mensaje corto de {remitente} sin propuesta — ignorado"
             )
-            cartas_procesadas.append(uid)
+            _cerrar_carta(uid, carta_id, "ignorar mensaje corto")
             continue
 
-        # ── Análisis unificado (1 sola llamada IA) ──
-        recursos_actuales = (
-            agente.info_actual.get("Recursos", {}) if agente.info_actual else {}
-        )
-        objetivo_actual = (
-            agente.info_actual.get("Objetivo", {}) if agente.info_actual else {}
-        )
-        r = agente._analizar_mensaje(
-            remitente=remitente,
-            mensaje=mensaje,
-            asunto=asunto,
-            necesidades=necesidades,
-            excedentes=excedentes,
-            recursos_actuales=recursos_actuales,
-            objetivo=objetivo_actual,
-        )
+        # ── Fast-path: oferta estructurada en plantilla (sin LLM) ──
+        ofrecen_struct, piden_struct = extraer_oferta_estructurada(asunto, mensaje)
+        if ofrecen_struct and piden_struct:
+            r = _decision_rapida_oferta(
+                agente,
+                ofrecen=ofrecen_struct,
+                piden=piden_struct,
+                necesidades=necesidades,
+                excedentes=excedentes,
+            )
+            agente._log(
+                "ANALISIS",
+                f"Carta estructurada de {remitente} analizada sin LLM",
+                {
+                    "ofrecen": r.ofrecen,
+                    "piden": r.piden,
+                    "decision": r.decision,
+                    "razon": r.razon,
+                },
+            )
+        else:
+            # ── Análisis unificado (1 sola llamada IA) ──
+            if analisis_llm_realizados >= max_analisis_llm:
+                agente._log(
+                    "INFO",
+                    f"Presupuesto LLM agotado ({max_analisis_llm}/ronda). "
+                    f"Carta de {remitente} diferida.",
+                )
+                continue
+
+            recursos_actuales = (
+                agente.info_actual.get("Recursos", {}) if agente.info_actual else {}
+            )
+            objetivo_actual = (
+                agente.info_actual.get("Objetivo", {}) if agente.info_actual else {}
+            )
+            r = agente._analizar_mensaje(
+                remitente=remitente,
+                mensaje=mensaje,
+                asunto=asunto,
+                necesidades=necesidades,
+                excedentes=excedentes,
+                recursos_actuales=recursos_actuales,
+                objetivo=objetivo_actual,
+            )
+            analisis_llm_realizados += 1
 
         # ── ¿Aceptación? → responder ──
         if r.es_aceptacion:
             agente._log("ANALISIS", f"{remitente} ACEPTA intercambio")
             if responder_aceptacion(agente, remitente, mensaje, asunto):
                 intercambios += 1
-            cartas_procesadas.append(uid)
+            _cerrar_carta(uid, carta_id, "procesar aceptación LLM")
             continue
 
         # ── Decisión guiada por LLM ──
@@ -299,11 +433,15 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
                     f"no hay recursos válidos para enviar — rechazada",
                 )
                 registrar_rechazo_propio(agente, remitente, r.ofrecen, r.piden)
-                _enviar_rechazo_no_silencioso(
+                _responder_contraoferta_o_rechazo(
                     agente,
                     remitente,
                     asunto,
                     "no tengo recursos válidos para cumplir lo pedido",
+                    r.ofrecen,
+                    r.piden,
+                    necesidades,
+                    excedentes,
                 )
             else:
                 agente._log(
@@ -312,11 +450,15 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
                     f"no tengo suficientes excedentes para enviar {r.piden}",
                 )
                 registrar_rechazo_propio(agente, remitente, r.ofrecen, r.piden)
-                _enviar_rechazo_no_silencioso(
+                _responder_contraoferta_o_rechazo(
                     agente,
                     remitente,
                     asunto,
                     f"no tengo suficientes excedentes para enviar {r.piden}",
+                    r.ofrecen,
+                    r.piden,
+                    necesidades,
+                    excedentes,
                 )
 
         elif decision == "contraofertar" and hay_oferta:
@@ -329,8 +471,15 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
                     f"Contraoferta de IA inválida para {remitente} ({razon})",
                 )
                 registrar_rechazo_propio(agente, remitente, r.ofrecen, r.piden)
-                _enviar_rechazo_no_silencioso(
-                    agente, remitente, asunto, f"no puedo contraofertar ({razon})"
+                _responder_contraoferta_o_rechazo(
+                    agente,
+                    remitente,
+                    asunto,
+                    f"no puedo contraofertar ({razon})",
+                    r.ofrecen,
+                    r.piden,
+                    necesidades,
+                    excedentes,
                 )
             else:
                 exc_disp = agente._excedentes_disponibles(excedentes)
@@ -345,11 +494,15 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
                         {"ofrezco": contra["_ofrezco"], "excedentes": exc_disp},
                     )
                     registrar_rechazo_propio(agente, remitente, r.ofrecen, r.piden)
-                    _enviar_rechazo_no_silencioso(
+                    _responder_contraoferta_o_rechazo(
                         agente,
                         remitente,
                         asunto,
                         "no tengo excedente suficiente para contraofertar",
+                        r.ofrecen,
+                        r.piden,
+                        necesidades,
+                        excedentes,
                     )
                 else:
                     agente._log(
@@ -382,14 +535,23 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
         elif hay_oferta:
             agente._log("DECISION", f"RECHAZO oferta de {remitente} ({razon})")
             registrar_rechazo_propio(agente, remitente, r.ofrecen, r.piden)
-            _enviar_rechazo_no_silencioso(agente, remitente, asunto, razon)
-            agente._log("INFO", f"Oferta de {remitente} rechazada con respuesta explícita")
+            _responder_contraoferta_o_rechazo(
+                agente,
+                remitente,
+                asunto,
+                razon,
+                r.ofrecen,
+                r.piden,
+                necesidades,
+                excedentes,
+            )
+            agente._log(
+                "INFO",
+                f"Oferta de {remitente} rechazada con intento de contraoferta",
+            )
         else:
             agente._log("INFO", f"Mensaje de {remitente} sin propuesta clara: {razon}")
 
-        cartas_procesadas.append(uid)
-
-    for uid in cartas_procesadas:
-        agente.api.eliminar_carta(uid)
+        _cerrar_carta(uid, carta_id, "procesar carta general")
 
     return intercambios

@@ -32,6 +32,14 @@ def ejecutar_ronda(agente, console) -> bool:
             else:
                 acuerdos_expirados.append(acuerdo)
                 mover_a_expirados_por_tx(agente, persona, acuerdo, ahora)
+                recursos_dar = acuerdo.get("recursos_dar", {}) or {}
+                recursos_pedir = acuerdo.get("recursos_pedir", {}) or {}
+                for rec_dar in recursos_dar:
+                    for rec_pedir in recursos_pedir:
+                        agente._registrar_backoff_combo(
+                            (persona, rec_dar, rec_pedir),
+                            "expirado_sin_respuesta",
+                        )
 
         if acuerdos_expirados:
             agente._log(
@@ -46,6 +54,7 @@ def ejecutar_ronda(agente, console) -> bool:
             del agente.acuerdos_pendientes[persona]
 
     limpiar_cache_tx(agente, ahora)
+    agente._limpiar_backoff_obsoletos()
 
     claves_viejas = [
         k

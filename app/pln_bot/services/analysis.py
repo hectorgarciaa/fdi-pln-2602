@@ -10,6 +10,7 @@ from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
 from pydantic_ai.settings import ModelSettings
+from pydantic_ai.usage import UsageLimits
 
 from ..core.config import OLLAMA_URL
 
@@ -75,9 +76,11 @@ class AnalisisMensajesService:
         ai_provider = OllamaProvider(base_url=ollama_base)
         ai_model = OpenAIChatModel(modelo, provider=ai_provider)
         ai_settings = ModelSettings(
-            temperature=0.3,
-            top_p=0.7,
-            max_tokens=512,
+            temperature=0.1,
+            top_p=0.8,
+            max_tokens=256,
+            timeout=25.0,
+            parallel_tool_calls=False,
         )
         self._contexto: Dict[str, Dict[str, int] | str] = {
             "necesidades": {},
@@ -123,7 +126,7 @@ class AnalisisMensajesService:
                 'piden={"piedra": 3}, decision=...'
             ),
             model_settings=ai_settings,
-            retries=2,
+            retries=1,
         )
         self._registrar_tools()
 
@@ -250,5 +253,12 @@ class AnalisisMensajesService:
             "- Si decides contraofertar, rellena contraoferta_ofrezco y contraoferta_pido.\n"
             "- No inventes cantidades ni recursos."
         )
-        result = self._agente.run_sync(prompt_usuario)
+        result = self._agente.run_sync(
+            prompt_usuario,
+            usage_limits=UsageLimits(
+                request_limit=1,
+                tool_calls_limit=8,
+                response_tokens_limit=256,
+            ),
+        )
         return result.output

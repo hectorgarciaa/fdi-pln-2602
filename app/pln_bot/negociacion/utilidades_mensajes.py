@@ -47,6 +47,50 @@ RE_ASUNTO_RECURSOS = _re.compile(
 )
 RE_RECURSO_INDIVIDUAL = _re.compile(r"(\d+)\s+(\w+)")
 RE_TOKEN = _re.compile(r"\b([a-záéíóúñ][a-z0-9_áéíóúñ-]{1,})\b", _re.IGNORECASE)
+RE_CUERPO_INTERCAMBIO = _re.compile(
+    r"yo\s+te\s+doy\s+(.+?)\s+y\s+t[úu]\s+me\s+das\s+(.+?)(?:[\.\n]|$)",
+    _re.IGNORECASE | _re.DOTALL,
+)
+
+
+def _parsear_recursos_texto(texto: str) -> Dict[str, int]:
+    recursos: Dict[str, int] = {}
+    for cant, rec in RE_RECURSO_INDIVIDUAL.findall(texto or ""):
+        try:
+            cantidad = int(cant)
+        except (TypeError, ValueError):
+            continue
+        if cantidad <= 0:
+            continue
+        recurso_norm = rec.strip().lower()
+        if not recurso_norm:
+            continue
+        recursos[recurso_norm] = recursos.get(recurso_norm, 0) + cantidad
+    return recursos
+
+
+def extraer_oferta_estructurada(asunto: str = "", mensaje: str = "") -> tuple[Dict[str, int], Dict[str, int]]:
+    """Extrae oferta estructurada de asunto/cuerpo en formato plantilla.
+
+    Devuelve `(ofrecen, piden)` donde:
+    - `ofrecen`: recursos que envía el remitente
+    - `piden`: recursos que solicita al destinatario
+    """
+    m_asunto = RE_ASUNTO_RECURSOS.search(asunto or "")
+    if m_asunto:
+        ofrecen = _parsear_recursos_texto(m_asunto.group(1))
+        piden = _parsear_recursos_texto(m_asunto.group(2))
+        if ofrecen and piden:
+            return ofrecen, piden
+
+    m_cuerpo = RE_CUERPO_INTERCAMBIO.search(mensaje or "")
+    if m_cuerpo:
+        ofrecen = _parsear_recursos_texto(m_cuerpo.group(1))
+        piden = _parsear_recursos_texto(m_cuerpo.group(2))
+        if ofrecen and piden:
+            return ofrecen, piden
+
+    return {}, {}
 
 
 def extraer_recursos_mencionados(
@@ -181,6 +225,7 @@ def registrar_rechazo(agente, remitente: str, asunto: str):
             for _, r_p in recs_pido:
                 clave = (remitente, r_o.lower(), r_p.lower())
                 agente.rechazos_recibidos[clave] = agente.ronda_actual
+                agente._registrar_backoff_combo(clave, "rechazo_recibido")
         if recs_ofrezco and recs_pido:
             ofr_str = ", ".join(r for _, r in recs_ofrezco)
             pid_str = ", ".join(r for _, r in recs_pido)
@@ -196,6 +241,7 @@ def registrar_rechazo(agente, remitente: str, asunto: str):
         recurso_pido = m.group(2).lower()
         clave = (remitente, recurso_ofrezco, recurso_pido)
         agente.rechazos_recibidos[clave] = agente.ronda_actual
+        agente._registrar_backoff_combo(clave, "rechazo_recibido")
         agente._log(
             "INFO",
             f"Rechazo registrado de {remitente}: {recurso_ofrezco}→{recurso_pido} (no repetir)",
@@ -210,3 +256,4 @@ def registrar_rechazo_propio(
         for r_p in piden:
             clave = (remitente, r_p, r_o)
             agente.rechazos_recibidos[clave] = agente.ronda_actual
+            agente._registrar_backoff_combo(clave, "rechazo_propio")

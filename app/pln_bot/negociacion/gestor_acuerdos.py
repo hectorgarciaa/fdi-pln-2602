@@ -295,6 +295,9 @@ def responder_aceptacion(
                 ]
                 if not agente.acuerdos_expirados_por_remitente[remitente]:
                     del agente.acuerdos_expirados_por_remitente[remitente]
+        for rec_dar in recursos_a_enviar:
+            for rec_pedir in recursos_a_recibir:
+                agente._limpiar_backoff_combo((remitente, rec_dar, rec_pedir))
         return True
 
     agente._log("ERROR", f"No se pudo enviar paquete a {remitente}")

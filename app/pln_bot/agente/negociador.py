@@ -122,6 +122,10 @@ class AgenteNegociador:
         self.pausa_entre_rondas = 30
         self.max_rondas = 10
         self.max_propuestas_por_ronda = 3
+        self.max_analisis_llm_por_ronda = 3
+        self.BACKOFF_ESCALA_RONDAS: tuple[int, ...] = (1, 2, 4, 6)
+        self.BACKOFF_RETENCION_RONDAS: int = 20
+        self.backoff_combos: Dict[tuple, Dict[str, int | str]] = {}
 
         # ── Configurar loguru ────────────────────────────────────────────
         # Limpiar handlers previos (evitar duplicados en multi-bot)
@@ -278,6 +282,7 @@ class AgenteNegociador:
             tx_cerrados = data.get("tx_cerrados", {})
             propuestas_enviadas = data.get("propuestas_enviadas", {})
             rechazos_recibidos = data.get("rechazos_recibidos", {})
+            backoff_combos = data.get("backoff_combos", {})
 
             if isinstance(acuerdos_pendientes, dict):
                 self.acuerdos_pendientes = acuerdos_pendientes
@@ -321,6 +326,34 @@ class AgenteNegociador:
                         continue
                 self.rechazos_recibidos = rechazos
 
+            if isinstance(backoff_combos, dict):
+                backoff: Dict[tuple, Dict[str, int | str]] = {}
+                for key, raw_data in backoff_combos.items():
+                    if not isinstance(key, str) or not isinstance(raw_data, dict):
+                        continue
+                    partes = key.split("|")
+                    if len(partes) != 3:
+                        continue
+                    clave_norm = self._normalizar_clave_combo(
+                        (partes[0], partes[1], partes[2])
+                    )
+                    if clave_norm is None:
+                        continue
+                    try:
+                        nivel = int(raw_data.get("nivel", 0))
+                        next_round = int(raw_data.get("next_round", 0))
+                        updated_round = int(raw_data.get("updated_round", 0))
+                    except (TypeError, ValueError):
+                        continue
+                    nivel_max = len(self.BACKOFF_ESCALA_RONDAS) - 1
+                    backoff[clave_norm] = {
+                        "nivel": max(0, min(nivel, nivel_max)),
+                        "next_round": max(0, next_round),
+                        "updated_round": max(0, updated_round),
+                        "motivo": str(raw_data.get("motivo", ""))[:80],
+                    }
+                self.backoff_combos = backoff
+
             self._log(
                 "INFO",
                 "Estado de negociación cargado",
@@ -329,6 +362,7 @@ class AgenteNegociador:
                         len(v) for v in self.acuerdos_pendientes.values()
                     ),
                     "tx_cerrados": len(self.tx_cerrados),
+                    "backoff_activos": len(self.backoff_combos),
                 },
             )
         except Exception as e:
@@ -347,6 +381,13 @@ class AgenteNegociador:
                 for clave, ronda in self.rechazos_recibidos.items()
                 if isinstance(clave, tuple) and len(clave) == 3
             }
+            backoff_serializado = {
+                "|".join(clave): data
+                for clave, data in self.backoff_combos.items()
+                if isinstance(clave, tuple)
+                and len(clave) == 3
+                and isinstance(data, dict)
+            }
 
             data = {
                 "acuerdos_pendientes": self.acuerdos_pendientes,
@@ -355,6 +396,7 @@ class AgenteNegociador:
                 "tx_cerrados": self.tx_cerrados,
                 "propuestas_enviadas": propuestas_serializadas,
                 "rechazos_recibidos": rechazos_serializados,
+                "backoff_combos": backoff_serializado,
                 "updated_at": time.time(),
             }
             temp_path = f"{self._estado_runtime_path}.tmp"
@@ -382,6 +424,7 @@ class AgenteNegociador:
 
         Devuelve RespuestaUnificada con parsing + decisión sugerida por LLM.
         """
+        inicio = time.perf_counter()
         try:
             r = self.analisis_mensajes.analizar(
                 remitente=remitente,
@@ -393,10 +436,15 @@ class AgenteNegociador:
                 objetivo=objetivo,
                 modo_agente=self.modo.value,
             )
-            self._log("DEBUG", f"IA unificada: {r.model_dump()}")
+            duracion_ms = int((time.perf_counter() - inicio) * 1000)
+            self._log(
+                "DEBUG",
+                f"IA unificada ({duracion_ms}ms): {r.model_dump()}",
+            )
             return r
         except Exception as e:
-            self._log("ERROR", f"Error pydantic_ai: {e}")
+            duracion_ms = int((time.perf_counter() - inicio) * 1000)
+            self._log("ERROR", f"Error pydantic_ai tras {duracion_ms}ms: {e}")
             return RespuestaUnificada(
                 decision="ignorar", razon="No se pudo analizar el mensaje"
             )
@@ -438,6 +486,75 @@ class AgenteNegociador:
             return False
         ronda_rechazo = self.rechazos_recibidos[clave]
         return (self.ronda_actual - ronda_rechazo) < self.RECHAZO_TTL
+
+    @staticmethod
+    def _normalizar_clave_combo(clave: tuple) -> Optional[tuple]:
+        """Normaliza una clave (destinatario, recurso_dar, recurso_pedir)."""
+        if not isinstance(clave, tuple) or len(clave) != 3:
+            return None
+        destino = str(clave[0]).strip()
+        recurso_dar = str(clave[1]).strip().lower()
+        recurso_pedir = str(clave[2]).strip().lower()
+        if not destino or not recurso_dar or not recurso_pedir:
+            return None
+        return destino, recurso_dar, recurso_pedir
+
+    def _combo_en_backoff(self, clave: tuple) -> tuple[bool, int]:
+        """Indica si una combinación está temporalmente bloqueada."""
+        clave_norm = self._normalizar_clave_combo(clave)
+        if clave_norm is None:
+            return False, 0
+        data = self.backoff_combos.get(clave_norm)
+        if not data:
+            return False, 0
+        try:
+            next_round = int(data.get("next_round", 0))
+        except (TypeError, ValueError):
+            return False, 0
+        restante = next_round - self.ronda_actual
+        return restante > 0, max(0, restante)
+
+    def _registrar_backoff_combo(self, clave: tuple, motivo: str) -> None:
+        """Aplica backoff adaptativo a una combinación de propuesta."""
+        clave_norm = self._normalizar_clave_combo(clave)
+        if clave_norm is None:
+            return
+        previo = self.backoff_combos.get(clave_norm, {})
+        try:
+            nivel_previo = int(previo.get("nivel", -1))
+        except (TypeError, ValueError):
+            nivel_previo = -1
+        nivel_max = len(self.BACKOFF_ESCALA_RONDAS) - 1
+        nivel = max(0, min(nivel_previo + 1, nivel_max))
+        espera = self.BACKOFF_ESCALA_RONDAS[nivel]
+        next_round = self.ronda_actual + espera
+        self.backoff_combos[clave_norm] = {
+            "nivel": nivel,
+            "next_round": next_round,
+            "updated_round": self.ronda_actual,
+            "motivo": str(motivo)[:80],
+        }
+
+    def _limpiar_backoff_combo(self, clave: tuple) -> None:
+        """Elimina el backoff de una combinación al cerrarse con éxito."""
+        clave_norm = self._normalizar_clave_combo(clave)
+        if clave_norm is None:
+            return
+        self.backoff_combos.pop(clave_norm, None)
+
+    def _limpiar_backoff_obsoletos(self) -> None:
+        """Limpia entradas de backoff ya vencidas y antiguas."""
+        umbral = self.ronda_actual - self.BACKOFF_RETENCION_RONDAS
+        for clave in list(self.backoff_combos.keys()):
+            data = self.backoff_combos.get(clave, {})
+            try:
+                next_round = int(data.get("next_round", 0))
+                updated_round = int(data.get("updated_round", 0))
+            except (TypeError, ValueError):
+                del self.backoff_combos[clave]
+                continue
+            if next_round <= self.ronda_actual and updated_round < umbral:
+                del self.backoff_combos[clave]
 
     def _generar_texto_propuesta_ia(
         self, destinatario: str, necesidades: Dict, excedentes: Dict, oro: int
