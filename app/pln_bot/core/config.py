@@ -53,6 +53,17 @@ class Settings(BaseModel):
     # ── Parámetros de Ollama ─────────────────────────────────────────────
     ollama_params: OllamaParams = OllamaParams()
 
+    # ── Estrategia de análisis IA (pydantic_ai) ──────────────────────────
+    max_analisis_llm_por_ronda: int = Field(
+        default=12,
+        ge=1,
+        description="Máximo de análisis pydantic_ai por ronda.",
+    )
+    forzar_llm_en_ofertas_estructuradas: bool = Field(
+        default=True,
+        description="Si es True, también analiza con LLM cartas con plantilla.",
+    )
+
     # ── Control de pensamiento (modelo qwen3) ───────────────────────────
     think_timeout: int = Field(default=25, description="Máx. segundos de <think>")
     disable_think: bool = Field(default=False, description="Forzar /no_think")
@@ -101,6 +112,8 @@ OLLAMA_URL = settings.ollama_url
 MODELOS_DISPONIBLES = settings.modelos_disponibles
 MODELO_DEFAULT = settings.modelo_default
 OLLAMA_PARAMS = settings.ollama_params.model_dump()
+MAX_ANALISIS_LLM_POR_RONDA = settings.max_analisis_llm_por_ronda
+FORZAR_LLM_EN_OFERTAS_ESTRUCTURADAS = settings.forzar_llm_en_ofertas_estructuradas
 THINK_TIMEOUT = settings.think_timeout
 DISABLE_THINK = settings.disable_think
 RECURSOS_CONOCIDOS = settings.recursos_conocidos

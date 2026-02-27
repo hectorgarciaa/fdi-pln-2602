@@ -24,7 +24,12 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from ..core.config import MODELO_DEFAULT, modelo_soporta_tools
+from ..core.config import (
+    MODELO_DEFAULT,
+    MAX_ANALISIS_LLM_POR_RONDA,
+    FORZAR_LLM_EN_OFERTAS_ESTRUCTURADAS,
+    modelo_soporta_tools,
+)
 from .ronda import ejecutar_ronda
 from ..services.analysis import AnalisisMensajesService, RespuestaUnificada
 from ..services.api_client import APIClient
@@ -122,7 +127,8 @@ class AgenteNegociador:
         self.pausa_entre_rondas = 30
         self.max_rondas = 10
         self.max_propuestas_por_ronda = 3
-        self.max_analisis_llm_por_ronda = 3
+        self.max_analisis_llm_por_ronda = MAX_ANALISIS_LLM_POR_RONDA
+        self.forzar_llm_en_ofertas_estructuradas = FORZAR_LLM_EN_OFERTAS_ESTRUCTURADAS
         self.BACKOFF_ESCALA_RONDAS: tuple[int, ...] = (1, 2, 4, 6)
         self.BACKOFF_RETENCION_RONDAS: int = 20
         self.backoff_combos: Dict[tuple, Dict[str, int | str]] = {}

@@ -115,7 +115,9 @@ def _responder_contraoferta_o_rechazo(
             if agente.info_actual
             else 0
         )
-        contra = generar_propuesta(agente, remitente, necesidades, excedentes, oro_actual)
+        contra = generar_propuesta(
+            agente, remitente, necesidades, excedentes, oro_actual
+        )
 
     if contra:
         agente._log(
@@ -152,8 +154,12 @@ def _decision_rapida_oferta(
     exc_disp = agente._excedentes_disponibles(excedentes)
     puede_entregar = all(exc_disp.get(rec, 0) >= cant for rec, cant in piden.items())
 
-    valor_recibo = sum(min(int(cant), int(necesidades.get(rec, 0))) for rec, cant in ofrecen.items())
-    coste_entrego = sum(min(int(cant), int(necesidades.get(rec, 0))) for rec, cant in piden.items())
+    valor_recibo = sum(
+        min(int(cant), int(necesidades.get(rec, 0))) for rec, cant in ofrecen.items()
+    )
+    coste_entrego = sum(
+        min(int(cant), int(necesidades.get(rec, 0))) for rec, cant in piden.items()
+    )
 
     if puede_entregar and valor_recibo > 0 and valor_recibo >= coste_entrego:
         return RespuestaUnificada(
@@ -303,9 +309,13 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
             _cerrar_carta(uid, carta_id, "ignorar mensaje corto")
             continue
 
-        # ── Fast-path: oferta estructurada en plantilla (sin LLM) ──
+        # ── Oferta estructurada: por defecto también pasa por pydantic_ai ──
         ofrecen_struct, piden_struct = extraer_oferta_estructurada(asunto, mensaje)
-        if ofrecen_struct and piden_struct:
+        carta_estructurada = bool(ofrecen_struct and piden_struct)
+        forzar_llm_estructurada = bool(
+            getattr(agente, "forzar_llm_en_ofertas_estructuradas", True)
+        )
+        if carta_estructurada and not forzar_llm_estructurada:
             r = _decision_rapida_oferta(
                 agente,
                 ofrecen=ofrecen_struct,
@@ -349,6 +359,33 @@ def procesar_buzon(agente, necesidades: Dict, excedentes: Dict) -> int:
                 objetivo=objetivo_actual,
             )
             analisis_llm_realizados += 1
+            if carta_estructurada:
+                agente._log(
+                    "ANALISIS",
+                    f"Carta estructurada de {remitente} analizada con pydantic_ai",
+                )
+
+        # Si una carta estructurada vuelve vacía desde LLM, aplicar fallback local
+        # para no perder ofertas claras por timeout/token-limit del modelo.
+        if carta_estructurada and not r.es_aceptacion and not (r.ofrecen or r.piden):
+            r_fallback = _decision_rapida_oferta(
+                agente,
+                ofrecen=ofrecen_struct,
+                piden=piden_struct,
+                necesidades=necesidades,
+                excedentes=excedentes,
+            )
+            agente._log(
+                "ANALISIS",
+                f"Fallback local para carta estructurada de {remitente} tras salida vacía de LLM",
+                {
+                    "decision": r_fallback.decision,
+                    "razon": r_fallback.razon,
+                    "ofrecen": r_fallback.ofrecen,
+                    "piden": r_fallback.piden,
+                },
+            )
+            r = r_fallback
 
         # ── ¿Aceptación? → responder ──
         if r.es_aceptacion:

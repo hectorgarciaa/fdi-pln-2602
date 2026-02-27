@@ -69,7 +69,9 @@ def _parsear_recursos_texto(texto: str) -> Dict[str, int]:
     return recursos
 
 
-def extraer_oferta_estructurada(asunto: str = "", mensaje: str = "") -> tuple[Dict[str, int], Dict[str, int]]:
+def extraer_oferta_estructurada(
+    asunto: str = "", mensaje: str = ""
+) -> tuple[Dict[str, int], Dict[str, int]]:
     """Extrae oferta estructurada de asunto/cuerpo en formato plantilla.
 
     Devuelve `(ofrecen, piden)` donde:

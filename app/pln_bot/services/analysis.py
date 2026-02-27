@@ -72,14 +72,17 @@ class AnalisisMensajesService:
     """Encapsula la llamada al modelo para analizar cartas."""
 
     def __init__(self, modelo: str):
+        self._modelo = (modelo or "").strip().lower()
+        self._usar_no_think = self._modelo.startswith("qwen")
+        self._max_chars_mensaje = 700
         ollama_base = OLLAMA_URL.rstrip("/") + "/v1"
         ai_provider = OllamaProvider(base_url=ollama_base)
         ai_model = OpenAIChatModel(modelo, provider=ai_provider)
         ai_settings = ModelSettings(
-            temperature=0.1,
-            top_p=0.8,
+            temperature=0.0,
+            top_p=0.3,
             max_tokens=320,
-            timeout=25.0,
+            timeout=15.0,
             parallel_tool_calls=False,
         )
         self._contexto: Dict[str, Dict[str, int] | str] = {
@@ -96,8 +99,9 @@ class AnalisisMensajesService:
             system_prompt=(
                 "Eres un analizador de mensajes en un juego de intercambio de recursos.\n"
                 "Debes analizar el mensaje y tomar una decisión de negociación.\n"
-                "Si detectas oferta o intercambio, usa tools antes de decidir.\n"
-                "Debes invocar tools para validar stock/necesidad/excedente.\n\n"
+                "Si detectas oferta o intercambio, analiza primero el texto.\n"
+                "Usa tools solo si necesitas validar stock/necesidad/excedente.\n"
+                "Haz como máximo 2 llamadas de tools.\n\n"
                 "Reglas de brevedad estrictas:\n"
                 "- Responde SOLO con datos estructurados, sin texto adicional.\n"
                 "- razon debe tener como máximo 15 palabras.\n"
@@ -131,7 +135,7 @@ class AnalisisMensajesService:
                 'piden={"piedra": 3}, decision=...'
             ),
             model_settings=ai_settings,
-            retries=1,
+            retries=0,
         )
         self._registrar_tools()
 
@@ -225,6 +229,20 @@ class AnalisisMensajesService:
         items = sorted(recursos.items(), key=lambda kv: (-kv[1], kv[0]))[:limite]
         return ", ".join(f"{rec}:{cant}" for rec, cant in items)
 
+    def _prefijo_prompt(self) -> str:
+        """Desactiva pensamiento largo en modelos qwen para respuestas más estables."""
+        if self._usar_no_think:
+            return "/no_think\n"
+        return ""
+
+    def _recortar_texto(self, texto: str) -> str:
+        if not isinstance(texto, str):
+            return ""
+        limpio = texto.strip()
+        if len(limpio) <= self._max_chars_mensaje:
+            return limpio
+        return f"{limpio[: self._max_chars_mensaje]}..."
+
     def analizar(
         self,
         remitente: str,
@@ -243,8 +261,10 @@ class AnalisisMensajesService:
             recursos_actuales=recursos_actuales,
             objetivo=objetivo,
         )
+        mensaje_recortado = self._recortar_texto(mensaje)
 
         prompt_usuario = (
+            f"{self._prefijo_prompt()}"
             "Analiza este mensaje y produce salida estructurada.\n\n"
             f"REMITENTE: {remitente}\n"
             f"ASUNTO: {asunto or '(sin asunto)'}\n"
@@ -252,19 +272,51 @@ class AnalisisMensajesService:
             f"NECESIDADES_PRINCIPALES: {self._resumen_contexto(necesidades)}\n"
             f"EXCEDENTES_PRINCIPALES: {self._resumen_contexto(excedentes)}\n\n"
             "MENSAJE:\n"
-            f"{mensaje}\n\n"
-                "Instrucciones críticas:\n"
-                "- Si hay oferta, llama tools y valida stock/necesidad/excedente.\n"
-                "- Si decides contraofertar, rellena contraoferta_ofrezco y contraoferta_pido.\n"
-                "- No inventes cantidades ni recursos.\n"
-                "- Devuelve una razon MUY corta (maximo 15 palabras)."
+            f"{mensaje_recortado}\n\n"
+            "Instrucciones críticas:\n"
+            "- Usa tools solo si de verdad aportan valor.\n"
+            "- Si decides contraofertar, rellena contraoferta_ofrezco y contraoferta_pido.\n"
+            "- No inventes cantidades ni recursos.\n"
+            "- Devuelve una razon MUY corta (maximo 15 palabras)."
         )
-        result = self._agente.run_sync(
-            prompt_usuario,
-            usage_limits=UsageLimits(
+        limits_principal = UsageLimits(
+            request_limit=1,
+            tool_calls_limit=3,
+            response_tokens_limit=600,
+        )
+        try:
+            result = self._agente.run_sync(
+                prompt_usuario, usage_limits=limits_principal
+            )
+            return result.output
+        except Exception as err_principal:
+            # Segundo intento más estricto y breve para evitar timeouts/tokens.
+            prompt_rescate = (
+                f"{self._prefijo_prompt()}"
+                "MODO RESCATE: responde ultra-breve y estructurado.\n"
+                "Sin tools. Sin explicación extra.\n\n"
+                f"REMITENTE: {remitente}\n"
+                f"ASUNTO: {asunto or '(sin asunto)'}\n"
+                "MENSAJE:\n"
+                f"{mensaje_recortado}\n\n"
+                "Reglas:\n"
+                "- Si no hay oferta explícita: ofrecen={} y piden={} y decision=ignorar.\n"
+                "- Si hay oferta explícita: extrae recursos y cantidades exactas.\n"
+                "- razon maximo 10 palabras."
+            )
+            limits_rescate = UsageLimits(
                 request_limit=1,
-                tool_calls_limit=8,
-                response_tokens_limit=320,
-            ),
-        )
-        return result.output
+                tool_calls_limit=0,
+                response_tokens_limit=180,
+            )
+            try:
+                result = self._agente.run_sync(
+                    prompt_rescate,
+                    usage_limits=limits_rescate,
+                )
+                return result.output
+            except Exception as err_rescate:
+                raise RuntimeError(
+                    "Fallo analisis pydantic_ai principal y rescate: "
+                    f"{err_principal} | rescate: {err_rescate}"
+                ) from err_rescate
