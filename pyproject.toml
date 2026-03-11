@@ -2,7 +2,7 @@
 name = "fdi_pln_2602_p1"
 version = "1.0"
 description = "Agente negociador autónomo basado en PLN para la práctica 1"
-readme = "README.md"
+readme = "p1/README.md"
 requires-python = ">=3.12"
 dependencies = [
     "click>=8.3.1",
@@ -23,4 +23,4 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["app"]
+packages = ["p1/app"]

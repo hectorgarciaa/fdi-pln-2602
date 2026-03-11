@@ -23,12 +23,12 @@ env/
 # uv.lock 
 
 # --- Logs y Datos temporales ---
-app/logs/
+p1/app/logs/
 *.log
 estado_butler.json
 
 # --- Estado de runtime del agente ---
-app/state/*.json
+p1/app/state/*.json
 
 # --- Variables de entorno locales ---
 .env
