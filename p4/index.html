@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quijote Search — Motor de Búsqueda</title>
+    <meta name="description" content="Sistema de Information Retrieval para Don Quijote de la Mancha basado en TF-IDF y BM25">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ============ RESET & BASE ============ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0f0e17;
+            --bg-secondary: #1a1929;
+            --bg-card: #1e1d2f;
+            --bg-card-hover: #262540;
+            --text-primary: #fffffe;
+            --text-secondary: #a7a9be;
+            --text-muted: #6b6d85;
+            --accent-gold: #e8b059;
+            --accent-gold-dim: #c89540;
+            --accent-warm: #ff8906;
+            --accent-amber: #f2c94c;
+            --border-subtle: rgba(232, 176, 89, 0.12);
+            --border-card: rgba(232, 176, 89, 0.08);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
+            --shadow-card-hover: 0 8px 40px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ============ BACKGROUND DECORATION ============ */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(232, 176, 89, 0.04) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(255, 137, 6, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============ LAYOUT ============ */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ============ HEADER ============ */
+        .header {
+            text-align: center;
+            padding: 3rem 0 2.5rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header__icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(232, 176, 89, 0.3));
+        }
+
+        .header__title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 50%, var(--accent-warm) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .header__subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            opacity: 0.7;
+        }
+
+        .header__badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            padding: 0.35rem 0.9rem;
+            background: rgba(232, 176, 89, 0.08);
+            border: 1px solid var(--border-subtle);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            letter-spacing: 0.03em;
+        }
+
+        /* ============ SEARCH BOX ============ */
+        .search-box {
+            margin-top: 1rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .search-box__input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        .search-box__input-wrap:focus-within {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(232, 176, 89, 0.12), 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .search-box__icon {
+            position: absolute;
+            left: 1.2rem;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: color var(--transition);
+        }
+
+        .search-box__input-wrap:focus-within .search-box__icon {
+            color: var(--accent-gold);
+        }
+
+        .search-box__input {
+            flex: 1;
+            padding: 1rem 1rem 1rem 3.2rem;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box__input::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .search-box__btn {
+            padding: 0.75rem 1.6rem;
+            margin: 0.4rem;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dim) 100%);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform var(--transition), box-shadow var(--transition);
+            white-space: nowrap;
+        }
+
+        .search-box__btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(232, 176, 89, 0.3);
+        }
+
+        .search-box__btn:active {
+            transform: translateY(0);
+        }
+
+        /* ============ CONTROLS ============ */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .method-toggle {
+            display: flex;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .method-toggle__btn {
+            padding: 0.5rem 1.2rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .method-toggle__btn.active {
+            background: rgba(232, 176, 89, 0.15);
+            color: var(--accent-gold);
+        }
+
+        .method-toggle__btn:hover:not(.active) {
+            color: var(--text-secondary);
+        }
+
+        .top-n-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .top-n-control select {
+            padding: 0.4rem 0.7rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ============ LOADING ============ */
+        .loader {
+            display: none;
+            justify-content: center;
+            padding: 3rem;
+        }
+
+        .loader.visible { display: flex; }
+
+        .loader__dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .loader__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loader__dot:nth-child(1) { animation-delay: -0.32s; }
+        .loader__dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0.4); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ============ RESULTS ============ */
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .results-header__text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .results-header__text strong {
+            color: var(--accent-gold);
+        }
+
+        .results-header__method {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.7rem;
+            background: rgba(232, 176, 89, 0.1);
+            border-radius: 999px;
+            color: var(--accent-gold);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* ============ RESULT CARD ============ */
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: all var(--transition);
+            animation: fadeInUp 0.5s ease-out both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-gold), var(--accent-warm));
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .result-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(232, 176, 89, 0.15);
+            box-shadow: var(--shadow-card-hover);
+            transform: translateY(-2px);
+        }
+
+        .result-card:hover::before {
+            opacity: 1;
+        }
+
+        .result-card:nth-child(1) { animation-delay: 0.05s; }
+        .result-card:nth-child(2) { animation-delay: 0.1s; }
+        .result-card:nth-child(3) { animation-delay: 0.15s; }
+        .result-card:nth-child(4) { animation-delay: 0.2s; }
+        .result-card:nth-child(5) { animation-delay: 0.25s; }
+
+        .result-card__top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .result-card__rank {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(232, 176, 89, 0.1);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+        }
+
+        .result-card__info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-card__part {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-gold-dim);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .result-card__title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+
+        .result-card__score-wrap {
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        .result-card__score-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .result-card__score-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+
+        .result-card__bar {
+            height: 3px;
+            background: rgba(232, 176, 89, 0.1);
+            border-radius: 2px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .result-card__bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-warm));
+            border-radius: 2px;
+            transition: width 0.8s ease-out;
+        }
+
+        .result-card__fragment {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            font-style: italic;
+            border-left: 2px solid var(--border-subtle);
+            padding-left: 1rem;
+        }
+
+        .result-card__fragment mark {
+            background: rgba(232, 176, 89, 0.2);
+            color: var(--accent-gold);
+            border-radius: 2px;
+            padding: 0 2px;
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        .result-card__meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.8rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ============ EMPTY STATE ============ */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .empty-state__icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state__title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state__text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ============ SUGGESTIONS ============ */
+        .suggestions {
+            margin-top: 2rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .suggestions__label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .suggestions__list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .suggestion-chip {
+            padding: 0.45rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 999px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .suggestion-chip:hover {
+            background: rgba(232, 176, 89, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            line-height: 1.8;
+        }
+
+        .footer a {
+            color: var(--accent-gold-dim);
+            text-decoration: none;
+        }
+
+        /* ============ ANIMATIONS ============ */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 600px) {
+            .container { padding: 1rem; }
+            .header { padding: 2rem 0 1.5rem; }
+            .result-card { padding: 1.2rem; }
+            .result-card__top { flex-direction: column; gap: 0.5rem; }
+            .result-card__score-wrap { text-align: left; }
+            .controls { gap: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <span class="header__icon">📜</span>
+            <h1 class="header__title">Quijote Search</h1>
+            <p class="header__subtitle">«En un lugar de la Mancha, de cuyo nombre no quiero acordarme…»</p>
+            <span class="header__badge">
+                <span>⚡</span> TF-IDF &amp; BM25 · N-gramas (1,2) · spaCy
+            </span>
+        </header>
+
+        <!-- SEARCH -->
+        <div class="search-box">
+            <div class="search-box__input-wrap">
+                <span class="search-box__icon">🔍</span>
+                <input
+                    id="searchInput"
+                    class="search-box__input"
+                    type="text"
+                    placeholder="Busca en Don Quijote… ej: molinos de viento"
+                    autocomplete="off"
+                >
+                <button id="searchBtn" class="search-box__btn">Buscar</button>
+            </div>
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="controls">
+            <div class="method-toggle" id="methodToggle">
+                <button class="method-toggle__btn active" data-method="tfidf">TF-IDF</button>
+                <button class="method-toggle__btn" data-method="bm25">BM25</button>
+            </div>
+            <div class="top-n-control">
+                <label for="topN">Resultados:</label>
+                <select id="topN">
+                    <option value="3">3</option>
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SUGGESTIONS -->
+        <div class="suggestions" id="suggestions">
+            <p class="suggestions__label">Prueba con</p>
+            <div class="suggestions__list">
+                <button class="suggestion-chip" data-query="molinos de viento">molinos de viento</button>
+                <button class="suggestion-chip" data-query="Dulcinea del Toboso">Dulcinea del Toboso</button>
+                <button class="suggestion-chip" data-query="Sancho gobernador ínsula">Sancho gobernador</button>
+                <button class="suggestion-chip" data-query="aventura de los leones">aventura de los leones</button>
+                <button class="suggestion-chip" data-query="cueva de Montesinos">cueva de Montesinos</button>
+                <button class="suggestion-chip" data-query="caballero Blanca Luna">Blanca Luna</button>
+            </div>
+        </div>
+
+        <!-- LOADER -->
+        <div class="loader" id="loader">
+            <div class="loader__dots">
+                <div class="loader__dot"></div>
+                <div class="loader__dot"></div>
+                <div class="loader__dot"></div>
+            </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div id="resultsContainer"></div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            Procesamiento del Lenguaje Natural · Don Quijote de la Mancha ·
+            <a href="https://www.gutenberg.org/ebooks/2000" target="_blank">Project Gutenberg #2000</a><br>
+            TF-IDF + Cosine Similarity · BM25 Okapi · spaCy es_core_news_sm · scikit-learn
+        </footer>
+    </div>
+
+    <script>
+        // ============ STATE ============
+        let currentMethod = 'tfidf';
+        let isSearching = false;
+
+        // ============ DOM ============
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const methodToggle = document.getElementById('methodToggle');
+        const topNSelect = document.getElementById('topN');
+        const loader = document.getElementById('loader');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const suggestionsEl = document.getElementById('suggestions');
+
+        // ============ EVENTS ============
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
+
+        methodToggle.querySelectorAll('.method-toggle__btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                methodToggle.querySelectorAll('.method-toggle__btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMethod = btn.dataset.method;
+                // Re-search if there's a query
+                if (searchInput.value.trim()) performSearch();
+            });
+        });
+
+        document.querySelectorAll('.suggestion-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                searchInput.value = chip.dataset.query;
+                performSearch();
+            });
+        });
+
+        // ============ SEARCH ============
+        async function performSearch() {
+            const query = searchInput.value.trim();
+            if (!query || isSearching) return;
+
+            isSearching = true;
+            const topN = topNSelect.value;
+
+            // Show loader, hide suggestions
+            loader.classList.add('visible');
+            suggestionsEl.style.display = 'none';
+            resultsContainer.innerHTML = '';
+
+            try {
+                const url = `/api/search?query=${encodeURIComponent(query)}&metodo=${currentMethod}&top_n=${topN}`;
+                const res = await fetch(url);
+                const data = await res.json();
+                renderResults(data);
+            } catch (err) {
+                renderError(err);
+            } finally {
+                loader.classList.remove('visible');
+                isSearching = false;
+            }
+        }
+
+        // ============ RENDER ============
+        function renderResults(data) {
+            const { resultados, query, metodo, total_capitulos } = data;
+
+            if (!resultados || resultados.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state__icon">🏰</div>
+                        <h3 class="empty-state__title">No se encontraron resultados</h3>
+                        <p class="empty-state__text">
+                            Intenta con otros términos. El texto ha sido lematizado,
+                            así que búsquedas simples como «molinos», «gigante» o «encantamiento» pueden funcionar mejor.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            const maxScore = Math.max(...resultados.map(r => r.score));
+
+            let html = `
+                <div class="results-header">
+                    <span class="results-header__text">
+                        <strong>${resultados.length}</strong> capítulos encontrados para «<strong>${escapeHtml(query)}</strong>»
+                        de ${total_capitulos} capítulos
+                    </span>
+                    <span class="results-header__method">${metodo}</span>
+                </div>
+                <div class="results-list">
+            `;
+
+            resultados.forEach((r, i) => {
+                const barWidth = maxScore > 0 ? (r.score / maxScore) * 100 : 0;
+                const highlightedFrag = highlightTerms(r.fragmento, query);
+
+                html += `
+                    <article class="result-card" style="animation-delay: ${i * 0.07}s">
+                        <div class="result-card__top">
+                            <div class="result-card__rank">${i + 1}</div>
+                            <div class="result-card__info">
+                                <div class="result-card__part">Parte ${r.parte}</div>
+                                <h3 class="result-card__title">${escapeHtml(r.titulo)}</h3>
+                            </div>
+                            <div class="result-card__score-wrap">
+                                <div class="result-card__score-label">Relevancia</div>
+                                <div class="result-card__score-value">${r.score.toFixed(4)}</div>
+                            </div>
+                        </div>
+                        <div class="result-card__bar">
+                            <div class="result-card__bar-fill" style="width: ${barWidth.toFixed(1)}%"></div>
+                        </div>
+                        <blockquote class="result-card__fragment">${highlightedFrag}</blockquote>
+                        <div class="result-card__meta">
+                            <span>📄 ~${r.num_palabras.toLocaleString()} palabras</span>
+                        </div>
+                    </article>
+                `;
+            });
+
+            html += '</div>';
+            resultsContainer.innerHTML = html;
+        }
+
+        function renderError(err) {
+            resultsContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state__icon">⚠️</div>
+                    <h3 class="empty-state__title">Error de conexión</h3>
+                    <p class="empty-state__text">
+                        No se pudo conectar con el servidor. Asegúrate de que <code>quijote_ir.py</code>
+                        está ejecutándose en <code>http://localhost:5000</code>.
+                    </p>
+                </div>
+            `;
+        }
+
+        // ============ UTILS ============
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function highlightTerms(text, query) {
+            let safe = escapeHtml(text);
+            const terms = query.toLowerCase().split(/\s+/).filter(t => t.length > 2);
+            terms.forEach(term => {
+                const regex = new RegExp(`(${escapeRegex(term)})`, 'gi');
+                safe = safe.replace(regex, '<mark>$1</mark>');
+            });
+            return safe;
+        }
+
+        function escapeRegex(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        // Focus input on load
+        searchInput.focus();
+    </script>
+</body>
+</html>
