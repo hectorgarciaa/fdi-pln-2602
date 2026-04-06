@@ -31,7 +31,7 @@ rerank_pool_size = 40
 
 [ollama]
 host = "http://127.0.0.1:11434"
-timeout_seconds = 30
+timeout_seconds = 90
 
 [rag]
 enabled = true
