@@ -171,9 +171,7 @@ class HybridRetriever:
             else:
                 explanation["semantic_only_penalty_applied"] = False
 
-    def _filter_by_score_ratio(
-        self, entries: object
-    ) -> list[dict[str, object]]:
+    def _filter_by_score_ratio(self, entries: object) -> list[dict[str, object]]:
         ranked_entries = list(entries)
         if not ranked_entries:
             return []
@@ -183,9 +181,7 @@ class HybridRetriever:
             return ranked_entries
 
         cutoff = best_score * self.min_score_ratio
-        filtered = [
-            item for item in ranked_entries if float(item["score"]) >= cutoff
-        ]
+        filtered = [item for item in ranked_entries if float(item["score"]) >= cutoff]
         if filtered:
             return filtered
         return sorted(

@@ -103,9 +103,7 @@ def load_settings() -> AppSettings:
         semantic_normalized_query_weight=float(
             dynasettings.semantic.normalized_query_weight
         ),
-        semantic_lexical_bonus_weight=float(
-            dynasettings.semantic.lexical_bonus_weight
-        ),
+        semantic_lexical_bonus_weight=float(dynasettings.semantic.lexical_bonus_weight),
         semantic_rerank_pool_size=int(dynasettings.semantic.rerank_pool_size),
         ollama_host=str(dynasettings.ollama.host),
         ollama_timeout_seconds=float(dynasettings.ollama.timeout_seconds),
