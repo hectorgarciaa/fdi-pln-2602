@@ -64,7 +64,7 @@ Detalles en `p3/README.md`.
 ```bash
 uv sync --project p4
 uv run --project p4 python -m spacy download es_core_news_lg
-uv run --project p4 python -m p4.main tui
+uv run --project p4 fdi-pln-2602-p4
 ```
 
 Detalles en `p4/README.md`.
