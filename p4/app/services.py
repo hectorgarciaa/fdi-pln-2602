@@ -142,15 +142,25 @@ class QuijoteSearchService:
         """Reconstruye la matriz de embeddings semánticos."""
 
         chunk_manifest, chunks = self._load_or_build_chunks()
-        documents = self.load_documents()
         embedder = self._semantic_embedder()
-        engine = SemanticSearchEngine.build(chunks, documents, embedder)
+        engine = SemanticSearchEngine.build(
+            chunks,
+            embedder,
+            index_version=self.settings.semantic_index_version,
+            title_weight=self.settings.semantic_title_weight,
+            body_weight=self.settings.semantic_body_weight,
+        )
         save_semantic_embeddings(
             self.settings.semantic_embeddings_path, engine.embeddings
         )
         manifest = {
             "built_at": utc_now_iso(),
             "chunk_manifest": chunk_manifest,
+            "semantic_build": {
+                "index_version": self.settings.semantic_index_version,
+                "title_weight": self.settings.semantic_title_weight,
+                "body_weight": self.settings.semantic_body_weight,
+            },
             **engine.to_manifest(),
         }
         write_json(self.settings.semantic_manifest_path, manifest)
@@ -176,6 +186,21 @@ class QuijoteSearchService:
         if manifest["chunk_manifest"]["total_chunks"] != len(chunks):
             raise ResourceOutOfDateError(
                 "Los embeddings no coinciden con los chunks actuales. Ejecuta `build-semantic`."
+            )
+        semantic_build = manifest.get("semantic_build", {})
+        if int(semantic_build.get("index_version", -1)) != int(
+            self.settings.semantic_index_version
+        ):
+            raise ResourceOutOfDateError(
+                "La estrategia de embeddings semánticos ha cambiado. Ejecuta `build-semantic`."
+            )
+        if float(semantic_build.get("title_weight", -1.0)) != float(
+            self.settings.semantic_title_weight
+        ) or float(semantic_build.get("body_weight", -1.0)) != float(
+            self.settings.semantic_body_weight
+        ):
+            raise ResourceOutOfDateError(
+                "Los embeddings no coinciden con la configuración semántica actual. Ejecuta `build-semantic`."
             )
         embeddings = load_semantic_embeddings(self.settings.semantic_embeddings_path)
         engine = SemanticSearchEngine.from_manifest(manifest, embeddings)
@@ -235,7 +260,18 @@ class QuijoteSearchService:
         _, chunks = self.load_chunks()
         engine = self.load_semantic_engine()
         embedder = self._semantic_embedder()
-        return engine.search(query, chunks, embedder, top_k=top_k)
+        analysis = self.preprocessor.analyze(query)
+        return engine.search(
+            query,
+            analysis,
+            chunks,
+            embedder,
+            top_k=top_k,
+            original_query_weight=self.settings.semantic_original_query_weight,
+            normalized_query_weight=self.settings.semantic_normalized_query_weight,
+            lexical_bonus_weight=self.settings.semantic_lexical_bonus_weight,
+            rerank_pool_size=self.settings.semantic_rerank_pool_size,
+        )
 
     def retrieve_rag_sources(
         self, query: str, top_k: int | None = None

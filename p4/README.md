@@ -53,7 +53,7 @@ Ejemplos típicos:
 
 Usa vectores de `spaCy` con `es_core_news_lg`.
 
-Sirve para consultas reformuladas o menos literales, aunque su calidad depende bastante del modelo vectorial de spaCy y no siempre acierta tanto como la búsqueda clásica.
+Sirve para consultas reformuladas o menos literales. Para mejorar la recuperación, el sistema combina el vector del título del capítulo con el del cuerpo del chunk, mezcla consulta original y consulta lematizada, y aplica un pequeño re-ranking léxico sobre los mejores candidatos semánticos.
 
 Ejemplo:
 
@@ -119,8 +119,10 @@ Luego ambos se combinan con pesos configurables.
 
 Se generan embeddings a partir de `spaCy`:
 
-- se obtiene vector por párrafo
-- se agregan por chunk
+- se obtiene un vector para el título del capítulo y otro para el cuerpo del chunk
+- ambos se combinan con pesos configurables
+- la consulta mezcla versión original y versión lematizada
+- sobre los mejores candidatos se aplica un pequeño bonus léxico
 - se usa similitud coseno con `numpy`
 
 ### RAG

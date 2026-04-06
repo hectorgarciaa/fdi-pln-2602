@@ -32,6 +32,13 @@ class AppSettings:
     surface_weight: float
     lemma_weight: float
     semantic_batch_size: int
+    semantic_index_version: int
+    semantic_title_weight: float
+    semantic_body_weight: float
+    semantic_original_query_weight: float
+    semantic_normalized_query_weight: float
+    semantic_lexical_bonus_weight: float
+    semantic_rerank_pool_size: int
     ollama_host: str
     ollama_timeout_seconds: float
     rag_enabled: bool
@@ -85,6 +92,19 @@ def load_settings() -> AppSettings:
         surface_weight=float(dynasettings.search.surface_weight),
         lemma_weight=float(dynasettings.search.lemma_weight),
         semantic_batch_size=int(dynasettings.semantic.batch_size),
+        semantic_index_version=int(dynasettings.semantic.index_version),
+        semantic_title_weight=float(dynasettings.semantic.title_weight),
+        semantic_body_weight=float(dynasettings.semantic.body_weight),
+        semantic_original_query_weight=float(
+            dynasettings.semantic.original_query_weight
+        ),
+        semantic_normalized_query_weight=float(
+            dynasettings.semantic.normalized_query_weight
+        ),
+        semantic_lexical_bonus_weight=float(
+            dynasettings.semantic.lexical_bonus_weight
+        ),
+        semantic_rerank_pool_size=int(dynasettings.semantic.rerank_pool_size),
         ollama_host=str(dynasettings.ollama.host),
         ollama_timeout_seconds=float(dynasettings.ollama.timeout_seconds),
         rag_enabled=bool(dynasettings.rag.enabled),
