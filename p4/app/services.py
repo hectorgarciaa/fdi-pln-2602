@@ -263,9 +263,7 @@ class QuijoteSearchService:
             top_k=candidate_top_k,
         )
 
-    def answer_rag(
-        self, query: str, max_sources: int | None = None
-    ) -> RagResponse:
+    def answer_rag(self, query: str, max_sources: int | None = None) -> RagResponse:
         """Genera una respuesta RAG grounded sobre fuentes híbridas."""
 
         normalized_query = query.strip()

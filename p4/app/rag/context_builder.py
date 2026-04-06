@@ -64,7 +64,9 @@ class ContextBuilder:
 
     def _format_header(self, source: RagSource) -> str:
         paragraph_span = source.metadata.get("paragraph_span", "-")
-        retrieval_modes = ", ".join(source.explanation.get("retrieval_modes", [])) or "-"
+        retrieval_modes = (
+            ", ".join(source.explanation.get("retrieval_modes", [])) or "-"
+        )
         return "\n".join(
             [
                 f"[{source.source_id}]",

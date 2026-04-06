@@ -124,4 +124,3 @@ class HybridRetriever:
                 entry["fragment"] = result.fragment
                 entry["text"] = result.text
                 entry["metadata"] = dict(result.metadata)
-

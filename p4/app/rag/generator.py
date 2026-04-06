@@ -109,15 +109,19 @@ class OllamaRagGenerator:
         )
         if not cited_in_answer:
             if used_sources:
-                answer = answer.rstrip() + "\n\nFuentes: " + " ".join(
-                    f"[{source_id}]" for source_id in used_sources
+                answer = (
+                    answer.rstrip()
+                    + "\n\nFuentes: "
+                    + " ".join(f"[{source_id}]" for source_id in used_sources)
                 )
                 cited_in_answer = set(used_sources)
             elif insufficient_evidence:
                 fallback_refs = [source.source_id for source in context.sources[:2]]
                 if fallback_refs:
-                    answer = answer.rstrip() + "\n\nFuentes consultadas: " + " ".join(
-                        f"[{source_id}]" for source_id in fallback_refs
+                    answer = (
+                        answer.rstrip()
+                        + "\n\nFuentes consultadas: "
+                        + " ".join(f"[{source_id}]" for source_id in fallback_refs)
                     )
                     used_sources = fallback_refs
                     cited_in_answer = set(fallback_refs)

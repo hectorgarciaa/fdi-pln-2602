@@ -297,7 +297,11 @@ class QuijoteSearchTUI(App[None]):
         table.clear(columns=False)
         self.current_results = {result.chunk_id: result for result in results}
         for result in results:
-            row_label = result.source_id if hasattr(result, "source_id") and result.source_id else str(result.rank)
+            row_label = (
+                result.source_id
+                if hasattr(result, "source_id") and result.source_id
+                else str(result.rank)
+            )
             table.add_row(
                 row_label,
                 f"{result.score:.6f}",
@@ -341,7 +345,9 @@ class QuijoteSearchTUI(App[None]):
                 ]
             )
         else:
-            matched_surface = ", ".join(explanation.get("matched_surface_terms", [])) or "-"
+            matched_surface = (
+                ", ".join(explanation.get("matched_surface_terms", [])) or "-"
+            )
             matched_lemma = ", ".join(explanation.get("matched_lemma_terms", [])) or "-"
             lines.extend(
                 [

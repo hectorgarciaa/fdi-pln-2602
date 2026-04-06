@@ -24,7 +24,9 @@ def format_rag_answer_markdown(response: RagResponse) -> str:
     ]
 
     for source in response.sources:
-        used_flag = "usada" if source.source_id in set(response.references) else "recuperada"
+        used_flag = (
+            "usada" if source.source_id in set(response.references) else "recuperada"
+        )
         paragraph_span = source.metadata.get("paragraph_span", "-")
         lines.append(
             f"- [{source.source_id}] {source.title} ({source.chunk_id}, párrafos {paragraph_span}, {used_flag})"

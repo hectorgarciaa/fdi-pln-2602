@@ -32,11 +32,11 @@ def build_user_prompt(query: str, context: RagContext) -> str:
         "Contexto recuperado:\n"
         f"{context.prompt_context}\n\n"
         "Formato de salida requerido:\n"
-        '{'
+        "{"
         '"answer": "respuesta breve pero útil, con citas [F1] cuando proceda", '
         '"used_sources": ["F1", "F2"], '
         '"insufficient_evidence": false'
-        '}\n\n'
+        "}\n\n"
         "Reglas adicionales:\n"
         "- answer debe ser autosuficiente y no inventar nada fuera del contexto.\n"
         "- used_sources solo puede contener identificadores presentes en las fuentes disponibles.\n"
