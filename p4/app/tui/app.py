@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 
 from rich.markdown import Markdown
+from textual import events
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
@@ -13,6 +14,24 @@ from textual.widgets import Button, DataTable, Footer, Header, Input, Select, St
 from p4.app.errors import QuijoteIRError
 from p4.app.models import SearchResult
 from p4.app.services import QuijoteSearchService
+
+
+class SearchInput(Input):
+    """Input robusto para terminales que envían `space` sin carácter imprimible."""
+
+    async def _on_key(self, event: events.Key) -> None:  # pragma: no cover - UI glue
+        if event.key == "space":
+            self._restart_blink()
+            event.stop()
+            selection = self.selection
+            if selection.is_empty:
+                self.insert_text_at_cursor(" ")
+            else:
+                self.replace(" ", *selection)
+            event.prevent_default()
+            return
+
+        await super()._on_key(event)
 
 
 class QuijoteSearchTUI(App[None]):
@@ -80,6 +99,7 @@ class QuijoteSearchTUI(App[None]):
 
     BINDINGS = [
         Binding("ctrl+r", "submit_search", "Buscar"),
+        Binding("/", "focus_query", "Ir a búsqueda"),
         Binding("c", "set_classical_mode", "Clásica"),
         Binding("s", "set_semantic_mode", "Semántica"),
         Binding("q", "quit", "Salir"),
@@ -104,7 +124,7 @@ class QuijoteSearchTUI(App[None]):
                     value="classical",
                     id="mode-select",
                 )
-                yield Input(
+                yield SearchInput(
                     placeholder="Escribe tu consulta y pulsa Enter", id="query-input"
                 )
                 yield Button("Buscar", variant="primary", id="search-button")
@@ -127,6 +147,7 @@ class QuijoteSearchTUI(App[None]):
         table.zebra_stripes = True
         table.add_columns("#", "Score", "Parte", "Capítulo", "Chunk")
         await self.refresh_artifact_status()
+        self.action_focus_query()
 
     async def refresh_artifact_status(self) -> None:
         status = await asyncio.to_thread(self.service.describe_artifacts)
@@ -138,11 +159,16 @@ class QuijoteSearchTUI(App[None]):
     async def action_submit_search(self) -> None:
         await self.run_search()
 
+    def action_focus_query(self) -> None:
+        self.query_one("#query-input", Input).focus()
+
     def action_set_classical_mode(self) -> None:
         self.query_one("#mode-select", Select).value = "classical"
+        self.action_focus_query()
 
     def action_set_semantic_mode(self) -> None:
         self.query_one("#mode-select", Select).value = "semantic"
+        self.action_focus_query()
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "search-button":
