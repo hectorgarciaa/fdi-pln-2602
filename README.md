@@ -19,7 +19,7 @@ Repositorio único para las cuatro prácticas de Procesamiento del Lenguaje Natu
 
 ## Cómo usar uv sin romper el repo
 
-Cada práctica tiene su propio `pyproject.toml`. La raíz ya no actúa como proyecto único para evitar que las dependencias de una práctica contaminen a otra.
+Cada práctica tiene su propio `pyproject.toml`. Además, la raíz incluye un `pyproject.toml` mínimo que actúa solo como lanzador para exponer `p4` también desde el directorio raíz.
 
 La regla es:
 
@@ -28,12 +28,20 @@ uv sync --project pX
 uv run --project pX ...
 ```
 
+Y, específicamente para la práctica 4, también se puede hacer desde la raíz:
+
+```bash
+uv sync
+uv run fdi-pln-2602-p4
+```
+
 Eso hace que:
 
 - `p1` use su entorno para `requests`, `pydantic-ai`, `ollama`, `rich`, etc.
 - `p2` quede como entrega de materiales sin imponer dependencias.
 - `p3` mantenga un entorno mínimo con `typer`.
 - `p4` tenga su propio stack con `spacy`, `textual`, `dynaconf` y `numpy`.
+- la raíz pueda resolver el ejecutable `fdi-pln-2602-p4` sin tener que entrar en `p4/`.
 
 ## Uso rápido por práctica
 

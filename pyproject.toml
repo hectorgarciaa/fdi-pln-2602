@@ -1,0 +1,15 @@
+[project]
+name = "pln-monorepo"
+version = "0.1.0"
+description = "Launcher del monorepo para exponer ejecutables de las prácticas desde la raíz"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fdi-pln-2602-p4",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+fdi-pln-2602-p4 = { path = "p4" }
