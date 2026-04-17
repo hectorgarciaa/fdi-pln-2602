@@ -19,6 +19,40 @@ DEFAULT_DATA_DIR = ROOT_DIR / "data"
 DEFAULT_ARTIFACTS_DIR = ROOT_DIR / "artifacts"
 
 
+def resolve_device(device: str | None) -> torch.device:
+    requested = device.lower() if device is not None else None
+    auto_selected_cuda = requested is None
+    candidate = requested if requested is not None else "cuda"
+
+    if candidate == "cuda":
+        if torch.cuda.is_available():
+            return torch.device("cuda")
+
+        try:
+            driver_device_count = torch.cuda.device_count()
+        except RuntimeError:
+            driver_device_count = 0
+
+        if auto_selected_cuda:
+            print("CUDA no está disponible; se usará CPU para el entrenamiento.")
+            return torch.device("cpu")
+
+        if driver_device_count > 0 and torch.version.cuda is not None:
+            raise RuntimeError(
+                "Se solicitó --device cuda, pero la build de PyTorch no puede inicializar CUDA "
+                f"(torch={torch.__version__}, build CUDA={torch.version.cuda}). "
+                "La GPU parece visible para el driver, así que probablemente hay una incompatibilidad "
+                "entre la versión de CUDA de PyTorch y el driver instalado. "
+                "Instala una build de PyTorch compatible con tu driver o actualiza el driver."
+            )
+
+        raise RuntimeError(
+            "Se solicitó --device cuda, pero CUDA no está disponible en este entorno."
+        )
+
+    return torch.device(candidate)
+
+
 class TextDataset(Dataset):
     def __init__(self, token_ids: list[int], seq_len: int) -> None:
         if seq_len < 2:
@@ -127,9 +161,7 @@ def train_model(
         train_split=train_split,
     )
 
-    target_device = torch.device(
-        device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
-    )
+    target_device = resolve_device(device)
     model = LLM(
         vocab_size=len(tokenizer.vocab),
         dim_embedding=dim_embedding,
