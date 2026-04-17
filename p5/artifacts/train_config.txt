@@ -1,0 +1,6 @@
+vocab_size=256
+seq_len=64
+dim_embedding=64
+dim_attention=128
+num_heads=4
+num_layers=2
