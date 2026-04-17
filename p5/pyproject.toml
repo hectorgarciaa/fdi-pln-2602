@@ -9,6 +9,7 @@ description = "Mini LLM desde cero para la práctica 5 de PLN"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "numpy>=2.4.4",
     "torch>=2.11.0",
 ]
 
