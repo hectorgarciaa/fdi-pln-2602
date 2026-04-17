@@ -30,6 +30,8 @@ p4/artifacts/*
 p4/logs/*
 !p4/logs/.gitkeep
 
+p5/artifacts/*
+
 # --- Estado de runtime del agente ---
 p1/app/state/*.json
 
