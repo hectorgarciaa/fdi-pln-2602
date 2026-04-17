@@ -1,0 +1,29 @@
+// Descripción pseudo-funcional de un mecanismo de auto-atención escalada
+function CabezalAtención():
+    // parámetros del mecanismo de atención
+    DIM: int  // la dimensión de los embeddings
+    // parámetros de entrada
+    N_TOK: int    // número de tokens
+    X: list[N_TOK][vec[DIM]] // lista de tokens de entrada, cada token es un vector de DIM dimensiones
+    // parámetros de salida
+    C: list[N_TOK][vec[DIM]] // lista de vectores de contexto de salida, cada vector de DIM dimensiones
+    // parámetros aprendidos
+    // transformaciones lineales que convierten embeddings (DIM → DIM, misma dimensión)
+    const Q: matrix[DIM, DIM]   // consultas
+    const K: matrix[DIM, DIM]   // claves
+    const V: matrix[DIM, DIM]   // valores
+    for i = 0 .. N_TOK-1:
+        // 1. calcular atención
+        q: vec[DIM] = Q * X[i]   // matriz × vector → vector (query)
+        att: list[N_TOK][real]   // factores de atención
+        for j = 0 .. N_TOK-1:
+            key: vec[DIM] = K * X[j]      // matriz × vector → vector (key)
+            att[j]: real = q · key        // producto escalar → escalar (atención)
+            att[j] = att[j] / √(DIM)   // escalamos la atención en función del tamaño del espacio
+        att = softmax(att)                // normalizamos la atención para que sume 1
+        // 2. Calcular vector contexto
+        C[i]: vec[DIM] = 0
+        for j = 0 .. N_TOK-1:
+            value: vec[DIM] = V * X[j]     // matriz × vector → vector (value)
+            C[i] = C[i] + att[j] · value   // vector + escalar · vector → vector (contexto)
+    return C
