@@ -8,8 +8,10 @@ version = "1.0.0"
 description = "Mini LLM desde cero para la práctica 5 de PLN"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "torch>=2.11.0",
+]
 
 [tool.setuptools]
 include-package-data = true
-packages = ["p5", "p5.app"]
+packages = ["app", "app.attention", "app.tokenizer"]
