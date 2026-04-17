@@ -50,6 +50,16 @@ ids = tokenizer.encode("hola quijote")
 texto = tokenizer.decode(ids)
 ```
 
+Para generar texto con un modelo entrenado:
+
+```bash
+uv run --project p5 python -m app.inference.inference \
+  --prompt "en un lugar de la mancha" \
+  --max-new-tokens 40 \
+  --temperature 0.8 \
+  --top-k 40
+```
+
 ## Siguiente trabajo recomendado
 
 1. Probar el tokenizer con un corpus más grande.
