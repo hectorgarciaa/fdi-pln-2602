@@ -40,23 +40,40 @@ def train_model(
     now = time.strftime("%Y%m%d-%H%M%S")
     artifacts_path_exp = artifacts_path / now
     artifacts_path_exp.mkdir(parents=True, exist_ok=True)
+    print(f"   Guardando en: {artifacts_path_exp}")
 
+    # Cargar datos
+    print(f"\n📖 Cargando corpus...")
+    start_time = time.time()
     raw_text = read_corpus(data_path)
+    load_time = time.time() - start_time
+    print(f"   ✓ Corpus cargado en {load_time:.2f}s ({len(raw_text):,} caracteres)")
 
+    # Tokenizer
+    print(f"\n🔤 Entrenando tokenizer...")
+    start_time = time.time()
     tokenizer = MiniBPETokenizer()
     tokenizer.train(raw_text, vocab_size=vocab_size)
     token_ids = tokenizer.encode(raw_text)
+    tok_time = time.time() - start_time
+    print(f"   ✓ Tokenizer entrenado en {tok_time:.2f}s ({len(token_ids):,} tokens)")
 
+    # DataLoaders
+    print(f"\n🔀 Construyendo dataloaders...")
     train_loader, val_loader = build_dataloaders(
         token_ids=token_ids,
         seq_len=seq_len,
         batch_size=batch_size,
         train_split=train_split,
     )
+    print(f"   ✓ Train batches: {len(train_loader)} ({len(train_loader)*batch_size:,} ejemplos)")
+    print(f"   ✓ Val batches: {len(val_loader)} ({len(val_loader)*batch_size:,} ejemplos)")
 
+    # Modelo
     target_device = torch.device(
         device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
     )
+    print(f"\n🧠 Creando modelo en {target_device}...")
     model = LLM(
         vocab_size=len(tokenizer.vocab),
         dim_embedding=dim_embedding,
@@ -65,17 +82,27 @@ def train_model(
         num_layers=num_layers,
         max_seq_len=seq_len,
     ).to(target_device)
+    
+    # Contar parámetros
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(f"   ✓ Parámetros: {trainable_params:,} / {total_params:,}")
 
     optimizer = AdamW(model.parameters(), lr=learning_rate)
     best_val_loss = math.inf
     epochs_data = []
 
+    # Entrenamiento
+    print(f"\n🔥 ENTRENANDO ({epochs} épocas)...")
+    print("="*70)
+
     for epoch in range(1, epochs + 1):
         model.train()
         total_loss = 0.0
         total_batches = 0
+        epoch_start = time.time()
 
-        for x, y in train_loader:
+        for batch_idx, (x, y) in enumerate(train_loader, 1):
             x = x.to(target_device)
             y = y.to(target_device)
 
@@ -87,10 +114,16 @@ def train_model(
 
             total_loss += loss.item()
             total_batches += 1
+            
+            # Mostrar progreso cada 10 batches
+            if batch_idx % 10 == 0 or batch_idx == 1:
+                avg_loss = total_loss / total_batches
+                print(f"   Epoch {epoch}/{epochs} | Batch {batch_idx}/{len(train_loader)} | Loss: {avg_loss:.4f}", end="\r")
 
         train_loss = total_loss / max(1, total_batches)
         val_loss = evaluate(model, val_loader, target_device)
         perplexity = math.exp(val_loss)
+        epoch_time = time.time() - epoch_start
 
         epoch_info = {
             "epoch": epoch,
@@ -100,17 +133,16 @@ def train_model(
         }
         epochs_data.append(epoch_info)
 
-        print(
-            f"epoch={epoch} train_loss={train_loss:.4f} val_loss={val_loss:.4f} "
-            f"perplexity={perplexity:.2f}"
-        )
+        # Resultado de época
+        status = "✓ MEJOR" if val_loss < best_val_loss else "  -"
+        print(f"\n   [{status}] Epoch {epoch:2d}/{epochs} | Train: {train_loss:.4f} | Val: {val_loss:.4f} | PPL: {perplexity:7.2f} | {epoch_time:.1f}s")
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             torch.save(model.state_dict(), artifacts_path_exp / "best_model.pt")
 
     tokenizer.save(artifacts_path_exp / "tokenizer.json")
-    torch.save(model.state_dict(), artifacts_path_exp / "last_model.pt")
+    torch.save(model.state_dict(), artifacts_path_exp / "model.pt")
 
     metadata = {
         "vocab_size": len(tokenizer.vocab),
@@ -131,19 +163,39 @@ def train_model(
         encoding="utf-8",
     )
 
-    current_best_epoch = min(epochs_data, key=lambda x: x["perplexity"])
+    # Comparar con mejor modelo previo
+    current_best_epoch = min(epochs_data, key=lambda x: x["val_loss"])
     best_model_path = artifacts_path / "best"
+    
+    print("\n" + "="*70)
+    print("RESUMEN DEL ENTRENAMIENTO")
+    print("="*70)
+    print(f"✓ Mejor época: {current_best_epoch['epoch']} (val_loss: {current_best_epoch['val_loss']:.4f}, ppl: {current_best_epoch['perplexity']})")
+    print(f"✓ Modelo guardado en: {artifacts_path_exp}")
+    print(f"✓ Config guardada en: {artifacts_path_exp / 'train_config.txt'}")
+    print(f"✓ Tokenizer guardado en: {artifacts_path_exp / 'tokenizer.json'}")
+    
     if best_model_path.exists():
         best_results_path = best_model_path / "results.txt"
         if best_results_path.exists():
             best_results = json.loads(best_results_path.read_text(encoding="utf-8"))
-            best_epoch = min(best_results, key=lambda x: x["perplexity"])
-            if current_best_epoch["perplexity"] < best_epoch["perplexity"]:
-                shutil.copytree(artifacts_path_exp, best_model_path, dirs_exist_ok=True)
+            best_epoch_prev = min(best_results, key=lambda x: x["val_loss"])
+            if current_best_epoch["val_loss"] < best_epoch_prev["val_loss"]:
+                shutil.rmtree(best_model_path)
+                shutil.copytree(artifacts_path_exp, best_model_path)
+                print(f"\n¡NUEVO MEJOR MODELO! (val_loss: {current_best_epoch['val_loss']:.4f} < {best_epoch_prev['val_loss']:.4f})")
+                print(f"   Guardado en: {best_model_path}")
+            else:
+                print(f"\n✗ Modelo anterior mejor: {best_epoch_prev['val_loss']:.4f} < {current_best_epoch['val_loss']:.4f}")
         else:
-            shutil.copytree(artifacts_path_exp, best_model_path, dirs_exist_ok=True)
+            shutil.rmtree(best_model_path)
+            shutil.copytree(artifacts_path_exp, best_model_path)
+            print(f"\nPRIMER MODELO GUARDADO EN 'best/'")
     else:
-        shutil.copytree(artifacts_path_exp, best_model_path, dirs_exist_ok=True)
+        shutil.copytree(artifacts_path_exp, best_model_path)
+        print(f"\nPRIMER MODELO GUARDADO EN 'best/'")
+    
+    print("="*70 + "\n")
 
     return model, tokenizer
 
