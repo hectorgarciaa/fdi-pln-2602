@@ -5,7 +5,7 @@ from .attention import Attention
 
 
 class MultiHeadAttention(nn.Module):
-    def __init__(self, dim_embedding=64, dim_attention=128, num_heads=4):
+    def __init__(self, dim_embedding, dim_attention, num_heads):
         super().__init__()
         self.dim_embedding = dim_embedding
         self.dim_attention = dim_attention

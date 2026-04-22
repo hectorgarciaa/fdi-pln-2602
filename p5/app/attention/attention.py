@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class Attention(nn.Module):
-    def __init__(self, dim_embedding=64, dim_attention=128):
+    def __init__(self, dim_embedding, dim_attention):
         super().__init__()
         self.dim_embedding = dim_embedding
         self.dim_attention = dim_attention

@@ -1,11 +1,11 @@
 import torch
 import torch.nn as nn
 
-from ..attention.multi_head import MultiHeadAttention
+from ..attention import MultiHeadAttention
 
 
 class LLM(nn.Module):
-    def __init__(self, vocab_size=10000, dim_embedding=64, dim_attention=128, num_heads=4, num_layers=2, max_seq_len=512):
+    def __init__(self, vocab_size, dim_embedding, dim_attention, num_heads, num_layers, max_seq_len):
         super().__init__()
         self.dim_embedding = dim_embedding
         self.dim_attention = dim_attention

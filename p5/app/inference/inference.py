@@ -1,19 +1,16 @@
-from __future__ import annotations
-
 import argparse
 from dataclasses import dataclass
 from pathlib import Path
 
 import torch
 
-from ..model.model import LLM
-from ..tokenizer.tokenizer import MiniBPETokenizer
+from ..model import LLM
+from ..tokenizer import MiniBPETokenizer
 
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 DEFAULT_ARTIFACTS_DIR = ROOT_DIR / "artifacts"
 DEFAULT_CHECKPOINT = "best_model.pt"
-
 
 @dataclass(frozen=True)
 class InferenceArtifacts:
