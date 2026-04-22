@@ -1,3 +1,3 @@
-from tokenizer import MiniBPETokenizer
+from .tokenizer import MiniBPETokenizer
 
 __all__ = ["MiniBPETokenizer"]

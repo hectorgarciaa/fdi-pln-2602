@@ -1,4 +1,7 @@
+import time
 import math
+import json
+import shutil
 from pathlib import Path
 
 import torch
@@ -28,19 +31,21 @@ def train_model(
     train_split: float = 0.9,
     device: str | None = None,
 ) -> tuple[LLM, MiniBPETokenizer]:
+    if epochs < 1:
+        raise ValueError("epochs debe ser mayor o igual que 1.")
+
     data_path = Path(DEFAULT_DATA_DIR)
     artifacts_path = Path(DEFAULT_ARTIFACTS_DIR)
-    artifacts_path.mkdir(parents=True, exist_ok=True)
+
+    now = time.strftime("%Y%m%d-%H%M%S")
+    artifacts_path_exp = artifacts_path / now
+    artifacts_path_exp.mkdir(parents=True, exist_ok=True)
 
     raw_text = read_corpus(data_path)
 
     tokenizer = MiniBPETokenizer()
     tokenizer.train(raw_text, vocab_size=vocab_size)
     token_ids = tokenizer.encode(raw_text)
-    if len(token_ids) <= seq_len:
-        raise ValueError(
-            f"El corpus tokenizado solo tiene {len(token_ids)} tokens y seq_len={seq_len}."
-        )
 
     train_loader, val_loader = build_dataloaders(
         token_ids=token_ids,
@@ -63,6 +68,7 @@ def train_model(
 
     optimizer = AdamW(model.parameters(), lr=learning_rate)
     best_val_loss = math.inf
+    epochs_data = []
 
     for epoch in range(1, epochs + 1):
         model.train()
@@ -84,18 +90,27 @@ def train_model(
 
         train_loss = total_loss / max(1, total_batches)
         val_loss = evaluate(model, val_loader, target_device)
+        perplexity = math.exp(val_loss)
+
+        epoch_info = {
+            "epoch": epoch,
+            "train_loss": round(train_loss, 4),
+            "val_loss": round(val_loss, 4),
+            "perplexity": round(perplexity, 2),
+        }
+        epochs_data.append(epoch_info)
 
         print(
             f"epoch={epoch} train_loss={train_loss:.4f} val_loss={val_loss:.4f} "
-            f"perplexity={math.exp(val_loss):.2f}"
+            f"perplexity={perplexity:.2f}"
         )
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
-            torch.save(model.state_dict(), artifacts_path / "best_model.pt")
+            torch.save(model.state_dict(), artifacts_path_exp / "best_model.pt")
 
-    tokenizer.save(artifacts_path / "tokenizer.json")
-    torch.save(model.state_dict(), artifacts_path / "last_model.pt")
+    tokenizer.save(artifacts_path_exp / "tokenizer.json")
+    torch.save(model.state_dict(), artifacts_path_exp / "last_model.pt")
 
     metadata = {
         "vocab_size": len(tokenizer.vocab),
@@ -105,10 +120,30 @@ def train_model(
         "num_heads": num_heads,
         "num_layers": num_layers,
     }
-    (artifacts_path / "train_config.txt").write_text(
+    (artifacts_path_exp / "train_config.txt").write_text(
         "\n".join(f"{key}={value}" for key, value in metadata.items()),
         encoding="utf-8",
     )
+
+    results_path = artifacts_path_exp / "results.txt"
+    results_path.write_text(
+        json.dumps(epochs_data, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+    current_best_epoch = min(epochs_data, key=lambda x: x["perplexity"])
+    best_model_path = artifacts_path / "best"
+    if best_model_path.exists():
+        best_results_path = best_model_path / "results.txt"
+        if best_results_path.exists():
+            best_results = json.loads(best_results_path.read_text(encoding="utf-8"))
+            best_epoch = min(best_results, key=lambda x: x["perplexity"])
+            if current_best_epoch["perplexity"] < best_epoch["perplexity"]:
+                shutil.copytree(artifacts_path_exp, best_model_path, dirs_exist_ok=True)
+        else:
+            shutil.copytree(artifacts_path_exp, best_model_path, dirs_exist_ok=True)
+    else:
+        shutil.copytree(artifacts_path_exp, best_model_path, dirs_exist_ok=True)
 
     return model, tokenizer
 

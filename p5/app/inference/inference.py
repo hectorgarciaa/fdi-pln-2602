@@ -9,7 +9,7 @@ from ..tokenizer import MiniBPETokenizer
 
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_ARTIFACTS_DIR = ROOT_DIR / "artifacts"
+DEFAULT_ARTIFACTS_DIR = ROOT_DIR / "artifacts" / "best"
 DEFAULT_CHECKPOINT = "best_model.pt"
 
 @dataclass(frozen=True)
