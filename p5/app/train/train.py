@@ -142,7 +142,7 @@ def train_model(
             torch.save(model.state_dict(), artifacts_path_exp / "best_model.pt")
 
     tokenizer.save(artifacts_path_exp / "tokenizer.json")
-    torch.save(model.state_dict(), artifacts_path_exp / "model.pt")
+    torch.save(model.state_dict(), artifacts_path_exp / "last_model.pt")
 
     metadata = {
         "vocab_size": len(tokenizer.vocab),
