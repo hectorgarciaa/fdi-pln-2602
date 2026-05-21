@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{article}
+﻿\documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
@@ -7,6 +7,8 @@
 \usepackage{geometry}
 \usepackage{hyperref}
 \geometry{margin=2.5cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4em}
 
 \title{Informe breve de resultados}
 \author{Héctor García \and Pablo Manuel Rodríguez Sosa}
@@ -19,6 +21,14 @@
 El modelo de lenguaje se ha construido desde cero con un tokenizador BPE sencillo y un transformer causal pequeño. Los hiperparámetros más relevantes del LLM son \texttt{vocab\_size}, \texttt{seq\_len}, \texttt{dim\_embedding}, \texttt{dim\_attention}, \texttt{num\_heads} y \texttt{num\_layers}. La configuración finalmente elegida como modelo general fue:
 
 \begin{itemize}
+    \item \texttt{vocab\_size}: tamaño del vocabulario del tokenizador (número total de tokens posibles).
+    \item \texttt{seq\_len}: longitud máxima de la secuencia de entrada (contexto) que procesa el modelo.
+    \item \texttt{dim\_embedding}: dimensionalidad de los embeddings de los tokens.
+    \item \texttt{dim\_attention}: tamaño interno usado en los cálculos de atención.
+    \item \texttt{num\_heads}: número de cabezas de atención en cada bloque transformer.
+    \item \texttt{num\_layers}: número de bloques/capas transformer apilados en el modelo.
+\end{itemize}
+\begin{itemize}
     \item \texttt{vocab\_size=95}
     \item \texttt{seq\_len=96}
     \item \texttt{dim\_embedding=105}
@@ -30,13 +40,17 @@ El modelo de lenguaje se ha construido desde cero con un tokenizador BPE sencill
 Esta configuración corresponde al artefacto \texttt{artifacts/llm/best\_general}.
 
 \section{Optimización de hiperparámetros del LLM}
-Para el LLM no se compararon los modelos usando únicamente \texttt{val\_loss}, porque al variar \texttt{vocab\_size} cambia también la tokenización. En consecuencia, la pérdida por token no es directamente comparable entre modelos: el mismo texto puede quedar segmentado en un número distinto de tokens y con distribuciones diferentes sobre el vocabulario.
+Para el LLM no se compararon los modelos usando únicamente \texttt{val\_loss}, porque al variar \texttt{vocab\_size} cambia también la tokenización. En consecuencia, la pérdida por token no es directamente comparable entre modelos: el mismo texto puede quedar segmentado en un número distinto de tokens y con distribuciones diferentes sobre el vocabulario. Además, cuando el vocabulario es más grande, el modelo tiene más opciones para predecir cada token, lo que puede reducir la pérdida sin que necesariamente refleje una mejor comprensión del texto.
 
 Por eso se usaron dos métricas más estables:
 
 \begin{itemize}
-    \item \texttt{bpc\_all\_tokens}: bits por carácter promediados sobre todos los tokens evaluados. Esta métrica normaliza por caracteres y permite comparar modelos con tokenizaciones distintas.
-    \item \texttt{bpc\_last\_token}: bits por carácter calculados solo sobre el último token de cada ventana. Esta métrica reduce el sesgo introducido por el solapamiento entre ventanas y refleja mejor la calidad de predicción con contexto completo.
+    \item \textbf{Paso 1: loss por batch.} En cada batch se calcula la \texttt{cross entropy} sumando la contribución de todas las predicciones del batch.
+    \item \textbf{Paso 2: loss por token.} Esa pérdida total se divide por el número de tokens evaluados en el batch para obtener una pérdida media por token.
+    \item \textbf{\texttt{bpc\_all\_tokens}.} Para esta métrica, en cada ventana se usan todas las posiciones predichas (aprox. \texttt{seq\_len} tokens por ventana), y con ello se obtiene la loss por token sobre todos los tokens.
+    \item \textbf{\texttt{bpc\_last\_token}.} Para esta métrica, en cada ventana solo se usa el último token predicho. Así medimos el rendimiento cuando el modelo aprovecha el contexto completo y reducimos el sesgo por solapamiento entre ventanas.
+    \item \textbf{Paso 3: loss por carácter.} A partir de la loss por token, se pasa a escala de carácter multiplicando por \texttt{tokens\_per\_char} (equivalentemente, dividiendo por \texttt{chars\_per\_token}). Este es el paso clave: al normalizar por carácter en lugar de por token, la métrica deja de depender de cómo segmenta cada tokenizador y ya permite comparar modelos con distinto \texttt{vocab\_size}.
+    \item \textbf{Paso 4: paso a bits.} Como \texttt{CrossEntropyLoss} usa logaritmo natural, la loss sale en \textit{nats}. Para expresarla en bits, se divide por \(\ln(2)\). El resultado final es \texttt{bits por carácter (BPC)}.
 \end{itemize}
 
 En los resultados se observó que no siempre coincidía el mejor modelo en ambas métricas. Por eso se eligió un modelo de compromiso: muy cercano al mejor en \texttt{bpc\_last\_token} y, a la vez, mejor posicionado en \texttt{bpc\_all\_tokens} que otras alternativas muy parecidas.
@@ -53,8 +67,44 @@ En los resultados se observó que no siempre coincidía el mejor modelo en ambas
     \caption{Impacto medio de los hiperparámetros del LLM sobre las métricas de comparación.}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../analysis/artifact_analysis/metric_by_vocab_size_dual_metrics.png}
+    \caption{Bits por carácter medios en función de \texttt{vocab\_size}.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../analysis/artifact_analysis/metric_by_seq_len_dual_metrics.png}
+    \caption{Bits por carácter medios en función de \texttt{seq\_len}.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../analysis/artifact_analysis/metric_by_num_layers_dual_metrics.png}
+    \caption{Bits por carácter medios en función de \texttt{num\_layers}.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../analysis/artifact_analysis/metric_by_num_heads_dual_metrics.png}
+    \caption{Bits por carácter medios en función de \texttt{num\_heads}.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../analysis/artifact_analysis/heatmap_vocab_seq_len.png}
+    \caption{Interacción entre \texttt{vocab\_size} y \texttt{seq\_len} sobre el rendimiento medio.}
+\end{figure}
+
+A partir de las agregaciones por hiperparámetro, los cambios más fuertes en el rendimiento medio aparecen en \texttt{seq\_len} y \texttt{vocab\_size}; después vienen \texttt{num\_layers} y \texttt{num\_heads}; y el efecto medio de \texttt{dim\_embedding} y \texttt{dim\_attention} es menor. En particular, las mejores medias se obtienen con \texttt{seq\_len=96}, \texttt{vocab\_size=95}, \texttt{num\_layers=2} y \texttt{num\_heads=2}, mientras que los peores casos aparecen en configuraciones extremas como \texttt{seq\_len=1024}, \texttt{vocab\_size=6597}, \texttt{num\_layers=4} o \texttt{num\_heads=8}.
+
+Si miramos los mejores runs en lugar de la media global, el patrón también es bastante claro. En el top 20 de experimentos, todos los modelos usan \texttt{num\_layers=2} y \texttt{num\_heads=2}. Además, los mejores resultados se mueven sobre todo en el rango \texttt{seq\_len=64--128}, con mayor concentración en \texttt{96}, y en vocabularios relativamente pequeños o medianos, especialmente \texttt{95} y \texttt{128}. Para las dimensiones internas no aparece un único valor dominante tan marcado, pero los mejores runs se concentran en \texttt{dim\_embedding} entre \texttt{105} y \texttt{140} y en \texttt{dim\_attention} entre \texttt{140} y \texttt{280}; en cambio, valores muy pequeños como \texttt{dim\_embedding=32} o \texttt{dim\_attention=64} empeoran claramente la media.
+
+En conjunto, las gráficas muestran dos ideas útiles para interpretar la búsqueda: primero, que la longitud de contexto y el tamaño del vocabulario son las decisiones que más cambian el resultado medio; y segundo, que la zona más competitiva de la búsqueda está formada por arquitecturas pequeñas o intermedias, con dos capas y dos cabezas, en lugar de configuraciones más grandes.
+
 \section{Optimización de hiperparámetros para NER}
-Para NER se reutilizó el backbone preentrenado del LLM y se exploró una rejilla sencilla sobre \texttt{batch\_size}, \texttt{epochs}, \texttt{learning\_rate} y \texttt{freeze\_backbone}. La conclusión principal fue clara: el mejor resultado apareció al ajustar también el backbone (\texttt{freeze\_backbone=False}), con \texttt{learning\_rate=1e-3}, \texttt{batch\_size=32} y en torno a \texttt{8} épocas. El mejor experimento alcanzó una \texttt{best\_val\_token\_f1\_micro} de aproximadamente \texttt{0.9831}.
+Para NER se reutilizó el backbone preentrenado del LLM, con su mejor arquitectura encontrada, y se exploró una rejilla sencilla sobre \texttt{batch\_size}, \texttt{epochs}, \texttt{learning\_rate} y \texttt{freeze\_backbone}. La conclusión principal fue clara: el mejor resultado apareció al ajustar también el backbone (\texttt{freeze\_backbone=False}), con \texttt{learning\_rate=1e-3}, \texttt{batch\_size=32} y en torno a \texttt{8} épocas. El mejor experimento alcanzó una \texttt{best\_val\_token\_f1\_micro} de aproximadamente \texttt{0.9831}.
 
 \begin{figure}[H]
     \centering
@@ -74,7 +124,10 @@ Para NER se reutilizó el backbone preentrenado del LLM y se exploró una rejill
     \caption{Relación entre batch size, learning rate y resultado en validación para NER.}
 \end{figure}
 
+Las gráficas de NER muestran un patrón bastante consistente. El factor más importante es \texttt{freeze\_backbone}: cuando se ajusta también el backbone preentrenado, los resultados son mejores que cuando se congela. Además, el \texttt{learning\_rate=1e-3} concentra los mejores experimentos, mientras que valores menores tienden a quedarse algo por detrás. En cuanto a \texttt{batch\_size} y \texttt{epochs}, la zona más favorable está en configuraciones intermedias, especialmente con \texttt{batch\_size=32} y alrededor de \texttt{8} épocas, lo que sugiere que para esta tarea el modelo ya preentrenado se beneficia de un ajuste completo pero relativamente corto y estable.
+
 \section{Resumen}
 En el LLM, la decisión más importante fue comparar modelos con métricas normalizadas por carácter, no con \texttt{val\_loss}, para poder evaluar justamente configuraciones con tokenizaciones distintas. En NER, el mejor comportamiento se obtuvo haciendo fine-tuning completo del modelo preentrenado y usando una configuración moderada de tamaño de batch y learning rate.
 
 \end{document}
+
