@@ -32,6 +32,8 @@ p4/logs/*
 
 p5/artifacts/*
 !p5/artifacts/best/
+!p5/artifacts/artifact_comparison.json
+!p5/artifacts/hyperparam_results.json
 
 # --- Estado de runtime del agente ---
 p1/app/state/*.json
