@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fdi-pln-2602-p5"
-version = "1.0.0"
+version = "1.0"
 description = "Mini LLM desde cero para la práctica 5 de PLN"
 readme = "README.md"
 requires-python = ">=3.12"
