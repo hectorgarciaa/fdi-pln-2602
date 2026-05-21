@@ -31,6 +31,7 @@ p4/logs/*
 !p4/logs/.gitkeep
 
 p5/artifacts/llm/runs
+p5/artifacts/ner/runs
 
 # --- Estado de runtime del agente ---
 p1/app/state/*.json
