@@ -54,6 +54,23 @@ uv sync
 - `artifacts/ner/best/`: mejor run global de NER
 - `artifacts/ner/hyperparam_results.json`: historial acumulado del grid search de NER
 
+## CLI Principal
+
+El ejecutable principal del proyecto es:
+
+```bash
+uv run fdi-pln-2602-p5 --help
+```
+
+Subcomandos disponibles:
+
+- `train-llm`
+- `train-hp-llm`
+- `generate-llm`
+- `train-ner`
+- `train-hp-ner`
+- `detect-ner`
+
 ## Entrenamiento LLM
 
 Entrena una unica configuracion y guarda el run en `artifacts/llm/runs/`. Si mejora el mejor global, actualiza `artifacts/llm/best/`.
@@ -61,13 +78,13 @@ Entrena una unica configuracion y guarda el run en `artifacts/llm/runs/`. Si mej
 Comando basico:
 
 ```bash
-uv run python -m app.train.train
+uv run fdi-pln-2602-p5 train-llm
 ```
 
 Ejemplo con parametros explicitos:
 
 ```bash
-uv run python -m app.train.train \
+uv run fdi-pln-2602-p5 train-llm \
   --data-dir data \
   --vocab-size 95 \
   --seq-len 96 \
@@ -90,13 +107,13 @@ Lanza un grid search y acumula resultados en `artifacts/llm/hyperparam_results.j
 Comando basico:
 
 ```bash
-uv run python -m app.train.hyperparam_train
+uv run fdi-pln-2602-p5 train-hp-llm
 ```
 
 Ejemplo con grid pequeno:
 
 ```bash
-uv run python -m app.train.hyperparam_train \
+uv run fdi-pln-2602-p5 train-hp-llm \
   --data-dir data \
   --output-dir artifacts/llm \
   --device cpu \
@@ -111,9 +128,30 @@ uv run python -m app.train.hyperparam_train \
   --learning-rates 1e-4
 ```
 
+## Generacion LLM
+
+Generacion puntual a partir de un prompt:
+
+```bash
+uv run fdi-pln-2602-p5 generate-llm \
+  --artifacts-dir artifacts/llm/best_general \
+  --prompt "Hola" \
+  --max-tokens 80 \
+  --temperature 0.8 \
+  --top-k 40
+```
+
+Modo chat interactivo:
+
+```bash
+uv run fdi-pln-2602-p5 generate-llm \
+  --artifacts-dir artifacts/llm/best_general \
+  --chat
+```
+
 ## Comparacion De Artefactos
 
-Evalua los runs de `artifacts/llm/runs/` y genera `artifacts/llm/artifact_comparison.json`.
+Sigue disponible como utilidad separada:
 
 ```bash
 uv run python -m app.train.compare_artifacts
@@ -130,69 +168,43 @@ uv run python -m app.train.compare_artifacts \
   --output artifacts/llm/artifact_comparison.json
 ```
 
-## Inference
-
-Usa por defecto `artifacts/llm/best_general/`.
-
-```bash
-uv run python -m app.inference.inference \
-  --prompt "Hola" \
-  --max-tokens 80 \
-  --temperature 0.8 \
-  --top-k 40
-```
-
-Ejemplo en CPU y con semilla fija:
-
-```bash
-uv run python -m app.inference.inference \
-  --prompt "Alice" \
-  --max-tokens 60 \
-  --temperature 0.7 \
-  --top-k 40 \
-  --device cpu \
-  --seed 42
-```
-
-## Chat
-
-Abre un chat interactivo usando el modelo de `artifacts/llm/best_general/`.
-
-```bash
-uv run python -m app.chat.chat
-```
-
-Escribe `salir` para terminar.
-
 ## NER
 
 Entrenamiento simple sobre el backbone preentrenado:
 
 ```bash
-uv run python -m app.ner.train
+uv run fdi-pln-2602-p5 train-ner
 ```
 
 Grid search de NER:
 
 ```bash
-uv run python -m app.ner.hyperparam_train
+uv run fdi-pln-2602-p5 train-hp-ner
 ```
 
 Prediccion de entidades con el mejor modelo NER:
 
 ```bash
-uv run python -m app.ner.predict \
-  --text "Alice went to the garden." \
-  --artifacts-dir artifacts/ner/best_general
+uv run fdi-pln-2602-p5 detect-ner \
+  --artifacts-dir artifacts/ner/best_general \
+  --text "Alice went to the garden."
 ```
 
 Si quieres ver tambien la etiqueta predicha para cada palabra:
 
 ```bash
-uv run python -m app.ner.predict \
-  --text "Alice went to the garden." \
+uv run fdi-pln-2602-p5 detect-ner \
   --artifacts-dir artifacts/ner/best_general \
+  --text "Alice went to the garden." \
   --show-labels
+```
+
+Tambien se puede detectar NER sobre un fichero de texto:
+
+```bash
+uv run fdi-pln-2602-p5 detect-ner \
+  --artifacts-dir artifacts/ner/best_general \
+  --input-file ruta/al/texto.txt
 ```
 
 ## Notas
@@ -200,3 +212,4 @@ uv run python -m app.ner.predict \
 - Los notebooks de `analysis/` consumen los JSON actuales de `artifacts/llm`.
 - `hyperparam_results.json` acumula resultados de ejecuciones previas.
 - `chat` e `inference` cargan por defecto desde `artifacts/llm/best_general`.
+- Los modulos `python -m app...` siguen existiendo, pero la forma recomendada de uso es el ejecutable `fdi-pln-2602-p5`.
