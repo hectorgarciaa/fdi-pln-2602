@@ -1,0 +1,4388 @@
+[
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.7313,
+    "best_perplexity": 41.73,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.661,
+    "best_perplexity": 38.9,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.7416,
+    "best_perplexity": 42.17,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6579,
+    "best_perplexity": 38.78,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.7453,
+    "best_perplexity": 42.32,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6438,
+    "best_perplexity": 38.24,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.7254,
+    "best_perplexity": 41.49,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6506,
+    "best_perplexity": 38.5,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3574,
+    "best_perplexity": 28.71,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2359,
+    "best_perplexity": 25.43,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.4323,
+    "best_perplexity": 30.95,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2466,
+    "best_perplexity": 25.7,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2818,
+    "best_perplexity": 26.62,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.1123,
+    "best_perplexity": 22.47,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3423,
+    "best_perplexity": 28.28,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.1603,
+    "best_perplexity": 23.58,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.709,
+    "best_perplexity": 40.81,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6704,
+    "best_perplexity": 39.27,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.709,
+    "best_perplexity": 40.81,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6507,
+    "best_perplexity": 38.5,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.7058,
+    "best_perplexity": 40.68,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6477,
+    "best_perplexity": 38.39,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6943,
+    "best_perplexity": 40.22,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6249,
+    "best_perplexity": 37.52,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.4771,
+    "best_perplexity": 32.37,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2828,
+    "best_perplexity": 26.65,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.5753,
+    "best_perplexity": 35.71,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2705,
+    "best_perplexity": 26.33,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3841,
+    "best_perplexity": 29.49,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2056,
+    "best_perplexity": 24.67,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.4624,
+    "best_perplexity": 31.89,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2049,
+    "best_perplexity": 24.65,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.3031,
+    "best_perplexity": 73.93,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.2238,
+    "best_perplexity": 68.29,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.3271,
+    "best_perplexity": 75.72,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.2166,
+    "best_perplexity": 67.8,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.2975,
+    "best_perplexity": 73.52,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.2362,
+    "best_perplexity": 69.14,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.3182,
+    "best_perplexity": 75.06,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.2298,
+    "best_perplexity": 68.7,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.0363,
+    "best_perplexity": 56.62,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.9362,
+    "best_perplexity": 51.22,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.0842,
+    "best_perplexity": 59.39,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.9451,
+    "best_perplexity": 51.68,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.035,
+    "best_perplexity": 56.54,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.9001,
+    "best_perplexity": 49.41,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.049,
+    "best_perplexity": 57.34,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.8985,
+    "best_perplexity": 49.33,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.2302,
+    "best_perplexity": 68.73,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.182,
+    "best_perplexity": 65.49,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.2332,
+    "best_perplexity": 68.94,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.1711,
+    "best_perplexity": 64.78,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.2367,
+    "best_perplexity": 69.18,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.1691,
+    "best_perplexity": 64.66,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.227,
+    "best_perplexity": 68.51,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.1701,
+    "best_perplexity": 64.73,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.061,
+    "best_perplexity": 58.03,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.9634,
+    "best_perplexity": 52.64,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.0806,
+    "best_perplexity": 59.18,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.9536,
+    "best_perplexity": 52.12,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.0705,
+    "best_perplexity": 58.58,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.9667,
+    "best_perplexity": 52.81,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.0633,
+    "best_perplexity": 58.16,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 512,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.9446,
+    "best_perplexity": 51.66,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.8902,
+    "best_perplexity": 132.98,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.8524,
+    "best_perplexity": 128.05,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.882,
+    "best_perplexity": 131.89,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.8288,
+    "best_perplexity": 125.06,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.9147,
+    "best_perplexity": 136.28,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.8271,
+    "best_perplexity": 124.84,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.9213,
+    "best_perplexity": 137.18,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.8414,
+    "best_perplexity": 126.65,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.6181,
+    "best_perplexity": 101.3,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5169,
+    "best_perplexity": 91.55,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.6379,
+    "best_perplexity": 103.32,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5315,
+    "best_perplexity": 92.9,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5974,
+    "best_perplexity": 99.22,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5088,
+    "best_perplexity": 90.82,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.6484,
+    "best_perplexity": 104.41,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5181,
+    "best_perplexity": 91.66,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.8248,
+    "best_perplexity": 124.56,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.7427,
+    "best_perplexity": 114.74,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.7872,
+    "best_perplexity": 119.96,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.7321,
+    "best_perplexity": 113.54,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.8078,
+    "best_perplexity": 122.46,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.7227,
+    "best_perplexity": 112.47,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.814,
+    "best_perplexity": 123.23,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 32,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.7545,
+    "best_perplexity": 116.11,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5829,
+    "best_perplexity": 97.8,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5134,
+    "best_perplexity": 91.23,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5848,
+    "best_perplexity": 97.99,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 64,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5047,
+    "best_perplexity": 90.45,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.591,
+    "best_perplexity": 98.59,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5043,
+    "best_perplexity": 90.4,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 1,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5637,
+    "best_perplexity": 95.94,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 1000,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 4,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 3,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 4.5109,
+    "best_perplexity": 91.01,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.6134,
+    "best_perplexity": 13.64,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3976,
+    "best_perplexity": 11.0,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.6083,
+    "best_perplexity": 13.58,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3791,
+    "best_perplexity": 10.8,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.5757,
+    "best_perplexity": 13.14,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.4142,
+    "best_perplexity": 11.18,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3874,
+    "best_perplexity": 10.89,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3613,
+    "best_perplexity": 10.6,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.373,
+    "best_perplexity": 10.73,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3753,
+    "best_perplexity": 10.75,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3686,
+    "best_perplexity": 10.68,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3715,
+    "best_perplexity": 10.71,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3354,
+    "best_perplexity": 10.33,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.501,
+    "best_perplexity": 12.19,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3323,
+    "best_perplexity": 10.3,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.59,
+    "best_perplexity": 13.33,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.326,
+    "best_perplexity": 10.24,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.7522,
+    "best_perplexity": 15.68,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.6288,
+    "best_perplexity": 13.86,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.4256,
+    "best_perplexity": 11.31,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.5978,
+    "best_perplexity": 13.43,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3848,
+    "best_perplexity": 10.86,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.5706,
+    "best_perplexity": 13.07,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.4151,
+    "best_perplexity": 11.19,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3605,
+    "best_perplexity": 10.6,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3663,
+    "best_perplexity": 10.66,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3629,
+    "best_perplexity": 10.62,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3673,
+    "best_perplexity": 10.67,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3681,
+    "best_perplexity": 10.68,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.3741,
+    "best_perplexity": 10.74,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3304,
+    "best_perplexity": 10.28,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.6221,
+    "best_perplexity": 13.76,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3307,
+    "best_perplexity": 10.28,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 2.7715,
+    "best_perplexity": 15.98,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.322,
+    "best_perplexity": 10.2,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0072,
+    "best_perplexity": 20.23,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3048,
+    "best_perplexity": 27.24,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0171,
+    "best_perplexity": 20.43,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3405,
+    "best_perplexity": 28.23,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0616,
+    "best_perplexity": 21.36,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3015,
+    "best_perplexity": 27.15,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0476,
+    "best_perplexity": 21.06,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.029,
+    "best_perplexity": 20.68,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0271,
+    "best_perplexity": 20.64,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.0157,
+    "best_perplexity": 20.4,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.014,
+    "best_perplexity": 20.37,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.9969,
+    "best_perplexity": 20.02,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0212,
+    "best_perplexity": 20.52,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.9622,
+    "best_perplexity": 19.34,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.2581,
+    "best_perplexity": 26.0,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.9797,
+    "best_perplexity": 19.68,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.4753,
+    "best_perplexity": 32.31,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.9635,
+    "best_perplexity": 19.37,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.7094,
+    "best_perplexity": 40.83,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.4454,
+    "best_perplexity": 31.36,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0497,
+    "best_perplexity": 21.11,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2919,
+    "best_perplexity": 26.89,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.073,
+    "best_perplexity": 21.61,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3931,
+    "best_perplexity": 29.76,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0611,
+    "best_perplexity": 21.35,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.0939,
+    "best_perplexity": 22.06,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0507,
+    "best_perplexity": 21.13,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.0532,
+    "best_perplexity": 21.18,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.0704,
+    "best_perplexity": 21.55,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.0559,
+    "best_perplexity": 21.24,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.085,
+    "best_perplexity": 21.87,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.9641,
+    "best_perplexity": 19.38,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.3509,
+    "best_perplexity": 28.53,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.9886,
+    "best_perplexity": 19.86,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.6035,
+    "best_perplexity": 36.72,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.9793,
+    "best_perplexity": 19.67,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 256,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 4.1854,
+    "best_perplexity": 65.72,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6752,
+    "best_perplexity": 39.46,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.3813,
+    "best_perplexity": 29.41,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.678,
+    "best_perplexity": 39.57,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.3579,
+    "best_perplexity": 28.73,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6658,
+    "best_perplexity": 39.09,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.3937,
+    "best_perplexity": 29.77,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3597,
+    "best_perplexity": 28.78,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.3265,
+    "best_perplexity": 27.84,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3329,
+    "best_perplexity": 28.02,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.3714,
+    "best_perplexity": 29.12,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3378,
+    "best_perplexity": 28.16,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.3444,
+    "best_perplexity": 28.34,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2904,
+    "best_perplexity": 26.85,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.6835,
+    "best_perplexity": 39.78,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2869,
+    "best_perplexity": 26.76,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.8382,
+    "best_perplexity": 46.44,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3021,
+    "best_perplexity": 27.17,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 64,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 4.0502,
+    "best_perplexity": 57.41,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.729,
+    "best_perplexity": 41.64,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.4106,
+    "best_perplexity": 30.28,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.6924,
+    "best_perplexity": 40.14,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.425,
+    "best_perplexity": 30.72,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.7029,
+    "best_perplexity": 40.57,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 40,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.4042,
+    "best_perplexity": 30.09,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.4334,
+    "best_perplexity": 30.98,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.4141,
+    "best_perplexity": 30.39,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.4254,
+    "best_perplexity": 30.73,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.4637,
+    "best_perplexity": 31.93,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3777,
+    "best_perplexity": 29.3,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 64,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.4252,
+    "best_perplexity": 30.73,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3334,
+    "best_perplexity": 28.03,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 80,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 3.9452,
+    "best_perplexity": 51.69,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.2894,
+    "best_perplexity": 26.83,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 128,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 4.3214,
+    "best_perplexity": 75.3,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 3.3126,
+    "best_perplexity": 27.46,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 350,
+      "seq_len": 128,
+      "dim_embedding": 128,
+      "dim_attention": 256,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0005
+    },
+    "best_val_loss": 4.7265,
+    "best_perplexity": 112.89,
+    "best_epoch": 1,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7177,
+    "best_perplexity": 5.57,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7199,
+    "best_perplexity": 5.58,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7171,
+    "best_perplexity": 5.57,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.6911,
+    "best_perplexity": 5.43,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7054,
+    "best_perplexity": 5.5,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.6974,
+    "best_perplexity": 5.46,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7023,
+    "best_perplexity": 5.49,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.6971,
+    "best_perplexity": 5.46,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7024,
+    "best_perplexity": 5.49,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7056,
+    "best_perplexity": 5.5,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7126,
+    "best_perplexity": 5.54,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7101,
+    "best_perplexity": 5.53,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.6896,
+    "best_perplexity": 5.42,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7057,
+    "best_perplexity": 5.51,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7073,
+    "best_perplexity": 5.51,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.6948,
+    "best_perplexity": 5.45,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.6957,
+    "best_perplexity": 5.45,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 64,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 1.7074,
+    "best_perplexity": 5.51,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.1063,
+    "best_perplexity": 8.22,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0918,
+    "best_perplexity": 8.1,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.1132,
+    "best_perplexity": 8.28,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.066,
+    "best_perplexity": 7.89,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0985,
+    "best_perplexity": 8.15,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0821,
+    "best_perplexity": 8.02,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0684,
+    "best_perplexity": 7.91,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0668,
+    "best_perplexity": 7.9,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0775,
+    "best_perplexity": 7.98,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0997,
+    "best_perplexity": 8.16,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.1228,
+    "best_perplexity": 8.35,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.1119,
+    "best_perplexity": 8.26,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0849,
+    "best_perplexity": 8.04,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.1005,
+    "best_perplexity": 8.17,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0763,
+    "best_perplexity": 7.97,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0843,
+    "best_perplexity": 8.04,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.0925,
+    "best_perplexity": 8.11,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 95,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.1054,
+    "best_perplexity": 8.21,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3413,
+    "best_perplexity": 10.4,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3609,
+    "best_perplexity": 10.6,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 70,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3631,
+    "best_perplexity": 10.62,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3445,
+    "best_perplexity": 10.43,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3304,
+    "best_perplexity": 10.28,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3535,
+    "best_perplexity": 10.52,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3237,
+    "best_perplexity": 10.21,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3347,
+    "best_perplexity": 10.33,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 96,
+      "dim_embedding": 140,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3531,
+    "best_perplexity": 10.52,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3996,
+    "best_perplexity": 11.02,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3407,
+    "best_perplexity": 10.39,
+    "best_epoch": 5,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 70,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3493,
+    "best_perplexity": 10.48,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3245,
+    "best_perplexity": 10.22,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3408,
+    "best_perplexity": 10.39,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 105,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3502,
+    "best_perplexity": 10.49,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.314,
+    "best_perplexity": 10.11,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 210,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.318,
+    "best_perplexity": 10.16,
+    "best_epoch": 2,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "vocab_size": 128,
+      "seq_len": 128,
+      "dim_embedding": 140,
+      "dim_attention": 280,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": 16,
+      "epochs": 5,
+      "learning_rate": 0.0001
+    },
+    "best_val_loss": 2.3727,
+    "best_perplexity": 10.73,
+    "best_epoch": 2,
+    "status": "completed"
+  }
+]
