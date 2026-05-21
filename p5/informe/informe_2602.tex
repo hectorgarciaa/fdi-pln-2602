@@ -1,0 +1,80 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\title{Informe breve de resultados}
+\author{Héctor García \and Pablo Manuel Rodríguez Sosa}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Tokenizador y arquitectura del LLM}
+El modelo de lenguaje se ha construido desde cero con un tokenizador BPE sencillo y un transformer causal pequeño. Los hiperparámetros más relevantes del LLM son \texttt{vocab\_size}, \texttt{seq\_len}, \texttt{dim\_embedding}, \texttt{dim\_attention}, \texttt{num\_heads} y \texttt{num\_layers}. La configuración finalmente elegida como modelo general fue:
+
+\begin{itemize}
+    \item \texttt{vocab\_size=95}
+    \item \texttt{seq\_len=96}
+    \item \texttt{dim\_embedding=105}
+    \item \texttt{dim\_attention=140}
+    \item \texttt{num\_heads=2}
+    \item \texttt{num\_layers=2}
+\end{itemize}
+
+Esta configuración corresponde al artefacto \texttt{artifacts/llm/best\_general}.
+
+\section{Optimización de hiperparámetros del LLM}
+Para el LLM no se compararon los modelos usando únicamente \texttt{val\_loss}, porque al variar \texttt{vocab\_size} cambia también la tokenización. En consecuencia, la pérdida por token no es directamente comparable entre modelos: el mismo texto puede quedar segmentado en un número distinto de tokens y con distribuciones diferentes sobre el vocabulario.
+
+Por eso se usaron dos métricas más estables:
+
+\begin{itemize}
+    \item \texttt{bpc\_all\_tokens}: bits por carácter promediados sobre todos los tokens evaluados. Esta métrica normaliza por caracteres y permite comparar modelos con tokenizaciones distintas.
+    \item \texttt{bpc\_last\_token}: bits por carácter calculados solo sobre el último token de cada ventana. Esta métrica reduce el sesgo introducido por el solapamiento entre ventanas y refleja mejor la calidad de predicción con contexto completo.
+\end{itemize}
+
+En los resultados se observó que no siempre coincidía el mejor modelo en ambas métricas. Por eso se eligió un modelo de compromiso: muy cercano al mejor en \texttt{bpc\_last\_token} y, a la vez, mejor posicionado en \texttt{bpc\_all\_tokens} que otras alternativas muy parecidas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../analysis/artifact_analysis/top_runs_dual_metrics.png}
+    \caption{Comparación de los mejores runs del LLM con las dos métricas principales.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../analysis/artifact_analysis/param_impact_dual_metrics.png}
+    \caption{Impacto medio de los hiperparámetros del LLM sobre las métricas de comparación.}
+\end{figure}
+
+\section{Optimización de hiperparámetros para NER}
+Para NER se reutilizó el backbone preentrenado del LLM y se exploró una rejilla sencilla sobre \texttt{batch\_size}, \texttt{epochs}, \texttt{learning\_rate} y \texttt{freeze\_backbone}. La conclusión principal fue clara: el mejor resultado apareció al ajustar también el backbone (\texttt{freeze\_backbone=False}), con \texttt{learning\_rate=1e-3}, \texttt{batch\_size=32} y en torno a \texttt{8} épocas. El mejor experimento alcanzó una \texttt{best\_val\_token\_f1\_micro} de aproximadamente \texttt{0.9831}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../analysis/artifact_ner_analysis/top10_ner_configs.png}
+    \caption{Top 10 configuraciones evaluadas para NER.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{../analysis/artifact_ner_analysis/f1_by_learning_rate.png}
+    \caption{Distribución de resultados en función del learning rate.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{../analysis/artifact_ner_analysis/heatmap_batch_lr_f1.png}
+    \caption{Relación entre batch size, learning rate y resultado en validación para NER.}
+\end{figure}
+
+\section{Resumen}
+En el LLM, la decisión más importante fue comparar modelos con métricas normalizadas por carácter, no con \texttt{val\_loss}, para poder evaluar justamente configuraciones con tokenizaciones distintas. En NER, el mejor comportamiento se obtuvo haciendo fine-tuning completo del modelo preentrenado y usando una configuración moderada de tamaño de batch y learning rate.
+
+\end{document}

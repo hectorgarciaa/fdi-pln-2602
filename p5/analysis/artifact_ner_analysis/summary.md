@@ -1,0 +1,11 @@
+# Analisis NER
+- Configuraciones registradas: 36
+- Configuraciones completadas: 36
+- Mejor batch_size: 32
+- Mejor epochs: 8
+- Mejor learning_rate: 0.001
+- Mejor freeze_backbone: False
+- Mejor best_epoch: 6
+- Mejor val_token_f1_micro: 0.983058
+- Mejor val_loss: 0.082086
+- Mejor run_dir: artifacts/ner/runs/20260521-205925-638984
