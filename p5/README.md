@@ -5,6 +5,11 @@ Implementacion de un LLM pequeno desde cero, con entrenamiento, exploracion de h
 > Asignatura: Procesamiento del Lenguaje Natural, UCM  
 > Curso: 2025-2026
 
+## Integrantes
+
+- Héctor García
+- Pablo Manuel Rodríguez Sosa
+
 ## Estructura
 
 ```text
@@ -41,6 +46,12 @@ Desde la raiz del proyecto:
 
 ```bash
 uv sync
+```
+
+Para los notebooks de `analysis/`, que usan librerias de exploracion y visualizacion fuera de las dependencias minimas del paquete, instala al abrirlos:
+
+```bash
+pip install pandas matplotlib seaborn
 ```
 
 ## Artefactos
