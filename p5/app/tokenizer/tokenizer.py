@@ -9,6 +9,7 @@ END_OF_WORD = "</w>"
 PAD_TOKEN = "<pad>"
 UNK_TOKEN = "<unk>"
 
+
 class MiniBPETokenizer:
     """Versión sencilla de un tokenizer BPE para uso didáctico."""
 
@@ -47,7 +48,9 @@ class MiniBPETokenizer:
 
         return merged
 
-    def _count_pairs(self, word_freqs: Counter[tuple[str, ...]]) -> Counter[tuple[str, str]]:
+    def _count_pairs(
+        self, word_freqs: Counter[tuple[str, ...]]
+    ) -> Counter[tuple[str, str]]:
         pair_counts: Counter[tuple[str, str]] = Counter()
         for word, freq in word_freqs.items():
             for pair in pairwise(word):
@@ -85,7 +88,10 @@ class MiniBPETokenizer:
 
             self.merges.append(best_pair)
             word_freqs = Counter(
-                {tuple(self._merge_word(list(word), best_pair)): freq for word, freq in word_freqs.items()}
+                {
+                    tuple(self._merge_word(list(word), best_pair)): freq
+                    for word, freq in word_freqs.items()
+                }
             )
 
             merged_token = "".join(best_pair)

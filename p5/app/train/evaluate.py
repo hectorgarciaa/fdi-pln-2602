@@ -3,6 +3,7 @@ from torch import nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
+
 def evaluate(model: nn.Module, dataloader: DataLoader, device: torch.device) -> float:
     model.eval()
     total_loss = 0.0

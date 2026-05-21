@@ -17,7 +17,7 @@ class Attention(nn.Module):
         k = self.Wk(x)
         v = self.Wv(x)
 
-        scores = torch.matmul(q, k.transpose(-2, -1)) / (self.dim_attention ** 0.5)
+        scores = torch.matmul(q, k.transpose(-2, -1)) / (self.dim_attention**0.5)
         if mask is not None:
             scores = scores.masked_fill(mask, torch.finfo(scores.dtype).min)
         weights = torch.softmax(scores, dim=-1)

@@ -11,12 +11,17 @@ class MultiHeadAttention(nn.Module):
         self.dim_attention = dim_attention
         self.num_heads = num_heads
 
-        assert dim_attention % num_heads == 0, "dim_attention must be divisible by num_heads"
+        assert dim_attention % num_heads == 0, (
+            "dim_attention must be divisible by num_heads"
+        )
 
-        self.attention_heads = nn.ModuleList([
-            Attention(dim_embedding, dim_attention // num_heads) for _ in range(num_heads)
-        ])
-        
+        self.attention_heads = nn.ModuleList(
+            [
+                Attention(dim_embedding, dim_attention // num_heads)
+                for _ in range(num_heads)
+            ]
+        )
+
         self.linear = nn.Linear(dim_attention, dim_embedding)
 
     def forward(self, x, mask=None):

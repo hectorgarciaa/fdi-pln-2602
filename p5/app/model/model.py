@@ -5,7 +5,15 @@ from ..attention import MultiHeadAttention
 
 
 class LLM(nn.Module):
-    def __init__(self, vocab_size, dim_embedding, dim_attention, num_heads, num_layers, max_seq_len):
+    def __init__(
+        self,
+        vocab_size,
+        dim_embedding,
+        dim_attention,
+        num_heads,
+        num_layers,
+        max_seq_len,
+    ):
         super().__init__()
         self.dim_embedding = dim_embedding
         self.dim_attention = dim_attention
@@ -16,24 +24,29 @@ class LLM(nn.Module):
         self.embedding = nn.Embedding(vocab_size, dim_embedding)
         self.position_embedding = nn.Embedding(max_seq_len, dim_embedding)
 
-        self.attention_layers = nn.ModuleList([
-            MultiHeadAttention(dim_embedding, dim_attention, num_heads) for _ in range(num_layers)
-        ])
-        self.attention_norms = nn.ModuleList([
-            nn.LayerNorm(dim_embedding) for _ in range(num_layers)
-        ])
+        self.attention_layers = nn.ModuleList(
+            [
+                MultiHeadAttention(dim_embedding, dim_attention, num_heads)
+                for _ in range(num_layers)
+            ]
+        )
+        self.attention_norms = nn.ModuleList(
+            [nn.LayerNorm(dim_embedding) for _ in range(num_layers)]
+        )
 
-        self.feed_forward = nn.ModuleList([
-            nn.Sequential(
-                nn.Linear(dim_embedding, dim_embedding * 4),
-                nn.GELU(),
-                nn.Linear(dim_embedding * 4, dim_embedding)
-            )
-            for _ in range(num_layers)
-        ])
-        self.feed_forward_norms = nn.ModuleList([
-            nn.LayerNorm(dim_embedding) for _ in range(num_layers)
-        ])
+        self.feed_forward = nn.ModuleList(
+            [
+                nn.Sequential(
+                    nn.Linear(dim_embedding, dim_embedding * 4),
+                    nn.GELU(),
+                    nn.Linear(dim_embedding * 4, dim_embedding),
+                )
+                for _ in range(num_layers)
+            ]
+        )
+        self.feed_forward_norms = nn.ModuleList(
+            [nn.LayerNorm(dim_embedding) for _ in range(num_layers)]
+        )
 
         self.output_norm = nn.LayerNorm(dim_embedding)
         self.output = nn.Linear(dim_embedding, vocab_size)
@@ -42,7 +55,7 @@ class LLM(nn.Module):
         x = self.backbone_forward(x)
         output = self.output(x)
         return output
-    
+
     def backbone_forward(self, x):
         _, seq_len = x.shape
         if seq_len > self.max_seq_len:
