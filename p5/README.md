@@ -178,6 +178,23 @@ Grid search de NER:
 uv run python -m app.ner.hyperparam_train
 ```
 
+Prediccion de entidades con el mejor modelo NER:
+
+```bash
+uv run python -m app.ner.predict \
+  --text "Alice went to the garden." \
+  --artifacts-dir artifacts/ner/best_general
+```
+
+Si quieres ver tambien la etiqueta predicha para cada palabra:
+
+```bash
+uv run python -m app.ner.predict \
+  --text "Alice went to the garden." \
+  --artifacts-dir artifacts/ner/best_general \
+  --show-labels
+```
+
 ## Notas
 
 - Los notebooks de `analysis/` consumen los JSON actuales de `artifacts/llm`.
