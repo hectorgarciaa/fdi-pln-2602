@@ -1,0 +1,578 @@
+[
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 4,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205820-566568",
+    "best_val_loss": 0.3678309261798859,
+    "best_val_token_f1_micro": 0.9155563634123547,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 4,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205822-782503",
+    "best_val_loss": 0.10632469616830349,
+    "best_val_token_f1_micro": 0.9714179644401183,
+    "best_epoch": 3,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 4,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205823-689750",
+    "best_val_loss": 0.6019197762012481,
+    "best_val_token_f1_micro": 0.8396895628700556,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 4,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205824-883604",
+    "best_val_loss": 0.10805650167167187,
+    "best_val_token_f1_micro": 0.9721747452489172,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 8,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205826-738076",
+    "best_val_loss": 0.28076009452342987,
+    "best_val_token_f1_micro": 0.9373839446636287,
+    "best_epoch": 8,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 8,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205829-235927",
+    "best_val_loss": 0.1209301742259413,
+    "best_val_token_f1_micro": 0.9727565915594389,
+    "best_epoch": 6,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 8,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205832-682291",
+    "best_val_loss": 0.3806631863117218,
+    "best_val_token_f1_micro": 0.9168962433705818,
+    "best_epoch": 8,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 8,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205835-006448",
+    "best_val_loss": 0.10805650167167187,
+    "best_val_token_f1_micro": 0.9721747452489172,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 16,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205838-485149",
+    "best_val_loss": 0.234560227394104,
+    "best_val_token_f1_micro": 0.9403023510658557,
+    "best_epoch": 16,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 16,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205842-110700",
+    "best_val_loss": 0.1209301742259413,
+    "best_val_token_f1_micro": 0.9727565915594389,
+    "best_epoch": 6,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 16,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205848-739932",
+    "best_val_loss": 0.30623012185096743,
+    "best_val_token_f1_micro": 0.937663550765981,
+    "best_epoch": 13,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 8,
+      "epochs": 16,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205851-389972",
+    "best_val_loss": 0.13784182947129012,
+    "best_val_token_f1_micro": 0.9727761863510185,
+    "best_epoch": 15,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 4,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205854-036251",
+    "best_val_loss": 0.553764541943868,
+    "best_val_token_f1_micro": 0.8604359820986035,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 4,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205855-427559",
+    "best_val_loss": 0.10950516040126483,
+    "best_val_token_f1_micro": 0.9729556619726524,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 4,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205856-021222",
+    "best_val_loss": 0.9877469937006632,
+    "best_val_token_f1_micro": 0.6712959925945364,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 4,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205856-670394",
+    "best_val_loss": 0.10430413857102394,
+    "best_val_token_f1_micro": 0.9719006020583691,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 8,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205857-880435",
+    "best_val_loss": 0.35092058777809143,
+    "best_val_token_f1_micro": 0.9230234482054871,
+    "best_epoch": 8,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 8,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205900-708209",
+    "best_val_loss": 0.10456761143480738,
+    "best_val_token_f1_micro": 0.976685726989125,
+    "best_epoch": 6,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 8,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205903-513009",
+    "best_val_loss": 0.5777713855107626,
+    "best_val_token_f1_micro": 0.8520027916265781,
+    "best_epoch": 8,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 8,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205904-802540",
+    "best_val_loss": 0.10430413857102394,
+    "best_val_token_f1_micro": 0.9719006020583691,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 16,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205906-697702",
+    "best_val_loss": 0.2954110950231552,
+    "best_val_token_f1_micro": 0.9388229248666141,
+    "best_epoch": 12,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 16,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205909-748875",
+    "best_val_loss": 0.1091112105641514,
+    "best_val_token_f1_micro": 0.9773080118953906,
+    "best_epoch": 12,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 16,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205913-925147",
+    "best_val_loss": 0.36232354243596393,
+    "best_val_token_f1_micro": 0.9158093165981516,
+    "best_epoch": 16,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 16,
+      "epochs": 16,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205918-640720",
+    "best_val_loss": 0.10430413857102394,
+    "best_val_token_f1_micro": 0.9719006020583691,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 4,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205920-791616",
+    "best_val_loss": 0.9690441489219666,
+    "best_val_token_f1_micro": 0.668784435261708,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 4,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205922-007438",
+    "best_val_loss": 0.09155283402651548,
+    "best_val_token_f1_micro": 0.9766098484848484,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 4,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205922-478390",
+    "best_val_loss": 1.569956660270691,
+    "best_val_token_f1_micro": 0.3804752066115702,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 4,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205923-544952",
+    "best_val_loss": 0.12338810600340366,
+    "best_val_token_f1_micro": 0.9739238980716254,
+    "best_epoch": 4,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 8,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205924-191766",
+    "best_val_loss": 0.5435544550418854,
+    "best_val_token_f1_micro": 0.8578254132231404,
+    "best_epoch": 8,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 8,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205925-638984",
+    "best_val_loss": 0.08208638522773981,
+    "best_val_token_f1_micro": 0.9830578512396695,
+    "best_epoch": 6,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 8,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205927-176131",
+    "best_val_loss": 0.9893747568130493,
+    "best_val_token_f1_micro": 0.6671315426997245,
+    "best_epoch": 8,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 8,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205928-476133",
+    "best_val_loss": 0.08412035927176476,
+    "best_val_token_f1_micro": 0.9770230716253443,
+    "best_epoch": 7,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 16,
+      "learning_rate": 0.001,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205930-681617",
+    "best_val_loss": 0.3317520469427109,
+    "best_val_token_f1_micro": 0.9294938016528926,
+    "best_epoch": 16,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 16,
+      "learning_rate": 0.001,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205935-611740",
+    "best_val_loss": 0.08208638522773981,
+    "best_val_token_f1_micro": 0.9830578512396695,
+    "best_epoch": 6,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 16,
+      "learning_rate": 0.0005,
+      "freeze_backbone": true
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205937-792441",
+    "best_val_loss": 0.566270500421524,
+    "best_val_token_f1_micro": 0.8659693526170799,
+    "best_epoch": 16,
+    "status": "completed"
+  },
+  {
+    "config": {
+      "data_path": "/home/hegarc04/pln/fdi-pln-2602/p5/data/ner_dataset.json",
+      "artifacts_dir": "artifacts/llm/best_general",
+      "output_dir": "artifacts/ner",
+      "batch_size": 32,
+      "epochs": 16,
+      "learning_rate": 0.0005,
+      "freeze_backbone": false
+    },
+    "run_dir": "artifacts/ner/runs/20260521-205940-894287",
+    "best_val_loss": 0.08412035927176476,
+    "best_val_token_f1_micro": 0.9770230716253443,
+    "best_epoch": 7,
+    "status": "completed"
+  }
+]
