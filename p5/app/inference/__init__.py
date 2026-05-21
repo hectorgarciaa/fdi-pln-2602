@@ -1,3 +1,3 @@
-from .inference import InferenceArtifacts, generate_text, load_artifacts, read_train_config
+from .inference import load_model, generate
 
-__all__ = [ "InferenceArtifacts", "generate_text", "load_artifacts", "read_train_config" ]
+__all__: list[str] = ["load_model", "generate"]
