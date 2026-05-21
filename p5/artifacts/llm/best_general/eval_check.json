@@ -1,0 +1,39 @@
+{
+  "artifacts_dir": "artifacts/best_general",
+  "data_dir": "/home/hegarc04/pln/fdi-pln-2602/p5/data",
+  "device": "cuda",
+  "train_split_used_for_comparison": 0.9,
+  "validation_chars": 30042,
+  "ranking_metric": "bits_per_char_last_token",
+  "results": [
+    {
+      "run_dir": "artifacts/best_general",
+      "vocab_size": 95,
+      "seq_len": 96,
+      "dim_embedding": 105,
+      "dim_attention": 140,
+      "num_heads": 2,
+      "num_layers": 2,
+      "batch_size": -1,
+      "epochs": -1,
+      "learning_rate": null,
+      "train_split": 0.9,
+      "token_count": 19805,
+      "char_count": 30042,
+      "tokens_per_char": 0.6592437254510353,
+      "unk_rate": 0.0,
+      "nll_per_token_last_token": 2.0525123926292688,
+      "token_perplexity_last_token": 7.787441660284518,
+      "nll_per_char_last_token": 1.3531059162513372,
+      "bits_per_char_last_token": 1.9521191951733214,
+      "nll_per_token_all_tokens": 2.063672383110166,
+      "token_perplexity_all_tokens": 7.874836189091718,
+      "nll_per_char_all_tokens": 1.360463069951962,
+      "bits_per_char_all_tokens": 1.9627333243322704,
+      "best_epoch": 3,
+      "saved_val_loss": 2.066,
+      "saved_perplexity": 7.89
+    }
+  ],
+  "skipped": []
+}

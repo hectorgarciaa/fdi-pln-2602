@@ -30,10 +30,7 @@ p4/artifacts/*
 p4/logs/*
 !p4/logs/.gitkeep
 
-p5/artifacts/*
-!p5/artifacts/best/
-!p5/artifacts/artifact_comparison.json
-!p5/artifacts/hyperparam_results.json
+p5/artifacts/llm/runs
 
 # --- Estado de runtime del agente ---
 p1/app/state/*.json

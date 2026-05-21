@@ -1,0 +1,6 @@
+vocab_size=95
+seq_len=96
+dim_embedding=105
+dim_attention=140
+num_heads=2
+num_layers=2
