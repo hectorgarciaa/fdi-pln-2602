@@ -97,7 +97,7 @@ for vocab_size in vocab_sizes:
                                         print(f"❌ Error: {e}")
 
 # Guardar resultados
-output_path = Path(__file__).resolve().parents[2] / "artifacts" / "hiperparam_results.json"
+output_path = Path(__file__).resolve().parents[2] / "artifacts" / "hyperparam_results.json"
 output_path.parent.mkdir(parents=True, exist_ok=True)
 if output_path.exists():
     existing_results = json.loads(output_path.read_text(encoding="utf-8"))
