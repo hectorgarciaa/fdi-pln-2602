@@ -14,13 +14,17 @@ p5/
 ├── README.md
 ├── pyproject.toml
 ├── uv.lock
-├── artifacts/
-│   └── .gitkeep
-└── p5/
-    ├── __init__.py
-    └── app/
-        ├── __init__.py
-        └── tokenizer.py
+├── app/
+├── analysis/
+├── data/
+└── artifacts/
+    ├── llm/
+    │   ├── best/
+    │   ├── best_general/
+    │   ├── runs/
+    │   ├── artifact_comparison.json
+    │   └── hyperparam_results.json
+    └── ner_best/
 ```
 
 ## Qué deja preparado esta base
@@ -55,7 +59,7 @@ Para generar texto con un modelo entrenado:
 ```bash
 uv run --project p5 python -m app.inference.inference \
   --prompt "en un lugar de la mancha" \
-  --max-new-tokens 40 \
+  --max-tokens 40 \
   --temperature 0.8 \
   --top-k 40
 ```

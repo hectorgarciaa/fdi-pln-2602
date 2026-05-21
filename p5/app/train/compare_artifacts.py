@@ -1,28 +1,21 @@
 import argparse
 import json
 import math
-import sys
 from pathlib import Path
 
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
-try:
-    from ..model import LLM
-    from ..tokenizer import MiniBPETokenizer
-    from .utils import TextDataset, read_corpus
-except ImportError:
-    sys.path.append(str(Path(__file__).resolve().parents[2]))
-    from app.model import LLM
-    from app.tokenizer import MiniBPETokenizer
-    from app.train.utils import TextDataset, read_corpus
+from ..model import LLM
+from ..tokenizer import MiniBPETokenizer
+from .utils import TextDataset, read_corpus
 
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_DIR = ROOT_DIR / "data"
-DEFAULT_ARTIFACTS_DIR = ROOT_DIR / "artifacts"
-DEFAULT_OUTPUT_PATH = DEFAULT_ARTIFACTS_DIR / "artifact_comparison.json"
+DEFAULT_ARTIFACTS_DIR = ROOT_DIR / "artifacts" / "llm" / "runs"
+DEFAULT_OUTPUT_PATH = ROOT_DIR / "artifacts" / "llm" / "artifact_comparison.json"
 
 
 def parse_train_config(path: Path) -> dict[str, int | float | str]:
@@ -195,7 +188,7 @@ def discover_runs(artifacts_dir: Path) -> list[Path]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Compara experimentos guardados en artifacts con métricas normalizadas por carácter."
+        description="Compara experimentos guardados en artifacts/llm/runs con metricas normalizadas por caracter."
     )
     parser.add_argument("--artifacts-dir", type=Path, default=DEFAULT_ARTIFACTS_DIR)
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
@@ -208,6 +201,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
     device = torch.device(
         args.device if args.device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
     )

@@ -1,108 +1,133 @@
+import argparse
 import json
 from pathlib import Path
-from .train import train_model
 
-# PARÁMETROS CRÍTICOS (exploración activa):
-vocab_sizes = [64, 95, 128]          # Expandir hacia valores menores (256 fue mejor)
-dim_embeddings = [70, 105, 140]         # Aumentar capacidad (64 fue mejor que 32)
-dim_attentions = [140, 210, 280]                 # Mejor encontrado, mínimo impacto
+from .train import DEFAULT_ARTIFACTS_BASE_DIR, DEFAULT_DATA_DIR, train_model
 
-# PARÁMETROS CONFIRMADOS (fijar):
-num_layers_list = [2]                  # Mejor encontrado (2 > 1)
-num_heads_list = [2]                   # Mejor encontrado, mínimo impacto
-epochs_list = [5]                      # Más iteraciones para convergencia
-batch_sizes = [16]                     # Mantener constante
 
-# PARÁMETROS CON IMPACTO MÍNIMO (máximo 2 valores):
-seq_lens = [96, 128]                   # Mantener los 2 originales
+DEFAULT_VOCAB_SIZES = [64, 95, 128]
+DEFAULT_DIM_EMBEDDINGS = [70, 105, 140]
+DEFAULT_DIM_ATTENTIONS = [140, 210, 280]
+DEFAULT_NUM_LAYERS = [2]
+DEFAULT_NUM_HEADS = [2]
+DEFAULT_EPOCHS = [5]
+DEFAULT_BATCH_SIZES = [16]
+DEFAULT_SEQ_LENS = [96, 128]
+DEFAULT_LEARNING_RATES = [1e-4]
 
-# NUEVOS PARÁMETROS A EXPLORAR (antes eran solo 1):
-learning_rates = [1e-4]          # Explorar rango de tasas
 
-results = []
+def parse_int_list(raw_value: str) -> list[int]:
+    return [int(value.strip()) for value in raw_value.split(",") if value.strip()]
 
-# Fors anidados
-for vocab_size in vocab_sizes:
-    for seq_len in seq_lens:
-        for dim_embedding in dim_embeddings:
-            for dim_attention in dim_attentions:
-                for num_heads in num_heads_list:
-                    for num_layers in num_layers_list:
-                        for batch_size in batch_sizes:
-                            for epochs in epochs_list:
-                                for learning_rate in learning_rates:
-                                    
-                                    config = {
-                                        "vocab_size": vocab_size,
-                                        "seq_len": seq_len,
-                                        "dim_embedding": dim_embedding,
-                                        "dim_attention": dim_attention,
-                                        "num_heads": num_heads,
-                                        "num_layers": num_layers,
-                                        "batch_size": batch_size,
-                                        "epochs": epochs,
-                                        "learning_rate": learning_rate,
-                                    }
-                                    
-                                    print(f"\n🔥 Probando: vocab={vocab_size}, seq={seq_len}, emb={dim_embedding}, attn={dim_attention}, heads={num_heads}, layers={num_layers}, batch={batch_size}, epochs={epochs}, lr={learning_rate}")
-                                    
-                                    try:
-                                        model, tokenizer = train_model(
-                                            vocab_size=vocab_size,
-                                            seq_len=seq_len,
-                                            batch_size=batch_size,
-                                            epochs=epochs,
-                                            learning_rate=learning_rate,
-                                            dim_embedding=dim_embedding,
-                                            dim_attention=dim_attention,
-                                            num_heads=num_heads,
-                                            num_layers=num_layers,
-                                            device="cuda",
+
+def parse_float_list(raw_value: str) -> list[float]:
+    return [float(value.strip()) for value in raw_value.split(",") if value.strip()]
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Grid search de hiperparametros para el LLM.")
+    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_ARTIFACTS_BASE_DIR)
+    parser.add_argument("--device", type=str, default=None)
+    parser.add_argument("--vocab-sizes", type=parse_int_list, default=DEFAULT_VOCAB_SIZES)
+    parser.add_argument("--seq-lens", type=parse_int_list, default=DEFAULT_SEQ_LENS)
+    parser.add_argument("--dim-embeddings", type=parse_int_list, default=DEFAULT_DIM_EMBEDDINGS)
+    parser.add_argument("--dim-attentions", type=parse_int_list, default=DEFAULT_DIM_ATTENTIONS)
+    parser.add_argument("--num-heads", type=parse_int_list, default=DEFAULT_NUM_HEADS)
+    parser.add_argument("--num-layers", type=parse_int_list, default=DEFAULT_NUM_LAYERS)
+    parser.add_argument("--batch-sizes", type=parse_int_list, default=DEFAULT_BATCH_SIZES)
+    parser.add_argument("--epochs-list", type=parse_int_list, default=DEFAULT_EPOCHS)
+    parser.add_argument("--learning-rates", type=parse_float_list, default=DEFAULT_LEARNING_RATES)
+    return parser
+
+
+def main() -> None:
+    args = build_parser().parse_args()
+    llm_artifacts_dir = args.output_dir
+    llm_artifacts_dir.mkdir(parents=True, exist_ok=True)
+
+    results = []
+
+    for vocab_size in args.vocab_sizes:
+        for seq_len in args.seq_lens:
+            for dim_embedding in args.dim_embeddings:
+                for dim_attention in args.dim_attentions:
+                    for num_heads in args.num_heads:
+                        for num_layers in args.num_layers:
+                            for batch_size in args.batch_sizes:
+                                for epochs in args.epochs_list:
+                                    for learning_rate in args.learning_rates:
+                                        config = {
+                                            "vocab_size": vocab_size,
+                                            "seq_len": seq_len,
+                                            "dim_embedding": dim_embedding,
+                                            "dim_attention": dim_attention,
+                                            "num_heads": num_heads,
+                                            "num_layers": num_layers,
+                                            "batch_size": batch_size,
+                                            "epochs": epochs,
+                                            "learning_rate": learning_rate,
+                                        }
+
+                                        print(
+                                            f"\nProbando: vocab={vocab_size}, seq={seq_len}, "
+                                            f"emb={dim_embedding}, attn={dim_attention}, "
+                                            f"heads={num_heads}, layers={num_layers}, "
+                                            f"batch={batch_size}, epochs={epochs}, lr={learning_rate}"
                                         )
-                                        
-                                        # Leer resultados del archivo guardado
-                                        artifacts_path = Path(__file__).resolve().parents[2] / "artifacts"
-                                        latest_exp = max(artifacts_path.glob("[0-9]*-[0-9]*"), key=lambda p: p.stat().st_mtime)
-                                        results_file = latest_exp / "results.txt"
-                                        
-                                        if results_file.exists():
-                                            epochs_data = json.loads(results_file.read_text(encoding="utf-8"))
+
+                                        try:
+                                            _, _, run_dir = train_model(
+                                                vocab_size=vocab_size,
+                                                seq_len=seq_len,
+                                                batch_size=batch_size,
+                                                epochs=epochs,
+                                                learning_rate=learning_rate,
+                                                dim_embedding=dim_embedding,
+                                                dim_attention=dim_attention,
+                                                num_heads=num_heads,
+                                                num_layers=num_layers,
+                                                device=args.device,
+                                                artifacts_base_dir=llm_artifacts_dir,
+                                                data_dir=args.data_dir,
+                                            )
+
+                                            epochs_data = json.loads(
+                                                (run_dir / "results.txt").read_text(encoding="utf-8")
+                                            )
                                             best_epoch = min(epochs_data, key=lambda x: x["val_loss"])
-                                            
                                             result = {
                                                 "config": config,
+                                                "run_dir": str(run_dir),
                                                 "best_val_loss": best_epoch["val_loss"],
                                                 "best_perplexity": best_epoch["perplexity"],
                                                 "best_epoch": best_epoch["epoch"],
-                                                "status": "completed"
+                                                "status": "completed",
                                             }
                                             results.append(result)
-                                            print(f"✅ Val Loss: {best_epoch['val_loss']:.4f}, PPL: {best_epoch['perplexity']:.2f}")
-                                        else:
+                                            print(
+                                                f"Val Loss: {best_epoch['val_loss']:.4f}, "
+                                                f"PPL: {best_epoch['perplexity']:.2f}"
+                                            )
+                                        except Exception as exc:
                                             result = {
                                                 "config": config,
                                                 "status": "failed",
-                                                "error": "No results file found"
+                                                "error": str(exc),
                                             }
                                             results.append(result)
-                                            print(f"❌ Error: No results file")
-                                    
-                                    except Exception as e:
-                                        result = {
-                                            "config": config,
-                                            "status": "failed",
-                                            "error": str(e)
-                                        }
-                                        results.append(result)
-                                        print(f"❌ Error: {e}")
+                                            print(f"Error: {exc}")
 
-# Guardar resultados
-output_path = Path(__file__).resolve().parents[2] / "artifacts" / "hyperparam_results.json"
-output_path.parent.mkdir(parents=True, exist_ok=True)
-if output_path.exists():
-    existing_results = json.loads(output_path.read_text(encoding="utf-8"))
-    existing_results.extend(results)
-    output_path.write_text(json.dumps(existing_results, ensure_ascii=False, indent=2), encoding="utf-8")
-else:
+    output_path = llm_artifacts_dir / "hyperparam_results.json"
+    if output_path.exists():
+        previous_results = json.loads(output_path.read_text(encoding="utf-8"))
+        if not isinstance(previous_results, list):
+            raise ValueError(f"Contenido invalido en {output_path}: se esperaba una lista JSON")
+        results = previous_results + results
     output_path.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\n💾 Resultados guardados en: {output_path}")
+
+    print(f"\nResultados guardados en: {output_path}")
+
+
+if __name__ == "__main__":
+    main()

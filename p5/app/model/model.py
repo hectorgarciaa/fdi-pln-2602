@@ -39,6 +39,11 @@ class LLM(nn.Module):
         self.output = nn.Linear(dim_embedding, vocab_size)
 
     def forward(self, x):
+        x = self.backbone_forward(x)
+        output = self.output(x)
+        return output
+    
+    def backbone_forward(self, x):
         _, seq_len = x.shape
         if seq_len > self.max_seq_len:
             raise ValueError(
@@ -62,5 +67,4 @@ class LLM(nn.Module):
             x = ff_norm(x + ff_layer(x))
 
         x = self.output_norm(x)
-        output = self.output(x)
-        return output
+        return x
