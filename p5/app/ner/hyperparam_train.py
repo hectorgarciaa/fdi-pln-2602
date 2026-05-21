@@ -2,7 +2,12 @@ import argparse
 import json
 from pathlib import Path
 
-from .train import DEFAULT_DATA_PATH, DEFAULT_LLM_ARTIFACTS_DIR, DEFAULT_OUTPUT_DIR, train
+from .train import (
+    DEFAULT_DATA_PATH,
+    DEFAULT_LLM_ARTIFACTS_DIR,
+    DEFAULT_OUTPUT_DIR,
+    train,
+)
 
 
 DEFAULT_BATCH_SIZES = [8, 16]
@@ -33,31 +38,48 @@ def parse_bool_list(raw_value: str) -> list[bool]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Grid search de hiperparametros para NER.")
+    parser = argparse.ArgumentParser(
+        description="Grid search de hiperparametros para NER."
+    )
     parser.add_argument("--data-path", type=Path, default=DEFAULT_DATA_PATH)
     parser.add_argument("--artifacts-dir", type=Path, default=DEFAULT_LLM_ARTIFACTS_DIR)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument("--batch-sizes", type=parse_int_list, default=DEFAULT_BATCH_SIZES)
+    parser.add_argument(
+        "--batch-sizes", type=parse_int_list, default=DEFAULT_BATCH_SIZES
+    )
     parser.add_argument("--epochs-list", type=parse_int_list, default=DEFAULT_EPOCHS)
-    parser.add_argument("--learning-rates", type=parse_float_list, default=DEFAULT_LEARNING_RATES)
-    parser.add_argument("--freeze-backbone-options", type=parse_bool_list, default=DEFAULT_FREEZE_BACKBONE)
+    parser.add_argument(
+        "--learning-rates", type=parse_float_list, default=DEFAULT_LEARNING_RATES
+    )
+    parser.add_argument(
+        "--freeze-backbone-options",
+        type=parse_bool_list,
+        default=DEFAULT_FREEZE_BACKBONE,
+    )
     return parser
 
 
-def main() -> None:
-    args = build_parser().parse_args()
-    args.output_dir.mkdir(parents=True, exist_ok=True)
+def run_hyperparam_search(
+    data_path: Path,
+    artifacts_dir: Path,
+    output_dir: Path,
+    batch_sizes: list[int],
+    epochs_list: list[int],
+    learning_rates: list[float],
+    freeze_backbone_options: list[bool],
+) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     results = []
 
-    for batch_size in args.batch_sizes:
-        for epochs in args.epochs_list:
-            for learning_rate in args.learning_rates:
-                for freeze_backbone in args.freeze_backbone_options:
+    for batch_size in batch_sizes:
+        for epochs in epochs_list:
+            for learning_rate in learning_rates:
+                for freeze_backbone in freeze_backbone_options:
                     config = {
-                        "data_path": str(args.data_path),
-                        "artifacts_dir": str(args.artifacts_dir),
-                        "output_dir": str(args.output_dir),
+                        "data_path": str(data_path),
+                        "artifacts_dir": str(artifacts_dir),
+                        "output_dir": str(output_dir),
                         "batch_size": batch_size,
                         "epochs": epochs,
                         "learning_rate": learning_rate,
@@ -72,9 +94,9 @@ def main() -> None:
 
                     try:
                         run_dir, best_epoch = train(
-                            data_path=args.data_path,
-                            artifacts_dir=args.artifacts_dir,
-                            output_dir=args.output_dir,
+                            data_path=data_path,
+                            artifacts_dir=artifacts_dir,
+                            output_dir=output_dir,
                             batch_size=batch_size,
                             epochs=epochs,
                             learning_rate=learning_rate,
@@ -103,15 +125,32 @@ def main() -> None:
                         results.append(result)
                         print(f"Error: {exc}")
 
-    output_path = args.output_dir / "hyperparam_results.json"
+    output_path = output_dir / "hyperparam_results.json"
     if output_path.exists():
         previous_results = json.loads(output_path.read_text(encoding="utf-8"))
         if not isinstance(previous_results, list):
-            raise ValueError(f"Contenido invalido en {output_path}: se esperaba una lista JSON")
+            raise ValueError(
+                f"Contenido invalido en {output_path}: se esperaba una lista JSON"
+            )
         results = previous_results + results
-    output_path.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
+    output_path.write_text(
+        json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     print(f"\nResultados guardados en: {output_path}")
+
+
+def main() -> None:
+    args = build_parser().parse_args()
+    run_hyperparam_search(
+        data_path=args.data_path,
+        artifacts_dir=args.artifacts_dir,
+        output_dir=args.output_dir,
+        batch_sizes=args.batch_sizes,
+        epochs_list=args.epochs_list,
+        learning_rates=args.learning_rates,
+        freeze_backbone_options=args.freeze_backbone_options,
+    )
 
 
 if __name__ == "__main__":

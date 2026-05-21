@@ -1,8 +1,17 @@
-from ..inference.inference import generate, load_model
+from pathlib import Path
 
-def chat():
+from ..inference.inference import DEFAULT_ARTIFACTS_DIR, generate, load_model
+
+
+def chat(
+    artifacts_dir: str | Path = DEFAULT_ARTIFACTS_DIR,
+    device: str | None = None,
+    max_tokens: int = 100,
+    temperature: float = 0.7,
+    top_k: int = 40,
+) -> None:
     print("Bienvenido al chat con el LLM. Escribe 'salir' para terminar.")
-    model, tokenizer, device = load_model()
+    model, tokenizer, device = load_model(artifacts_dir=artifacts_dir, device=device)
     try:
         prompt = input("Tú: ")
         while prompt.lower() != "salir":
@@ -10,15 +19,16 @@ def chat():
                 model,
                 tokenizer,
                 prompt,
-                max_tokens=100,
-                temperature=0.7,
-                top_k=40,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                top_k=top_k,
                 device=device,
             )
             print(f"LLM: {response}\n")
             prompt = input("Tú: ")
     except EOFError:
         print()
+
 
 if __name__ == "__main__":
     chat()

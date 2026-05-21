@@ -67,7 +67,9 @@ def build_label_vocab(rows: list[dict]) -> dict[str, int]:
     return vocab
 
 
-def encode_rows(rows: list[dict], tokenizer: MiniBPETokenizer, label_to_id: dict[str, int]) -> list[EncodedExample]:
+def encode_rows(
+    rows: list[dict], tokenizer: MiniBPETokenizer, label_to_id: dict[str, int]
+) -> list[EncodedExample]:
     encoded: list[EncodedExample] = []
     for row in rows:
         words = row["words"]
@@ -89,7 +91,9 @@ def encode_rows(rows: list[dict], tokenizer: MiniBPETokenizer, label_to_id: dict
     return encoded
 
 
-def collate_batch(batch: list[EncodedExample], max_seq_len: int) -> tuple[torch.Tensor, torch.Tensor]:
+def collate_batch(
+    batch: list[EncodedExample], max_seq_len: int
+) -> tuple[torch.Tensor, torch.Tensor]:
     padded_len = min(max(len(item.input_ids) for item in batch), max_seq_len)
     x = torch.zeros((len(batch), padded_len), dtype=torch.long)
     y = torch.zeros((len(batch), padded_len), dtype=torch.long)
@@ -103,7 +107,9 @@ def collate_batch(batch: list[EncodedExample], max_seq_len: int) -> tuple[torch.
     return x, y
 
 
-def token_f1_micro(logits: torch.Tensor, y: torch.Tensor, pad_label_id: int = 0) -> float:
+def token_f1_micro(
+    logits: torch.Tensor, y: torch.Tensor, pad_label_id: int = 0
+) -> float:
     pred = logits.argmax(dim=-1)
     mask = y != pad_label_id
     tp = ((pred == y) & mask).sum().item()
@@ -117,7 +123,9 @@ def token_f1_micro(logits: torch.Tensor, y: torch.Tensor, pad_label_id: int = 0)
     return 2 * precision * recall / (precision + recall)
 
 
-def evaluate(model: nn.Module, loader: DataLoader, criterion: nn.Module, device: torch.device) -> tuple[float, float]:
+def evaluate(
+    model: nn.Module, loader: DataLoader, criterion: nn.Module, device: torch.device
+) -> tuple[float, float]:
     model.eval()
     total_loss = 0.0
     total_f1 = 0.0
@@ -170,23 +178,33 @@ def train(
     val_data = encode_rows(val_rows, tokenizer, label_to_id)
 
     collate = lambda b: collate_batch(b, max_seq_len=backbone.max_seq_len)
-    train_loader = DataLoader(NERDataset(train_data), batch_size=batch_size, shuffle=True, collate_fn=collate)
-    val_loader = DataLoader(NERDataset(val_data), batch_size=batch_size, shuffle=False, collate_fn=collate)
+    train_loader = DataLoader(
+        NERDataset(train_data), batch_size=batch_size, shuffle=True, collate_fn=collate
+    )
+    val_loader = DataLoader(
+        NERDataset(val_data), batch_size=batch_size, shuffle=False, collate_fn=collate
+    )
 
-    model = TransformerNERHead(backbone=backbone, num_labels=len(label_to_id)).to(device)
+    model = TransformerNERHead(backbone=backbone, num_labels=len(label_to_id)).to(
+        device
+    )
 
     if freeze_backbone:
         for p in model.backbone.parameters():
             p.requires_grad = False
 
     criterion = nn.CrossEntropyLoss(ignore_index=0)
-    optimizer = torch.optim.Adam((p for p in model.parameters() if p.requires_grad), lr=learning_rate)
+    optimizer = torch.optim.Adam(
+        (p for p in model.parameters() if p.requires_grad), lr=learning_rate
+    )
 
     best_f1 = -1.0
     history: list[dict[str, float]] = []
 
     print(f"Guardando run NER en: {run_dir}")
-    print(f"Train samples: {len(train_data)} | Val samples: {len(val_data)} | Device: {device}")
+    print(
+        f"Train samples: {len(train_data)} | Val samples: {len(val_data)} | Device: {device}"
+    )
     for epoch in range(1, epochs + 1):
         model.train()
         tr_loss = 0.0
@@ -204,22 +222,32 @@ def train(
 
         train_loss = tr_loss / max(1, n)
         val_loss, val_f1 = evaluate(model, val_loader, criterion, device)
-        history.append({
-            "epoch": epoch,
-            "train_loss": train_loss,
-            "val_loss": val_loss,
-            "val_token_f1_micro": val_f1,
-        })
-        print(f"Epoch {epoch:02d}/{epochs} | train_loss={train_loss:.4f} | val_loss={val_loss:.4f} | val_f1={val_f1:.4f}")
+        history.append(
+            {
+                "epoch": epoch,
+                "train_loss": train_loss,
+                "val_loss": val_loss,
+                "val_token_f1_micro": val_f1,
+            }
+        )
+        print(
+            f"Epoch {epoch:02d}/{epochs} | train_loss={train_loss:.4f} | val_loss={val_loss:.4f} | val_f1={val_f1:.4f}"
+        )
 
         if val_f1 > best_f1:
             best_f1 = val_f1
             torch.save(model.state_dict(), run_dir / "best_model.pt")
 
     torch.save(model.state_dict(), run_dir / "last_model.pt")
-    (run_dir / "label_to_id.json").write_text(json.dumps(label_to_id, ensure_ascii=False, indent=2), encoding="utf-8")
+    (run_dir / "label_to_id.json").write_text(
+        json.dumps(label_to_id, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     (run_dir / "id_to_label.json").write_text(
-        json.dumps({idx: label for label, idx in label_to_id.items()}, ensure_ascii=False, indent=2),
+        json.dumps(
+            {idx: label for label, idx in label_to_id.items()},
+            ensure_ascii=False,
+            indent=2,
+        ),
         encoding="utf-8",
     )
     (run_dir / "train_config.json").write_text(
@@ -244,7 +272,9 @@ def train(
         ),
         encoding="utf-8",
     )
-    (run_dir / "history.json").write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding="utf-8")
+    (run_dir / "history.json").write_text(
+        json.dumps(history, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     best_dir = output_dir / "best"
     current_best = max(history, key=lambda row: row["val_token_f1_micro"])
@@ -268,7 +298,9 @@ def train(
         else:
             shutil.rmtree(best_dir)
             shutil.copytree(run_dir, best_dir)
-            print(f"Best global de NER actualizado en {best_dir} porque no tenia history.json valido.")
+            print(
+                f"Best global de NER actualizado en {best_dir} porque no tenia history.json valido."
+            )
     else:
         shutil.copytree(run_dir, best_dir)
         print(f"Primer best global de NER guardado en {best_dir}.")
@@ -278,7 +310,9 @@ def train(
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Entrenamiento NER simple sobre backbone preentrenado")
+    parser = argparse.ArgumentParser(
+        description="Entrenamiento NER simple sobre backbone preentrenado"
+    )
     parser.add_argument("--data-path", type=Path, default=DEFAULT_DATA_PATH)
     parser.add_argument("--artifacts-dir", type=Path, default=DEFAULT_LLM_ARTIFACTS_DIR)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)

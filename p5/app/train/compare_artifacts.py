@@ -117,9 +117,13 @@ def evaluate_run(
             total_target_tokens_all += y.numel()
 
     if total_target_tokens_last == 0:
-        raise ValueError("No hay suficientes tokens de validación para evaluar este experimento.")
+        raise ValueError(
+            "No hay suficientes tokens de validación para evaluar este experimento."
+        )
     if total_target_tokens_all == 0:
-        raise ValueError("No hay suficientes tokens de validación para evaluar este experimento.")
+        raise ValueError(
+            "No hay suficientes tokens de validación para evaluar este experimento."
+        )
 
     char_count = len(raw_val_text)
     unk_id = tokenizer.vocab[tokenizer.unk_token]
@@ -144,7 +148,9 @@ def evaluate_run(
         "num_layers": int(config["num_layers"]),
         "batch_size": int(config.get("batch_size", -1)),
         "epochs": int(config.get("epochs", -1)),
-        "learning_rate": float(config["learning_rate"]) if "learning_rate" in config else None,
+        "learning_rate": float(config["learning_rate"])
+        if "learning_rate" in config
+        else None,
         "train_split": float(config.get("train_split", 0.9)),
         "token_count": token_count,
         "char_count": char_count,
@@ -173,7 +179,9 @@ def evaluate_run(
 def discover_runs(artifacts_dir: Path) -> list[Path]:
     required_names = ["best_model.pt", "tokenizer.json", "train_config.txt"]
 
-    if artifacts_dir.is_dir() and all((artifacts_dir / name).exists() for name in required_names):
+    if artifacts_dir.is_dir() and all(
+        (artifacts_dir / name).exists() for name in required_names
+    ):
         return [artifacts_dir]
 
     runs: list[Path] = []
@@ -203,17 +211,25 @@ def main() -> None:
     args = build_parser().parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     device = torch.device(
-        args.device if args.device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
+        args.device
+        if args.device is not None
+        else ("cuda" if torch.cuda.is_available() else "cpu")
     )
 
     raw_text = read_corpus(args.data_dir)
-    raw_val_text = normalize_text_for_tokenizer(build_validation_text(raw_text, args.train_split))
+    raw_val_text = normalize_text_for_tokenizer(
+        build_validation_text(raw_text, args.train_split)
+    )
     if not raw_val_text:
-        raise ValueError("El texto de validación está vacío tras aplicar el split indicado.")
+        raise ValueError(
+            "El texto de validación está vacío tras aplicar el split indicado."
+        )
 
     runs = discover_runs(args.artifacts_dir)
     if not runs:
-        raise FileNotFoundError(f"No se encontraron runs evaluables en {args.artifacts_dir}")
+        raise FileNotFoundError(
+            f"No se encontraron runs evaluables en {args.artifacts_dir}"
+        )
 
     results = []
     skipped = []
@@ -252,7 +268,9 @@ def main() -> None:
         "skipped": skipped,
     }
 
-    args.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    args.output.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     print(f"Comparados {len(results)} experimentos")
     if results:

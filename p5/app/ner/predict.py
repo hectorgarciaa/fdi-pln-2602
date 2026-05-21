@@ -18,11 +18,18 @@ def load_ner_model(
     device: str | None = None,
 ) -> tuple[TransformerNERHead, object, dict[int, str], torch.device]:
     artifacts_path = Path(artifacts_dir)
-    config = json.loads((artifacts_path / "train_config.json").read_text(encoding="utf-8"))
-    label_to_id = json.loads((artifacts_path / "label_to_id.json").read_text(encoding="utf-8"))
-    id_to_label = {int(idx): label for idx, label in json.loads(
-        (artifacts_path / "id_to_label.json").read_text(encoding="utf-8")
-    ).items()}
+    config = json.loads(
+        (artifacts_path / "train_config.json").read_text(encoding="utf-8")
+    )
+    label_to_id = json.loads(
+        (artifacts_path / "label_to_id.json").read_text(encoding="utf-8")
+    )
+    id_to_label = {
+        int(idx): label
+        for idx, label in json.loads(
+            (artifacts_path / "id_to_label.json").read_text(encoding="utf-8")
+        ).items()
+    }
 
     backbone, tokenizer, target_device = load_pretrained_backbone(
         config["artifacts_dir"],
@@ -72,7 +79,9 @@ def choose_word_label(subtoken_label_ids: list[int]) -> int:
     return counts.most_common(1)[0][0]
 
 
-def predict_word_labels(model, tokenizer, words: list[str], device: torch.device) -> list[int]:
+def predict_word_labels(
+    model, tokenizer, words: list[str], device: torch.device
+) -> list[int]:
     predicted_labels: list[int] = []
 
     for chunk in chunk_words(words, tokenizer, model.backbone.max_seq_len):
@@ -100,7 +109,9 @@ def predict_word_labels(model, tokenizer, words: list[str], device: torch.device
     return predicted_labels
 
 
-def decode_entities(words: list[str], label_ids: list[int], id_to_label: dict[int, str]) -> list[dict[str, str | int]]:
+def decode_entities(
+    words: list[str], label_ids: list[int], id_to_label: dict[int, str]
+) -> list[dict[str, str | int]]:
     entities: list[dict[str, str | int]] = []
     current_type: str | None = None
     current_words: list[str] = []
@@ -111,12 +122,14 @@ def decode_entities(words: list[str], label_ids: list[int], id_to_label: dict[in
 
         if label == "O":
             if current_type is not None:
-                entities.append({
-                    "type": current_type,
-                    "text": " ".join(current_words),
-                    "start_word": start_index,
-                    "end_word": index - 1,
-                })
+                entities.append(
+                    {
+                        "type": current_type,
+                        "text": " ".join(current_words),
+                        "start_word": start_index,
+                        "end_word": index - 1,
+                    }
+                )
                 current_type = None
                 current_words = []
             continue
@@ -124,12 +137,14 @@ def decode_entities(words: list[str], label_ids: list[int], id_to_label: dict[in
         prefix, entity_type = label.split("-", 1)
         if prefix == "B" or current_type != entity_type:
             if current_type is not None:
-                entities.append({
-                    "type": current_type,
-                    "text": " ".join(current_words),
-                    "start_word": start_index,
-                    "end_word": index - 1,
-                })
+                entities.append(
+                    {
+                        "type": current_type,
+                        "text": " ".join(current_words),
+                        "start_word": start_index,
+                        "end_word": index - 1,
+                    }
+                )
             current_type = entity_type
             current_words = [word]
             start_index = index
@@ -137,12 +152,14 @@ def decode_entities(words: list[str], label_ids: list[int], id_to_label: dict[in
             current_words.append(word)
 
     if current_type is not None:
-        entities.append({
-            "type": current_type,
-            "text": " ".join(current_words),
-            "start_word": start_index,
-            "end_word": len(words) - 1,
-        })
+        entities.append(
+            {
+                "type": current_type,
+                "text": " ".join(current_words),
+                "start_word": start_index,
+                "end_word": len(words) - 1,
+            }
+        )
 
     return entities
 
@@ -165,18 +182,45 @@ def predict_entities(
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Detecta entidades nombradas con el mejor modelo NER.")
-    parser.add_argument("--text", type=str, required=True, help="Texto sobre el que detectar entidades")
+    parser = argparse.ArgumentParser(
+        description="Detecta entidades nombradas con el mejor modelo NER."
+    )
     parser.add_argument("--artifacts-dir", type=Path, default=DEFAULT_ARTIFACTS_DIR)
     parser.add_argument("--device", type=str, default=None)
-    parser.add_argument("--show-labels", action="store_true", help="Muestra tambien las etiquetas por palabra")
+    parser.add_argument(
+        "--show-labels",
+        action="store_true",
+        help="Muestra tambien las etiquetas por palabra",
+    )
+    input_group = parser.add_mutually_exclusive_group(required=True)
+    input_group.add_argument(
+        "--text", type=str, help="Texto sobre el que detectar entidades"
+    )
+    input_group.add_argument(
+        "--input-file",
+        type=Path,
+        help="Fichero de texto sobre el que detectar entidades",
+    )
     return parser
+
+
+def resolve_input_text(text: str | None, input_file: Path | None) -> str:
+    if text is not None:
+        return text
+    if input_file is not None:
+        return input_file.read_text(encoding="utf-8")
+    raise ValueError("Hay que proporcionar --text o --input-file.")
 
 
 def main() -> None:
     args = build_parser().parse_args()
-    model, tokenizer, id_to_label, device = load_ner_model(args.artifacts_dir, args.device)
-    words, labels, entities = predict_entities(model, tokenizer, id_to_label, args.text, device)
+    model, tokenizer, id_to_label, device = load_ner_model(
+        args.artifacts_dir, args.device
+    )
+    input_text = resolve_input_text(args.text, args.input_file)
+    words, labels, entities = predict_entities(
+        model, tokenizer, id_to_label, input_text, device
+    )
 
     if args.show_labels:
         print("Etiquetas por palabra:")

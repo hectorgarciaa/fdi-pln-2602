@@ -16,6 +16,9 @@ dependencies = [
     "torch>=2.11.0",
 ]
 
+[project.scripts]
+fdi-pln-2602-p5 = "app.cli:main"
+
 [[tool.uv.index]]
 name = "pytorch-cu128"
 url = "https://download.pytorch.org/whl/cu128"

@@ -25,38 +25,62 @@ def parse_float_list(raw_value: str) -> list[float]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Grid search de hiperparametros para el LLM.")
+    parser = argparse.ArgumentParser(
+        description="Grid search de hiperparametros para el LLM."
+    )
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_ARTIFACTS_BASE_DIR)
     parser.add_argument("--device", type=str, default=None)
-    parser.add_argument("--vocab-sizes", type=parse_int_list, default=DEFAULT_VOCAB_SIZES)
+    parser.add_argument(
+        "--vocab-sizes", type=parse_int_list, default=DEFAULT_VOCAB_SIZES
+    )
     parser.add_argument("--seq-lens", type=parse_int_list, default=DEFAULT_SEQ_LENS)
-    parser.add_argument("--dim-embeddings", type=parse_int_list, default=DEFAULT_DIM_EMBEDDINGS)
-    parser.add_argument("--dim-attentions", type=parse_int_list, default=DEFAULT_DIM_ATTENTIONS)
+    parser.add_argument(
+        "--dim-embeddings", type=parse_int_list, default=DEFAULT_DIM_EMBEDDINGS
+    )
+    parser.add_argument(
+        "--dim-attentions", type=parse_int_list, default=DEFAULT_DIM_ATTENTIONS
+    )
     parser.add_argument("--num-heads", type=parse_int_list, default=DEFAULT_NUM_HEADS)
     parser.add_argument("--num-layers", type=parse_int_list, default=DEFAULT_NUM_LAYERS)
-    parser.add_argument("--batch-sizes", type=parse_int_list, default=DEFAULT_BATCH_SIZES)
+    parser.add_argument(
+        "--batch-sizes", type=parse_int_list, default=DEFAULT_BATCH_SIZES
+    )
     parser.add_argument("--epochs-list", type=parse_int_list, default=DEFAULT_EPOCHS)
-    parser.add_argument("--learning-rates", type=parse_float_list, default=DEFAULT_LEARNING_RATES)
+    parser.add_argument(
+        "--learning-rates", type=parse_float_list, default=DEFAULT_LEARNING_RATES
+    )
     return parser
 
 
-def main() -> None:
-    args = build_parser().parse_args()
-    llm_artifacts_dir = args.output_dir
+def run_hyperparam_search(
+    data_dir: Path,
+    output_dir: Path,
+    device: str | None,
+    vocab_sizes: list[int],
+    seq_lens: list[int],
+    dim_embeddings: list[int],
+    dim_attentions: list[int],
+    num_heads_values: list[int],
+    num_layers_values: list[int],
+    batch_sizes: list[int],
+    epochs_list: list[int],
+    learning_rates: list[float],
+) -> None:
+    llm_artifacts_dir = output_dir
     llm_artifacts_dir.mkdir(parents=True, exist_ok=True)
 
     results = []
 
-    for vocab_size in args.vocab_sizes:
-        for seq_len in args.seq_lens:
-            for dim_embedding in args.dim_embeddings:
-                for dim_attention in args.dim_attentions:
-                    for num_heads in args.num_heads:
-                        for num_layers in args.num_layers:
-                            for batch_size in args.batch_sizes:
-                                for epochs in args.epochs_list:
-                                    for learning_rate in args.learning_rates:
+    for vocab_size in vocab_sizes:
+        for seq_len in seq_lens:
+            for dim_embedding in dim_embeddings:
+                for dim_attention in dim_attentions:
+                    for num_heads in num_heads_values:
+                        for num_layers in num_layers_values:
+                            for batch_size in batch_sizes:
+                                for epochs in epochs_list:
+                                    for learning_rate in learning_rates:
                                         config = {
                                             "vocab_size": vocab_size,
                                             "seq_len": seq_len,
@@ -87,20 +111,26 @@ def main() -> None:
                                                 dim_attention=dim_attention,
                                                 num_heads=num_heads,
                                                 num_layers=num_layers,
-                                                device=args.device,
+                                                device=device,
                                                 artifacts_base_dir=llm_artifacts_dir,
-                                                data_dir=args.data_dir,
+                                                data_dir=data_dir,
                                             )
 
                                             epochs_data = json.loads(
-                                                (run_dir / "results.txt").read_text(encoding="utf-8")
+                                                (run_dir / "results.txt").read_text(
+                                                    encoding="utf-8"
+                                                )
                                             )
-                                            best_epoch = min(epochs_data, key=lambda x: x["val_loss"])
+                                            best_epoch = min(
+                                                epochs_data, key=lambda x: x["val_loss"]
+                                            )
                                             result = {
                                                 "config": config,
                                                 "run_dir": str(run_dir),
                                                 "best_val_loss": best_epoch["val_loss"],
-                                                "best_perplexity": best_epoch["perplexity"],
+                                                "best_perplexity": best_epoch[
+                                                    "perplexity"
+                                                ],
                                                 "best_epoch": best_epoch["epoch"],
                                                 "status": "completed",
                                             }
@@ -122,11 +152,33 @@ def main() -> None:
     if output_path.exists():
         previous_results = json.loads(output_path.read_text(encoding="utf-8"))
         if not isinstance(previous_results, list):
-            raise ValueError(f"Contenido invalido en {output_path}: se esperaba una lista JSON")
+            raise ValueError(
+                f"Contenido invalido en {output_path}: se esperaba una lista JSON"
+            )
         results = previous_results + results
-    output_path.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
+    output_path.write_text(
+        json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     print(f"\nResultados guardados en: {output_path}")
+
+
+def main() -> None:
+    args = build_parser().parse_args()
+    run_hyperparam_search(
+        data_dir=args.data_dir,
+        output_dir=args.output_dir,
+        device=args.device,
+        vocab_sizes=args.vocab_sizes,
+        seq_lens=args.seq_lens,
+        dim_embeddings=args.dim_embeddings,
+        dim_attentions=args.dim_attentions,
+        num_heads_values=args.num_heads,
+        num_layers_values=args.num_layers,
+        batch_sizes=args.batch_sizes,
+        epochs_list=args.epochs_list,
+        learning_rates=args.learning_rates,
+    )
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ DEFAULT_DATA_DIR = ROOT_DIR / "data"
 DEFAULT_ARTIFACTS_BASE_DIR = ROOT_DIR / "artifacts" / "llm"
 DEFAULT_RUNS_DIR = DEFAULT_ARTIFACTS_BASE_DIR / "runs"
 
+
 def train_model(
     data_dir: Path = DEFAULT_DATA_DIR,
     vocab_size: int = 256,
@@ -75,12 +76,18 @@ def train_model(
         batch_size=batch_size,
         train_split=train_split,
     )
-    print(f"   Train batches: {len(train_loader)} ({len(train_loader)*batch_size:,} ejemplos)")
-    print(f"   Val batches: {len(val_loader)} ({len(val_loader)*batch_size:,} ejemplos)")
+    print(
+        f"   Train batches: {len(train_loader)} ({len(train_loader) * batch_size:,} ejemplos)"
+    )
+    print(
+        f"   Val batches: {len(val_loader)} ({len(val_loader) * batch_size:,} ejemplos)"
+    )
 
     # Modelo
     target_device = torch.device(
-        device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
+        device
+        if device is not None
+        else ("cuda" if torch.cuda.is_available() else "cpu")
     )
     print(f"\nCreando modelo en {target_device}...")
     model = LLM(
@@ -91,7 +98,7 @@ def train_model(
         num_layers=num_layers,
         max_seq_len=seq_len,
     ).to(target_device)
-    
+
     # Contar parámetros
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -103,7 +110,7 @@ def train_model(
 
     # Entrenamiento
     print(f"\nENTRENANDO ({epochs} epocas)...")
-    print("="*70)
+    print("=" * 70)
 
     for epoch in range(1, epochs + 1):
         model.train()
@@ -123,11 +130,14 @@ def train_model(
 
             total_loss += loss.item()
             total_batches += 1
-            
+
             # Mostrar progreso cada 10 batches
             if batch_idx % 10 == 0 or batch_idx == 1:
                 avg_loss = total_loss / total_batches
-                print(f"   Epoch {epoch}/{epochs} | Batch {batch_idx}/{len(train_loader)} | Loss: {avg_loss:.4f}", end="\r")
+                print(
+                    f"   Epoch {epoch}/{epochs} | Batch {batch_idx}/{len(train_loader)} | Loss: {avg_loss:.4f}",
+                    end="\r",
+                )
 
         train_loss = total_loss / max(1, total_batches)
         val_loss = evaluate(model, val_loader, target_device)
@@ -144,7 +154,9 @@ def train_model(
 
         # Resultado de época
         status = "MEJOR" if val_loss < best_val_loss else "  -"
-        print(f"\n   [{status}] Epoch {epoch:2d}/{epochs} | Train: {train_loss:.4f} | Val: {val_loss:.4f} | PPL: {perplexity:7.2f} | {epoch_time:.1f}s")
+        print(
+            f"\n   [{status}] Epoch {epoch:2d}/{epochs} | Train: {train_loss:.4f} | Val: {val_loss:.4f} | PPL: {perplexity:7.2f} | {epoch_time:.1f}s"
+        )
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
@@ -179,15 +191,17 @@ def train_model(
     # Comparar con mejor modelo previo
     current_best_epoch = min(epochs_data, key=lambda x: x["val_loss"])
     best_model_path = artifacts_base_path / "best"
-    
-    print("\n" + "="*70)
+
+    print("\n" + "=" * 70)
     print("RESUMEN DEL ENTRENAMIENTO")
-    print("="*70)
-    print(f"Mejor epoca: {current_best_epoch['epoch']} (val_loss: {current_best_epoch['val_loss']:.4f}, ppl: {current_best_epoch['perplexity']})")
+    print("=" * 70)
+    print(
+        f"Mejor epoca: {current_best_epoch['epoch']} (val_loss: {current_best_epoch['val_loss']:.4f}, ppl: {current_best_epoch['perplexity']})"
+    )
     print(f"Modelo guardado en: {artifacts_path_exp}")
     print(f"Config guardada en: {artifacts_path_exp / 'train_config.txt'}")
     print(f"Tokenizer guardado en: {artifacts_path_exp / 'tokenizer.json'}")
-    
+
     if best_model_path.exists():
         best_results_path = best_model_path / "results.txt"
         if best_results_path.exists():
@@ -196,10 +210,14 @@ def train_model(
             if current_best_epoch["val_loss"] < best_epoch_prev["val_loss"]:
                 shutil.rmtree(best_model_path)
                 shutil.copytree(artifacts_path_exp, best_model_path)
-                print(f"\nNUEVO MEJOR MODELO (val_loss: {current_best_epoch['val_loss']:.4f} < {best_epoch_prev['val_loss']:.4f})")
+                print(
+                    f"\nNUEVO MEJOR MODELO (val_loss: {current_best_epoch['val_loss']:.4f} < {best_epoch_prev['val_loss']:.4f})"
+                )
                 print(f"   Guardado en: {best_model_path}")
             else:
-                print(f"\nModelo anterior mejor: {best_epoch_prev['val_loss']:.4f} < {current_best_epoch['val_loss']:.4f}")
+                print(
+                    f"\nModelo anterior mejor: {best_epoch_prev['val_loss']:.4f} < {current_best_epoch['val_loss']:.4f}"
+                )
         else:
             shutil.rmtree(best_model_path)
             shutil.copytree(artifacts_path_exp, best_model_path)
@@ -207,8 +225,8 @@ def train_model(
     else:
         shutil.copytree(artifacts_path_exp, best_model_path)
         print(f"\nPRIMER MODELO GUARDADO EN 'best/'")
-    
-    print("="*70 + "\n")
+
+    print("=" * 70 + "\n")
 
     return model, tokenizer, artifacts_path_exp
 
