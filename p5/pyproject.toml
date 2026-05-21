@@ -9,7 +9,10 @@ description = "Mini LLM desde cero para la práctica 5 de PLN"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "matplotlib>=3.10.7",
     "numpy>=2.4.4",
+    "pandas>=2.3.3",
+    "seaborn>=0.13.2",
     "torch>=2.11.0",
 ]
 

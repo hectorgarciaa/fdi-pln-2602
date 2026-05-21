@@ -151,6 +151,10 @@ def train_model(
         "dim_attention": dim_attention,
         "num_heads": num_heads,
         "num_layers": num_layers,
+        "batch_size": batch_size,
+        "epochs": epochs,
+        "learning_rate": learning_rate,
+        "train_split": train_split,
     }
     (artifacts_path_exp / "train_config.txt").write_text(
         "\n".join(f"{key}={value}" for key, value in metadata.items()),
