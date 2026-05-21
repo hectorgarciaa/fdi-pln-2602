@@ -5,6 +5,11 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 
+ROOT_DIR = Path(__file__).resolve().parents[2]
+DEFAULT_DATA_DIR = ROOT_DIR / "data"
+DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "llm"
+
+
 class TextDataset(Dataset):
     def __init__(self, token_ids: list[int], seq_len: int) -> None:
         if seq_len < 2:
@@ -55,7 +60,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Entrena el mini transformer con textos de data/."
     )
-    parser.add_argument("--data-dir", type=Path, default=None)
+    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--vocab-size", type=int, default=256)
     parser.add_argument("--seq-len", type=int, default=64)
     parser.add_argument("--dim-embedding", type=int, default=64)
@@ -67,5 +72,5 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--learning-rate", type=float, default=3e-4)
     parser.add_argument("--train-split", type=float, default=0.9)
     parser.add_argument("--device", type=str, default=None)
-    parser.add_argument("--output-dir", type=Path, default=None)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     return parser

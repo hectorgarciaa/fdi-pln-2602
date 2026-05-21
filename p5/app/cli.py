@@ -124,8 +124,8 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Abre un chat interactivo en lugar de una generacion puntual",
     )
-    generate_llm.add_argument("--max-tokens", type=int, default=50)
-    generate_llm.add_argument("--temperature", type=float, default=1.0)
+    generate_llm.add_argument("--max-tokens", type=int, default=100)
+    generate_llm.add_argument("--temperature", type=float, default=0.7)
     generate_llm.add_argument("--top-k", type=int, default=40)
     generate_llm.add_argument("--device", type=str, default=None)
     generate_llm.add_argument("--seed", type=int, default=None)
