@@ -87,36 +87,59 @@ def evaluate_run(
     model.eval()
 
     token_ids = tokenizer.encode(raw_val_text)
-    if len(token_ids) <= int(config["seq_len"]):
+    seq_len = int(config["seq_len"])
+    if len(token_ids) <= seq_len:
         raise ValueError(
             f"Validación insuficiente: {len(token_ids)} tokens para seq_len={config['seq_len']}"
         )
-    dataset = TextDataset(token_ids, seq_len=int(config["seq_len"]))
+    dataset = TextDataset(token_ids, seq_len=seq_len)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
 
-    total_nll = 0.0
-    total_target_tokens = 0
+    total_nll_last = 0.0
+    total_target_tokens_last = 0
+    total_nll_all = 0.0
+    total_target_tokens_all = 0
 
     with torch.no_grad():
         for x, y in dataloader:
             x = x.to(device)
             y = y.to(device)
             logits = model(x)
-            loss = F.cross_entropy(
+            # Last-token metric: evaluates the prediction with full context.
+            loss_last = F.cross_entropy(
+                logits[:, -1, :],
+                y[:, -1],
+                reduction="sum",
+            )
+            total_nll_last += loss_last.item()
+            total_target_tokens_last += y.size(0)
+
+            # All-tokens metric: classic LM validation over all positions.
+            loss_all = F.cross_entropy(
                 logits.reshape(-1, logits.size(-1)),
                 y.reshape(-1),
                 reduction="sum",
             )
-            total_nll += loss.item()
-            total_target_tokens += y.numel()
+            total_nll_all += loss_all.item()
+            total_target_tokens_all += y.numel()
 
-    if total_target_tokens == 0:
+    if total_target_tokens_last == 0:
+        raise ValueError("No hay suficientes tokens de validación para evaluar este experimento.")
+    if total_target_tokens_all == 0:
         raise ValueError("No hay suficientes tokens de validación para evaluar este experimento.")
 
     char_count = len(raw_val_text)
     unk_id = tokenizer.vocab[tokenizer.unk_token]
     unk_count = sum(1 for token_id in token_ids if token_id == unk_id)
     best_epoch = read_best_epoch(run_dir)
+
+    token_count = len(token_ids)
+    tokens_per_char = token_count / char_count
+    nll_per_token_last = total_nll_last / total_target_tokens_last
+    nll_per_token_all = total_nll_all / total_target_tokens_all
+    # Use token-normalized metrics to avoid seq_len bias from overlapping windows.
+    nll_per_char_last = nll_per_token_last * tokens_per_char
+    nll_per_char_all = nll_per_token_all * tokens_per_char
 
     result: dict[str, int | float | str] = {
         "run_dir": str(run_dir),
@@ -130,14 +153,20 @@ def evaluate_run(
         "epochs": int(config.get("epochs", -1)),
         "learning_rate": float(config["learning_rate"]) if "learning_rate" in config else None,
         "train_split": float(config.get("train_split", 0.9)),
-        "token_count": len(token_ids),
+        "token_count": token_count,
         "char_count": char_count,
-        "tokens_per_char": len(token_ids) / char_count,
-        "unk_rate": unk_count / max(1, len(token_ids)),
-        "nll_per_token": total_nll / total_target_tokens,
-        "token_perplexity": math.exp(total_nll / total_target_tokens),
-        "nll_per_char": total_nll / char_count,
-        "bits_per_char": total_nll / (char_count * math.log(2)),
+        "tokens_per_char": tokens_per_char,
+        "unk_rate": unk_count / max(1, token_count),
+        # Explicit last-token metrics.
+        "nll_per_token_last_token": nll_per_token_last,
+        "token_perplexity_last_token": math.exp(nll_per_token_last),
+        "nll_per_char_last_token": nll_per_char_last,
+        "bits_per_char_last_token": nll_per_char_last / math.log(2),
+        # Classic all-tokens metrics.
+        "nll_per_token_all_tokens": nll_per_token_all,
+        "token_perplexity_all_tokens": math.exp(nll_per_token_all),
+        "nll_per_char_all_tokens": nll_per_char_all,
+        "bits_per_char_all_tokens": nll_per_char_all / math.log(2),
     }
 
     if best_epoch is not None:
@@ -149,12 +178,9 @@ def evaluate_run(
 
 
 def discover_runs(artifacts_dir: Path) -> list[Path]:
-    required_files = [
-        artifacts_dir / "best_model.pt",
-        artifacts_dir / "tokenizer.json",
-        artifacts_dir / "train_config.txt",
-    ]
-    if artifacts_dir.is_dir() and all(file_path.exists() for file_path in required_files):
+    required_names = ["best_model.pt", "tokenizer.json", "train_config.txt"]
+
+    if artifacts_dir.is_dir() and all((artifacts_dir / name).exists() for name in required_names):
         return [artifacts_dir]
 
     runs: list[Path] = []
@@ -162,12 +188,7 @@ def discover_runs(artifacts_dir: Path) -> list[Path]:
         if not path.is_dir() or path.name == "best":
             continue
 
-        required_files = [
-            path / "best_model.pt",
-            path / "tokenizer.json",
-            path / "train_config.txt",
-        ]
-        if all(file_path.exists() for file_path in required_files):
+        if all((path / name).exists() for name in required_names):
             runs.append(path)
     return runs
 
@@ -216,22 +237,23 @@ def main() -> None:
             results.append(result)
             print(
                 f"[{index}/{total_runs}] OK {run_dir.name} | "
-                f"bpc={result['bits_per_char']:.4f} | "
-                f"ppl_tok={result['token_perplexity']:.4f}",
+                f"bpc_last={result['bits_per_char_last_token']:.4f} | "
+                f"ppl_last={result['token_perplexity_last_token']:.4f} | "
+                f"bpc_all={result['bits_per_char_all_tokens']:.4f}",
                 flush=True,
             )
         except Exception as exc:
             skipped.append({"run_dir": str(run_dir), "error": str(exc)})
             print(f"[{index}/{total_runs}] Saltado {run_dir.name}: {exc}", flush=True)
 
-    results.sort(key=lambda row: row["bits_per_char"])
+    results.sort(key=lambda row: row["bits_per_char_last_token"])
     payload = {
         "artifacts_dir": str(args.artifacts_dir),
         "data_dir": str(args.data_dir),
         "device": str(device),
         "train_split_used_for_comparison": args.train_split,
         "validation_chars": len(raw_val_text),
-        "ranking_metric": "bits_per_char",
+        "ranking_metric": "bits_per_char_last_token",
         "results": results,
         "skipped": skipped,
     }
@@ -242,9 +264,11 @@ def main() -> None:
     if results:
         best = results[0]
         print(
-            "Mejor run por bits_per_char: "
-            f"{best['run_dir']} | bpc={best['bits_per_char']:.4f} | "
-            f"tpc={best['tokens_per_char']:.4f} | ppl_tok={best['token_perplexity']:.4f}"
+            "Mejor run por bits_per_char_last_token: "
+            f"{best['run_dir']} | bpc_last={best['bits_per_char_last_token']:.4f} | "
+            f"bpc_all={best['bits_per_char_all_tokens']:.4f} | "
+            f"tpc={best['tokens_per_char']:.4f} | "
+            f"ppl_last={best['token_perplexity_last_token']:.4f}"
         )
     if skipped:
         print(f"Saltados {len(skipped)} experimentos")
