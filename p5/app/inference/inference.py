@@ -37,7 +37,7 @@ def load_model(artifacts_dir: str | Path = DEFAULT_ARTIFACTS_DIR, device: str | 
     
     # Cargar pesos
     target_device = torch.device(device if device else ("cuda" if torch.cuda.is_available() else "cpu"))
-    state_dict = torch.load(artifacts_path / "model.pt", map_location=target_device, weights_only=True)
+    state_dict = torch.load(artifacts_path / "best_model.pt", map_location=target_device, weights_only=True)
     model.load_state_dict(state_dict)
     model.to(target_device).eval()
     
