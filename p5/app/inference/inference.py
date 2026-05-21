@@ -7,8 +7,7 @@ from ..model import LLM
 from ..tokenizer import MiniBPETokenizer
 
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_ARTIFACTS_DIR = ROOT_DIR / "artifacts" / "llm" / "best_general"
+DEFAULT_ARTIFACTS_DIR = Path("artifacts") / "llm" / "best_general"
 
 
 def load_model(

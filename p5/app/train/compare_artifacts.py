@@ -12,10 +12,9 @@ from ..tokenizer import MiniBPETokenizer
 from .utils import TextDataset, read_corpus
 
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_DATA_DIR = ROOT_DIR / "data"
-DEFAULT_ARTIFACTS_DIR = ROOT_DIR / "artifacts" / "llm" / "runs"
-DEFAULT_OUTPUT_PATH = ROOT_DIR / "artifacts" / "llm" / "artifact_comparison.json"
+DEFAULT_DATA_DIR = Path("data")
+DEFAULT_ARTIFACTS_DIR = Path("artifacts") / "llm" / "runs"
+DEFAULT_OUTPUT_PATH = Path("artifacts") / "llm" / "artifact_comparison.json"
 
 
 def parse_train_config(path: Path) -> dict[str, int | float | str]:

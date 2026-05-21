@@ -5,9 +5,8 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_DATA_DIR = ROOT_DIR / "data"
-DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "llm"
+DEFAULT_DATA_DIR = Path("data")
+DEFAULT_OUTPUT_DIR = Path("artifacts") / "llm"
 
 
 class TextDataset(Dataset):

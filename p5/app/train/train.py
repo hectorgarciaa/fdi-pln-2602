@@ -15,9 +15,8 @@ from .evaluate import evaluate
 from .utils import read_corpus, build_dataloaders, build_parser
 
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_DATA_DIR = ROOT_DIR / "data"
-DEFAULT_ARTIFACTS_BASE_DIR = ROOT_DIR / "artifacts" / "llm"
+DEFAULT_DATA_DIR = Path("data")
+DEFAULT_ARTIFACTS_BASE_DIR = Path("artifacts") / "llm"
 DEFAULT_RUNS_DIR = DEFAULT_ARTIFACTS_BASE_DIR / "runs"
 
 

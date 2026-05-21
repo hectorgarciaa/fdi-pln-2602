@@ -15,10 +15,9 @@ from ..tokenizer import MiniBPETokenizer
 from ..inference import load_model as load_pretrained_backbone
 
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_DATA_PATH = ROOT_DIR / "data" / "ner_dataset.json"
-DEFAULT_LLM_ARTIFACTS_DIR = ROOT_DIR / "artifacts" / "llm" / "best_general"
-DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "ner"
+DEFAULT_DATA_PATH = Path("data") / "ner_dataset.json"
+DEFAULT_LLM_ARTIFACTS_DIR = Path("artifacts") / "llm" / "best_general"
+DEFAULT_OUTPUT_DIR = Path("artifacts") / "ner"
 DEFAULT_TRAIN_SPLIT = 0.85
 DEFAULT_SEED = 42
 PAD_LABEL = "<pad_label>"
