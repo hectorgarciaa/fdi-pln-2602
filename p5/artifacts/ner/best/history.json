@@ -1,50 +1,58 @@
 [
   {
     "epoch": 1,
-    "train_loss": 0.8253579288721085,
-    "val_loss": 0.21235670894384384,
-    "val_token_f1_micro": 0.9521435950413223
+    "train_loss": 0.8997760376204615,
+    "val_loss": 0.6135025799274445,
+    "val_token_accuracy": 0.8935778277156781,
+    "val_entity_token_f1_micro": 0.47762730570192263
   },
   {
     "epoch": 2,
-    "train_loss": 0.28435977051655453,
-    "val_loss": 0.16665643826127052,
-    "val_token_f1_micro": 0.9506973140495868
+    "train_loss": 0.5634858945141668,
+    "val_loss": 0.36077907383441926,
+    "val_token_accuracy": 0.9488515534033676,
+    "val_entity_token_f1_micro": 0.6295610101217577
   },
   {
     "epoch": 3,
-    "train_loss": 0.2256964569290479,
-    "val_loss": 0.12063357047736645,
-    "val_token_f1_micro": 0.9737172865013775
+    "train_loss": 0.4303713648215584,
+    "val_loss": 0.3613248705863953,
+    "val_token_accuracy": 0.9238681848307454,
+    "val_entity_token_f1_micro": 0.6026887532693984
   },
   {
     "epoch": 4,
-    "train_loss": 0.20247298727432886,
-    "val_loss": 0.09155283402651548,
-    "val_token_f1_micro": 0.9766098484848484
+    "train_loss": 0.3532672861348028,
+    "val_loss": 0.3768912963569164,
+    "val_token_accuracy": 0.9500297626107865,
+    "val_entity_token_f1_micro": 0.6669111430833918
   },
   {
     "epoch": 5,
-    "train_loss": 0.177133080859979,
-    "val_loss": 0.08209616411477327,
-    "val_token_f1_micro": 0.9774362947658403
+    "train_loss": 0.2834208704855131,
+    "val_loss": 0.4189124368131161,
+    "val_token_accuracy": 0.9337290108984444,
+    "val_entity_token_f1_micro": 0.6269648921624841
   },
   {
     "epoch": 6,
-    "train_loss": 0.1553336220482985,
-    "val_loss": 0.08208638522773981,
-    "val_token_f1_micro": 0.9830578512396695
+    "train_loss": 0.2587496709564458,
+    "val_loss": 0.40877210423350335,
+    "val_token_accuracy": 0.9683876179364546,
+    "val_entity_token_f1_micro": 0.7168999100988913
   },
   {
     "epoch": 7,
-    "train_loss": 0.13480481008688608,
-    "val_loss": 0.08582777436822653,
-    "val_token_f1_micro": 0.9768164600550964
+    "train_loss": 0.21408782316290814,
+    "val_loss": 0.49785072803497316,
+    "val_token_accuracy": 0.9543582958146132,
+    "val_entity_token_f1_micro": 0.6863252805136327
   },
   {
     "epoch": 8,
-    "train_loss": 0.11145020152131717,
-    "val_loss": 0.08079440891742706,
-    "val_token_f1_micro": 0.9770230716253443
+    "train_loss": 0.23835275160229724,
+    "val_loss": 0.6057250708341598,
+    "val_token_accuracy": 0.9497249805907482,
+    "val_entity_token_f1_micro": 0.6150484543704883
   }
 ]

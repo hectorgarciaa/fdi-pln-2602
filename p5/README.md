@@ -51,7 +51,7 @@ uv sync
 Para los notebooks de `analysis/`, que usan librerias de exploracion y visualizacion fuera de las dependencias minimas del paquete, instala al abrirlos:
 
 ```bash
-pip install pandas matplotlib seaborn
+%pip install pandas matplotlib seaborn
 ```
 
 ## Artefactos
@@ -152,11 +152,30 @@ uv run fdi-pln-2602-p5 generate-llm \
   --top-k 40
 ```
 
+Tambien se puede cargar directamente un fichero de pesos con `--weight-dir`. En ese caso, el modelo usa el `train_config.txt` y el `tokenizer.json` de `artifacts/llm/best_general`:
+
+```bash
+uv run fdi-pln-2602-p5 generate-llm \
+  --weight-dir artifacts/llm/best_general/p5_causal_2602.pth \
+  --prompt "Hola" \
+  --max-tokens 80 \
+  --temperature 0.8 \
+  --top-k 40
+```
+
 Modo chat interactivo:
 
 ```bash
 uv run fdi-pln-2602-p5 generate-llm \
   --artifacts-dir artifacts/llm/best_general \
+  --chat
+```
+
+Tambien funciona con pesos directos:
+
+```bash
+uv run fdi-pln-2602-p5 generate-llm \
+  --weight-dir artifacts/llm/best_general/p5_causal_2602.pth \
   --chat
 ```
 
@@ -187,6 +206,12 @@ Entrenamiento simple sobre el backbone preentrenado:
 uv run fdi-pln-2602-p5 train-ner
 ```
 
+El entrenamiento de NER usa ahora:
+
+- `weighted cross entropy` para reducir el efecto del fuerte desbalanceo entre `O` y las clases de entidad
+- `val_entity_token_f1_micro` como metrica principal para seleccionar el mejor checkpoint y el mejor modelo global
+- `val_token_accuracy` solo como metrica secundaria de seguimiento
+
 Grid search de NER:
 
 ```bash
@@ -197,7 +222,15 @@ Prediccion de entidades con el mejor modelo NER:
 
 ```bash
 uv run fdi-pln-2602-p5 detect-ner \
-  --artifacts-dir artifacts/ner/best_general \
+  --artifacts-dir artifacts/ner/best \
+  --text "Alice went to the garden."
+```
+
+Tambien se puede cargar directamente un fichero de pesos con `--weight-dir`. En ese caso, el modelo usa la `train_config.json` y las etiquetas de `artifacts/ner/best`:
+
+```bash
+uv run fdi-pln-2602-p5 detect-ner \
+  --weight-dir artifacts/ner/best/p5_ner_2602.pth \
   --text "Alice went to the garden."
 ```
 
@@ -205,7 +238,7 @@ Si quieres ver tambien la etiqueta predicha para cada palabra:
 
 ```bash
 uv run fdi-pln-2602-p5 detect-ner \
-  --artifacts-dir artifacts/ner/best_general \
+  --artifacts-dir artifacts/ner/best \
   --text "Alice went to the garden." \
   --show-labels
 ```
@@ -214,7 +247,7 @@ Tambien se puede detectar NER sobre un fichero de texto:
 
 ```bash
 uv run fdi-pln-2602-p5 detect-ner \
-  --artifacts-dir artifacts/ner/best_general \
+  --artifacts-dir artifacts/ner/best \
   --input-file ruta/al/texto.txt
 ```
 
@@ -223,4 +256,6 @@ uv run fdi-pln-2602-p5 detect-ner \
 - Los notebooks de `analysis/` consumen los JSON actuales de `artifacts/llm`.
 - `hyperparam_results.json` acumula resultados de ejecuciones previas.
 - `chat` e `inference` cargan por defecto desde `artifacts/llm/best_general`.
+- `detect-ner` carga por defecto desde `artifacts/ner/best`.
+- `--weight-dir` siempre espera la ruta a un fichero `.pt` o `.pth`, no a un directorio.
 - Los modulos `python -m app...` siguen existiendo, pero la forma recomendada de uso es el ejecutable `fdi-pln-2602-p5`.

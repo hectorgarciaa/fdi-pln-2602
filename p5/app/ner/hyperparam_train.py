@@ -107,14 +107,17 @@ def run_hyperparam_search(
                             "config": config,
                             "run_dir": str(run_dir),
                             "best_val_loss": best_epoch["val_loss"],
-                            "best_val_token_f1_micro": best_epoch["val_token_f1_micro"],
+                            "best_val_token_accuracy": best_epoch["val_token_accuracy"],
+                            "best_val_entity_token_f1_micro": best_epoch[
+                                "val_entity_token_f1_micro"
+                            ],
                             "best_epoch": best_epoch["epoch"],
                             "status": "completed",
                         }
                         results.append(result)
                         print(
                             f"Val Loss: {best_epoch['val_loss']:.4f}, "
-                            f"F1: {best_epoch['val_token_f1_micro']:.4f}"
+                            f"Entity F1: {best_epoch['val_entity_token_f1_micro']:.4f}"
                         )
                     except Exception as exc:
                         result = {

@@ -1,15 +1,24 @@
 {
   "train_split": 0.85,
-  "batch_size": 32,
+  "batch_size": 8,
   "epochs": 8,
   "learning_rate": 0.001,
   "seed": 42,
   "freeze_backbone": false,
-  "artifacts_dir": "artifacts/llm/best_general",
+  "artifacts_dir": "artifacts\\llm\\best_general",
+  "selection_metric": "val_entity_token_f1_micro",
   "max_seq_len": 96,
   "dim_embedding": 105,
   "dim_attention": 140,
   "num_heads": 2,
   "num_layers": 2,
-  "vocab_size": 95
+  "vocab_size": 95,
+  "class_weights": {
+    "<pad_label>": 0.0,
+    "B-LOC": 1.947054386138916,
+    "B-PER": 0.7015010118484497,
+    "I-LOC": 1.502626895904541,
+    "I-PER": 0.7263720035552979,
+    "O": 0.12244611233472824
+  }
 }

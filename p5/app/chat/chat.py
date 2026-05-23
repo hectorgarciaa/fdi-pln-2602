@@ -5,13 +5,18 @@ from ..inference.inference import DEFAULT_ARTIFACTS_DIR, generate, load_model
 
 def chat(
     artifacts_dir: str | Path = DEFAULT_ARTIFACTS_DIR,
+    weight_dir: str | Path | None = None,
     device: str | None = None,
     max_tokens: int = 100,
     temperature: float = 0.7,
     top_k: int = 40,
 ) -> None:
     print("Bienvenido al chat con el LLM. Escribe 'salir' para terminar.")
-    model, tokenizer, device = load_model(artifacts_dir=artifacts_dir, device=device)
+    model, tokenizer, device = load_model(
+        artifacts_dir=artifacts_dir,
+        device=device,
+        weight_dir=weight_dir,
+    )
     try:
         prompt = input("Tú: ")
         while prompt.lower() != "salir":

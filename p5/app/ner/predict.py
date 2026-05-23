@@ -10,12 +10,13 @@ from ..inference import load_model as load_pretrained_backbone
 from .train import DEFAULT_OUTPUT_DIR, TransformerNERHead
 
 
-DEFAULT_ARTIFACTS_DIR = DEFAULT_OUTPUT_DIR / "best_general"
+DEFAULT_ARTIFACTS_DIR = DEFAULT_OUTPUT_DIR / "best"
 
 
 def load_ner_model(
-    artifacts_dir: Path,
+    artifacts_dir: Path = DEFAULT_ARTIFACTS_DIR,
     device: str | None = None,
+    weight_dir: Path | None = None,
 ) -> tuple[TransformerNERHead, object, dict[int, str], torch.device]:
     artifacts_path = Path(artifacts_dir)
     config = json.loads(
@@ -36,8 +37,15 @@ def load_ner_model(
         device=device,
     )
     model = TransformerNERHead(backbone=backbone, num_labels=len(label_to_id))
+    weights_path = (
+        artifacts_path / "best_model.pt" if weight_dir is None else Path(weight_dir)
+    )
+    if weights_path.suffix not in {".pt", ".pth"}:
+        raise ValueError(
+            f"weight_dir debe apuntar a un fichero .pt o .pth, recibido: {weights_path}"
+        )
     state_dict = torch.load(
-        artifacts_path / "best_model.pt",
+        weights_path,
         map_location=target_device,
         weights_only=True,
     )
@@ -185,7 +193,21 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Detecta entidades nombradas con el mejor modelo NER."
     )
-    parser.add_argument("--artifacts-dir", type=Path, default=DEFAULT_ARTIFACTS_DIR)
+    source_group = parser.add_mutually_exclusive_group()
+    source_group.add_argument(
+        "--artifacts-dir",
+        type=Path,
+        default=DEFAULT_ARTIFACTS_DIR,
+    )
+    source_group.add_argument(
+        "--weight-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Ruta directa a un fichero .pt o .pth. "
+            "Si se usa, la config y las etiquetas se toman de artifacts/ner/best."
+        ),
+    )
     parser.add_argument("--device", type=str, default=None)
     parser.add_argument(
         "--show-labels",
@@ -215,7 +237,9 @@ def resolve_input_text(text: str | None, input_file: Path | None) -> str:
 def main() -> None:
     args = build_parser().parse_args()
     model, tokenizer, id_to_label, device = load_ner_model(
-        args.artifacts_dir, args.device
+        artifacts_dir=args.artifacts_dir,
+        device=args.device,
+        weight_dir=args.weight_dir,
     )
     input_text = resolve_input_text(args.text, args.input_file)
     words, labels, entities = predict_entities(

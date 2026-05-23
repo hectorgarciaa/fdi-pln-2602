@@ -10,11 +10,29 @@ from ..tokenizer import MiniBPETokenizer
 DEFAULT_ARTIFACTS_DIR = Path("artifacts") / "llm" / "best_general"
 
 
+def resolve_weights_path(
+    artifacts_dir: str | Path,
+    weight_dir: str | Path | None,
+) -> Path:
+    if weight_dir is None:
+        return Path(artifacts_dir) / "best_model.pt"
+
+    weights_path = Path(weight_dir)
+    if weights_path.suffix not in {".pt", ".pth"}:
+        raise ValueError(
+            f"weight_dir debe apuntar a un fichero .pt o .pth, recibido: {weights_path}"
+        )
+    return weights_path
+
+
 def load_model(
-    artifacts_dir: str | Path = DEFAULT_ARTIFACTS_DIR, device: str | None = None
+    artifacts_dir: str | Path = DEFAULT_ARTIFACTS_DIR,
+    device: str | None = None,
+    weight_dir: str | Path | None = None,
 ):
     """Carga el modelo, tokenizer y config."""
     artifacts_path = Path(artifacts_dir)
+    weights_path = resolve_weights_path(artifacts_path, weight_dir)
 
     # Leer config
     config = {}
@@ -49,7 +67,9 @@ def load_model(
         device if device else ("cuda" if torch.cuda.is_available() else "cpu")
     )
     state_dict = torch.load(
-        artifacts_path / "best_model.pt", map_location=target_device, weights_only=True
+        weights_path,
+        map_location=target_device,
+        weights_only=True,
     )
     model.load_state_dict(state_dict)
     model.to(target_device).eval()
@@ -96,11 +116,21 @@ def generate(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Genera texto con el modelo.")
-    parser.add_argument(
+    source_group = parser.add_mutually_exclusive_group()
+    source_group.add_argument(
         "--artifacts-dir",
         type=Path,
         default=DEFAULT_ARTIFACTS_DIR,
         help="Directorio con tokenizer, config y pesos del modelo",
+    )
+    source_group.add_argument(
+        "--weight-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Ruta directa a un fichero .pt o .pth. "
+            "Si se usa, el tokenizer y la config se toman de artifacts/llm/best_general."
+        ),
     )
     parser.add_argument("--prompt", type=str, required=True, help="Texto inicial")
     parser.add_argument("--max-tokens", type=int, default=50, help="Máximo de tokens")
@@ -119,7 +149,9 @@ def main():
         torch.manual_seed(args.seed)
 
     model, tokenizer, device = load_model(
-        artifacts_dir=args.artifacts_dir, device=args.device
+        artifacts_dir=args.artifacts_dir,
+        device=args.device,
+        weight_dir=args.weight_dir,
     )
     text = generate(
         model,

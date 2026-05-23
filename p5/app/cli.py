@@ -110,8 +110,18 @@ def build_parser() -> argparse.ArgumentParser:
     generate_llm = subparsers.add_parser(
         "generate-llm", help="Genera texto o abre chat con el LLM."
     )
-    generate_llm.add_argument(
+    generate_llm_source = generate_llm.add_mutually_exclusive_group()
+    generate_llm_source.add_argument(
         "--artifacts-dir", type=Path, default=DEFAULT_LLM_ARTIFACTS_DIR
+    )
+    generate_llm_source.add_argument(
+        "--weight-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Ruta directa a un fichero .pt o .pth. "
+            "Si se usa, la config y el tokenizer se toman de artifacts/llm/best_general."
+        ),
     )
     generate_llm.add_argument(
         "--prompt",
@@ -175,8 +185,18 @@ def build_parser() -> argparse.ArgumentParser:
     detect_ner = subparsers.add_parser(
         "detect-ner", help="Detecta entidades nombradas con el mejor modelo NER."
     )
-    detect_ner.add_argument(
+    detect_ner_source = detect_ner.add_mutually_exclusive_group()
+    detect_ner_source.add_argument(
         "--artifacts-dir", type=Path, default=DEFAULT_NER_ARTIFACTS_DIR
+    )
+    detect_ner_source.add_argument(
+        "--weight-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Ruta directa a un fichero .pt o .pth. "
+            "Si se usa, la config y las etiquetas se toman de artifacts/ner/best."
+        ),
     )
     detect_ner.add_argument("--device", type=str, default=None)
     detect_ner.add_argument("--show-labels", action="store_true")
@@ -239,6 +259,7 @@ def main() -> None:
         if args.chat:
             chat(
                 artifacts_dir=args.artifacts_dir,
+                weight_dir=args.weight_dir,
                 device=args.device,
                 max_tokens=args.max_tokens,
                 temperature=args.temperature,
@@ -252,6 +273,7 @@ def main() -> None:
         model, tokenizer, target_device = load_model(
             artifacts_dir=args.artifacts_dir,
             device=args.device,
+            weight_dir=args.weight_dir,
         )
         text = generate(
             model,
@@ -294,6 +316,7 @@ def main() -> None:
         model, tokenizer, id_to_label, target_device = load_ner_model(
             artifacts_dir=args.artifacts_dir,
             device=args.device,
+            weight_dir=args.weight_dir,
         )
         words, labels, entities = predict_entities(
             model,

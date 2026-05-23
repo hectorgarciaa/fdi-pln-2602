@@ -21,6 +21,7 @@ DEFAULT_OUTPUT_DIR = Path("artifacts") / "ner"
 DEFAULT_TRAIN_SPLIT = 0.85
 DEFAULT_SEED = 42
 PAD_LABEL = "<pad_label>"
+SELECTION_METRIC = "val_entity_token_f1_micro"
 
 
 @dataclass
@@ -106,28 +107,80 @@ def collate_batch(
     return x, y
 
 
-def token_f1_micro(
+def build_class_weights(
+    examples: list[EncodedExample],
+    num_labels: int,
+    pad_label_id: int,
+) -> torch.Tensor:
+    counts = torch.zeros(num_labels, dtype=torch.float32)
+    for example in examples:
+        counts += torch.bincount(
+            torch.tensor(example.labels, dtype=torch.long), minlength=num_labels
+        ).to(torch.float32)
+
+    weights = torch.zeros(num_labels, dtype=torch.float32)
+    present_mask = counts > 0
+    non_pad_mask = torch.arange(num_labels) != pad_label_id
+    weighted_mask = present_mask & non_pad_mask
+
+    if weighted_mask.any():
+        # Smooth inverse-frequency weighting to help rare entities without
+        # making optimization too unstable.
+        weights[weighted_mask] = counts[weighted_mask].pow(-0.5)
+        weights[weighted_mask] /= weights[weighted_mask].mean()
+
+    return weights
+
+
+def token_accuracy(
     logits: torch.Tensor, y: torch.Tensor, pad_label_id: int = 0
 ) -> float:
     pred = logits.argmax(dim=-1)
     mask = y != pad_label_id
-    tp = ((pred == y) & mask).sum().item()
     n = mask.sum().item()
     if n == 0:
         return 0.0
-    precision = tp / n
-    recall = tp / n
+    correct = ((pred == y) & mask).sum().item()
+    return correct / n
+
+
+def entity_token_f1_micro(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+    entity_label_ids: list[int],
+    pad_label_id: int = 0,
+) -> float:
+    pred = logits.argmax(dim=-1)
+    valid_mask = y != pad_label_id
+    tp = 0
+    fp = 0
+    fn = 0
+
+    for label_id in entity_label_ids:
+        pred_is_label = pred == label_id
+        gold_is_label = y == label_id
+        tp += (pred_is_label & gold_is_label).sum().item()
+        fp += (pred_is_label & ~gold_is_label & valid_mask).sum().item()
+        fn += (~pred_is_label & gold_is_label).sum().item()
+
+    precision = tp / max(1, tp + fp)
+    recall = tp / max(1, tp + fn)
     if precision + recall == 0:
         return 0.0
     return 2 * precision * recall / (precision + recall)
 
 
 def evaluate(
-    model: nn.Module, loader: DataLoader, criterion: nn.Module, device: torch.device
-) -> tuple[float, float]:
+    model: nn.Module,
+    loader: DataLoader,
+    criterion: nn.Module,
+    device: torch.device,
+    entity_label_ids: list[int],
+) -> tuple[float, float, float]:
     model.eval()
     total_loss = 0.0
-    total_f1 = 0.0
+    total_accuracy = 0.0
+    total_entity_f1 = 0.0
     count = 0
     with torch.no_grad():
         for x, y in loader:
@@ -136,9 +189,19 @@ def evaluate(
             logits = model(x)
             loss = criterion(logits.reshape(-1, logits.size(-1)), y.reshape(-1))
             total_loss += loss.item()
-            total_f1 += token_f1_micro(logits, y, pad_label_id=0)
+            total_accuracy += token_accuracy(logits, y, pad_label_id=0)
+            total_entity_f1 += entity_token_f1_micro(
+                logits,
+                y,
+                entity_label_ids=entity_label_ids,
+                pad_label_id=0,
+            )
             count += 1
-    return total_loss / max(1, count), total_f1 / max(1, count)
+    return (
+        total_loss / max(1, count),
+        total_accuracy / max(1, count),
+        total_entity_f1 / max(1, count),
+    )
 
 
 def train(
@@ -175,6 +238,12 @@ def train(
 
     train_data = encode_rows(train_rows, tokenizer, label_to_id)
     val_data = encode_rows(val_rows, tokenizer, label_to_id)
+    o_label_id = label_to_id["O"]
+    entity_label_ids = [
+        label_id
+        for label, label_id in label_to_id.items()
+        if label not in {PAD_LABEL, "O"}
+    ]
 
     collate = lambda b: collate_batch(b, max_seq_len=backbone.max_seq_len)
     train_loader = DataLoader(
@@ -192,17 +261,27 @@ def train(
         for p in model.backbone.parameters():
             p.requires_grad = False
 
-    criterion = nn.CrossEntropyLoss(ignore_index=0)
+    class_weights = build_class_weights(
+        train_data,
+        num_labels=len(label_to_id),
+        pad_label_id=0,
+    ).to(device)
+    criterion = nn.CrossEntropyLoss(weight=class_weights, ignore_index=0)
     optimizer = torch.optim.Adam(
         (p for p in model.parameters() if p.requires_grad), lr=learning_rate
     )
 
-    best_f1 = -1.0
+    best_entity_f1 = -1.0
     history: list[dict[str, float]] = []
 
     print(f"Guardando run NER en: {run_dir}")
     print(
         f"Train samples: {len(train_data)} | Val samples: {len(val_data)} | Device: {device}"
+    )
+    print(
+        f"Class weight O={class_weights[o_label_id].item():.4f} | "
+        f"Avg entity weight="
+        f"{sum(class_weights[label_id].item() for label_id in entity_label_ids) / max(1, len(entity_label_ids)):.4f}"
     )
     for epoch in range(1, epochs + 1):
         model.train()
@@ -220,21 +299,30 @@ def train(
             n += 1
 
         train_loss = tr_loss / max(1, n)
-        val_loss, val_f1 = evaluate(model, val_loader, criterion, device)
+        val_loss, val_accuracy, val_entity_f1 = evaluate(
+            model,
+            val_loader,
+            criterion,
+            device,
+            entity_label_ids=entity_label_ids,
+        )
         history.append(
             {
                 "epoch": epoch,
                 "train_loss": train_loss,
                 "val_loss": val_loss,
-                "val_token_f1_micro": val_f1,
+                "val_token_accuracy": val_accuracy,
+                "val_entity_token_f1_micro": val_entity_f1,
             }
         )
         print(
-            f"Epoch {epoch:02d}/{epochs} | train_loss={train_loss:.4f} | val_loss={val_loss:.4f} | val_f1={val_f1:.4f}"
+            f"Epoch {epoch:02d}/{epochs} | train_loss={train_loss:.4f} | "
+            f"val_loss={val_loss:.4f} | val_acc={val_accuracy:.4f} | "
+            f"val_entity_f1={val_entity_f1:.4f}"
         )
 
-        if val_f1 > best_f1:
-            best_f1 = val_f1
+        if val_entity_f1 > best_entity_f1:
+            best_entity_f1 = val_entity_f1
             torch.save(model.state_dict(), run_dir / "best_model.pt")
 
     torch.save(model.state_dict(), run_dir / "last_model.pt")
@@ -259,12 +347,17 @@ def train(
                 "seed": seed,
                 "freeze_backbone": freeze_backbone,
                 "artifacts_dir": str(artifacts_dir),
+                "selection_metric": SELECTION_METRIC,
                 "max_seq_len": backbone.max_seq_len,
                 "dim_embedding": backbone.dim_embedding,
                 "dim_attention": backbone.dim_attention,
                 "num_heads": backbone.num_heads,
                 "num_layers": backbone.num_layers,
                 "vocab_size": len(tokenizer.vocab),
+                "class_weights": {
+                    label: class_weights[label_id].item()
+                    for label, label_id in label_to_id.items()
+                },
             },
             ensure_ascii=False,
             indent=2,
@@ -276,23 +369,29 @@ def train(
     )
 
     best_dir = output_dir / "best"
-    current_best = max(history, key=lambda row: row["val_token_f1_micro"])
+    current_best = max(
+        history,
+        key=lambda row: (row[SELECTION_METRIC], -row["val_loss"]),
+    )
     if best_dir.exists():
         best_history_path = best_dir / "history.json"
         if best_history_path.exists():
             best_history = json.loads(best_history_path.read_text(encoding="utf-8"))
-            previous_best = max(best_history, key=lambda row: row["val_token_f1_micro"])
-            if current_best["val_token_f1_micro"] > previous_best["val_token_f1_micro"]:
+            previous_best = max(
+                best_history,
+                key=lambda row: (row[SELECTION_METRIC], -row["val_loss"]),
+            )
+            if current_best[SELECTION_METRIC] > previous_best[SELECTION_METRIC]:
                 shutil.rmtree(best_dir)
                 shutil.copytree(run_dir, best_dir)
                 print(
                     "Nuevo mejor modelo NER global: "
-                    f"{current_best['val_token_f1_micro']:.4f} > {previous_best['val_token_f1_micro']:.4f}"
+                    f"{current_best[SELECTION_METRIC]:.4f} > {previous_best[SELECTION_METRIC]:.4f}"
                 )
             else:
                 print(
                     "El best global de NER no mejora: "
-                    f"{previous_best['val_token_f1_micro']:.4f} >= {current_best['val_token_f1_micro']:.4f}"
+                    f"{previous_best[SELECTION_METRIC]:.4f} >= {current_best[SELECTION_METRIC]:.4f}"
                 )
         else:
             shutil.rmtree(best_dir)
