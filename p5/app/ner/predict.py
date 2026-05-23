@@ -230,7 +230,9 @@ def resolve_input_text(text: str | None, input_file: Path | None) -> str:
     if text is not None:
         return text
     if input_file is not None:
-        return input_file.read_text(encoding="utf-8")
+        # Accept UTF-8 files with or without BOM to keep CLI behavior stable
+        # across editors and Windows/Linux environments.
+        return input_file.read_text(encoding="utf-8-sig")
     raise ValueError("Hay que proporcionar --text o --input-file.")
 
 
